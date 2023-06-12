@@ -33,12 +33,12 @@ namespace CodeBase.Data.Weapons
         private void FillAvailableWeapons()
         {
             WeaponDatas.Add(new WeaponData(HeroWeaponTypeId.GrenadeLauncher, true));
-            // WeaponDatas.Add(new WeaponData(HeroWeaponTypeId.RPG, false));
-            WeaponDatas.Add(new WeaponData(HeroWeaponTypeId.RPG, true));
-            // WeaponDatas.Add(new WeaponData(HeroWeaponTypeId.RocketLauncher, false));
-            WeaponDatas.Add(new WeaponData(HeroWeaponTypeId.RocketLauncher, true));
-            // WeaponDatas.Add(new WeaponData(HeroWeaponTypeId.Mortar, false));
-            WeaponDatas.Add(new WeaponData(HeroWeaponTypeId.Mortar, true));
+            WeaponDatas.Add(new WeaponData(HeroWeaponTypeId.RPG, false));
+            // WeaponDatas.Add(new WeaponData(HeroWeaponTypeId.RPG, true));
+            WeaponDatas.Add(new WeaponData(HeroWeaponTypeId.RocketLauncher, false));
+            // WeaponDatas.Add(new WeaponData(HeroWeaponTypeId.RocketLauncher, true));
+            WeaponDatas.Add(new WeaponData(HeroWeaponTypeId.Mortar, false));
+            // WeaponDatas.Add(new WeaponData(HeroWeaponTypeId.Mortar, true));
 
             SetAvailableWeapons();
         }

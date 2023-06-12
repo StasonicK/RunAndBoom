@@ -53,12 +53,12 @@ namespace CodeBase.Data.Weapons
         private void FillAmmo()
         {
             Amunition.Dictionary[HeroWeaponTypeId.GrenadeLauncher] = InitialGlAmmoCount;
-            Amunition.Dictionary[HeroWeaponTypeId.RPG] = InitialGlAmmoCount;
-            Amunition.Dictionary[HeroWeaponTypeId.RocketLauncher] = InitialGlAmmoCount;
-            Amunition.Dictionary[HeroWeaponTypeId.Mortar] = InitialGlAmmoCount;
-            // Amunition.Dictionary[HeroWeaponTypeId.RPG] = 0;
-            // Amunition.Dictionary[HeroWeaponTypeId.RocketLauncher] = 0;
-            // Amunition.Dictionary[HeroWeaponTypeId.Mortar] = 0;
+            // Amunition.Dictionary[HeroWeaponTypeId.RPG] = InitialGlAmmoCount;
+            // Amunition.Dictionary[HeroWeaponTypeId.RocketLauncher] = InitialGlAmmoCount;
+            // Amunition.Dictionary[HeroWeaponTypeId.Mortar] = InitialGlAmmoCount;
+            Amunition.Dictionary[HeroWeaponTypeId.RPG] = 0;
+            Amunition.Dictionary[HeroWeaponTypeId.RocketLauncher] = 0;
+            Amunition.Dictionary[HeroWeaponTypeId.Mortar] = 0;
         }
 
         public void AddAmmo(HeroWeaponTypeId typeId, int ammo)

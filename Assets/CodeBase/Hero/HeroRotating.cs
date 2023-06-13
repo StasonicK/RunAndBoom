@@ -5,6 +5,7 @@ namespace CodeBase.Hero
     [RequireComponent(typeof(Rigidbody))]
     public class HeroRotating : MonoBehaviour
     {
+        [SerializeField] private Camera _main;
         [SerializeField] private float _sensitivity = 1.0f;
 
         private const float EdgeAngle = 87f;
@@ -31,7 +32,8 @@ namespace CodeBase.Hero
 
             _xAxisClamp -= rotationAmountY;
 
-            Vector3 rotation = transform.rotation.eulerAngles;
+            Vector3 rotation = _main.transform.rotation.eulerAngles;
+            // Vector3 rotation = transform.rotation.eulerAngles;
 
             rotation.x -= rotationAmountY;
             rotation.y += rotationAmountX;
@@ -48,7 +50,8 @@ namespace CodeBase.Hero
                     break;
             }
 
-            transform.rotation = Quaternion.Euler(rotation);
+            _main.transform.rotation = Quaternion.Euler(rotation);
+            // transform.rotation = Quaternion.Euler(rotation);
         }
 
         public void TurnOn() =>

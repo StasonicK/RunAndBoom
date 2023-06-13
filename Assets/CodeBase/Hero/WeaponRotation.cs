@@ -9,18 +9,15 @@ namespace CodeBase.Hero
     {
         [SerializeField] private HeroWeaponSelection _weaponSelection;
         [SerializeField] private LayerMask _collidableLayers;
+        [SerializeField] private Camera _mainCamera;
 
         private HeroWeaponStaticData _weaponStaticData;
         private GameObject _currentWeapon;
-        private Camera _mainCamera;
         private float _centralPosition = 0.5f;
         private float _rotateDuration = 0.5f;
         private float _maxDistance = 25f;
 
         public Action<Vector3> GotTarget;
-
-        private void Start() =>
-            _mainCamera = Camera.main;
 
         private void Awake() =>
             _weaponSelection.WeaponSelected += WeaponChosen;
@@ -36,7 +33,9 @@ namespace CodeBase.Hero
         {
             if (_currentWeapon != null)
             {
+                Debug.Log($"mainCamera rect: {_mainCamera.rect}");
                 Ray ray = _mainCamera.ViewportPointToRay(new Vector3(_centralPosition, _centralPosition, 0));
+                Debug.Log($"ray: {ray}");
                 var targetPosition = MaxDistancePosition(ray);
                 WeaponLookAt(targetPosition);
             }

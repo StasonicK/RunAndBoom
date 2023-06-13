@@ -33,9 +33,7 @@ namespace CodeBase.Hero
         {
             if (_currentWeapon != null)
             {
-                Debug.Log($"mainCamera rect: {_mainCamera.rect}");
                 Ray ray = _mainCamera.ViewportPointToRay(new Vector3(_centralPosition, _centralPosition, 0));
-                Debug.Log($"ray: {ray}");
                 var targetPosition = MaxDistancePosition(ray);
                 WeaponLookAt(targetPosition);
             }

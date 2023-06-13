@@ -33,7 +33,6 @@ namespace CodeBase.Hero
             _xAxisClamp -= rotationAmountY;
 
             Vector3 rotation = _main.transform.rotation.eulerAngles;
-            // Vector3 rotation = transform.rotation.eulerAngles;
 
             rotation.x -= rotationAmountY;
             rotation.y += rotationAmountX;
@@ -51,7 +50,6 @@ namespace CodeBase.Hero
             }
 
             _main.transform.rotation = Quaternion.Euler(rotation);
-            // transform.rotation = Quaternion.Euler(rotation);
         }
 
         public void TurnOn() =>

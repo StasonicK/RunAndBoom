@@ -12,9 +12,9 @@ namespace CodeBase.UI.Windows.Shop
             _progress = AllServices.Container.Single<IPlayerProgressService>().Progress;
 
         public bool IsMoneyEnough(int value) =>
-            _progress.Stats.AllMoney.IsMoneyEnough(value);
+            _progress.Stats.IsMoneyEnough(value);
 
         public void ReduceMoney(int value) =>
-            _progress.Stats.AllMoney.ReduceMoney(value);
+            _progress.Stats.ReduceMoney(value);
     }
 }

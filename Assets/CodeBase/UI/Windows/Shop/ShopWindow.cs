@@ -14,6 +14,8 @@ namespace CodeBase.UI.Windows.Shop
         [SerializeField] private Button _refreshWithAdsButton;
         [SerializeField] private ItemsGeneratorBase _generator;
 
+        private const int MinItemValue = 5;
+
         private int _currentRefreshCount = 0;
         private int _maxRefreshCount;
         private int _watchAdsNumber;
@@ -26,16 +28,28 @@ namespace CodeBase.UI.Windows.Shop
 
         private void OnEnable()
         {
-            _skipButton.onClick.AddListener(CloseShop);
+            _skipButton.onClick.AddListener(Hide);
             _refreshButton.onClick.AddListener(GenerateShopItems);
             _refreshWithAdsButton.onClick.AddListener(ShowAdsAndGenerate);
         }
 
         private void OnDisable()
         {
-            _skipButton.onClick.RemoveListener(CloseShop);
+            _skipButton.onClick.RemoveListener(Hide);
             _refreshButton.onClick.RemoveListener(GenerateShopItems);
             _refreshWithAdsButton.onClick.RemoveListener(ShowAdsAndGenerate);
+        }
+
+        public override void Show(bool showCursor)
+        {
+            if (Progress.Stats.CurrentLevelStats.MoneyData.IsMoneyEnough(MinItemValue))
+                base.Show(showCursor);
+        }
+
+        protected override void Hide()
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            base.Hide();
         }
 
         public void Construct(GameObject hero) =>
@@ -100,34 +114,20 @@ namespace CodeBase.UI.Windows.Shop
             }
         }
 
-        private void ShowRefreshButton()
-        {
+        private void ShowRefreshButton() =>
             _refreshButton.gameObject.SetActive(true);
-        }
 
-        private void HideRefreshButton()
-        {
+        private void HideRefreshButton() =>
             _refreshButton.gameObject.SetActive(false);
-        }
 
-        private void ShowRefreshWithAdsButton()
-        {
+        private void ShowRefreshWithAdsButton() =>
             _refreshWithAdsButton.gameObject.SetActive(true);
-        }
 
-        private void HideRefreshWithAdsButton()
-        {
+        private void HideRefreshWithAdsButton() =>
             _refreshWithAdsButton.gameObject.SetActive(false);
-        }
 
         private void Start() =>
             Cursor.lockState = CursorLockMode.Confined;
-
-        private void CloseShop()
-        {
-            Hide();
-            Cursor.lockState = CursorLockMode.Locked;
-        }
 
         private void ShowAdsAndGenerate()
         {

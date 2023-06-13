@@ -12,6 +12,6 @@ namespace CodeBase.UI.Windows.Gifts
             _progress = AllServices.Container.Single<IPlayerProgressService>().Progress;
 
         public void AddMoney(int value) =>
-            _progress.Stats.AllMoney.AddMoney(value);
+            _progress.Stats.AddMoney(value);
     }
 }

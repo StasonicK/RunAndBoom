@@ -39,7 +39,7 @@ namespace CodeBase.UI.Windows.Common
             Hide();
         }
 
-        protected void Hide()
+        protected virtual void Hide()
         {
             gameObject.SetActive(false);
             PlayCloseSound();
@@ -57,7 +57,7 @@ namespace CodeBase.UI.Windows.Common
             }
         }
 
-        public void Show(bool showCursor)
+        public virtual void Show(bool showCursor)
         {
             gameObject.SetActive(true);
             Hero.GetComponent<HeroShooting>().TurnOff();

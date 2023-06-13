@@ -34,18 +34,16 @@ namespace CodeBase.Logic.Level
         {
             if (other.CompareByTag(Constants.HeroTag) && _isPassed == false)
             {
-                if (AllServices.Container.Single<IPlayerProgressService>().Progress.Stats.CurrentLevelStats.MoneyData
-                    .IsMoneyEnough(MinItemValue))
-                    // if (_progress.Stats.CurrentLevelStats.MoneyData.IsMoneyEnough(MinItemValue))
+                if (_progressService.Progress.Stats.CurrentLevelStats.MoneyData.IsMoneyEnough(MinItemValue))
                     ShowShopWindow();
 
+                _progressService.Progress.WorldData.LevelNameData.ChangeSector(_number.ToString());
                 SetPassed();
             }
         }
 
         private void ShowShopWindow()
         {
-            _progressService.Progress.WorldData.LevelNameData.ChangeSector(_number.ToString());
             WindowBase shopWindow = _windowService.Show<ShopWindow>(WindowId.Shop);
             (shopWindow as ShopWindow)?.gameObject.GetComponent<ShopItemsGenerator>()?.Generate();
             (shopWindow as ShopWindow)?.AddCounts(_refreshCount, _watchAdsNumber);

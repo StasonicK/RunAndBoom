@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using CodeBase.Data;
 using CodeBase.Data.Perks;

@@ -27,7 +27,7 @@ namespace CodeBase.Data.Stats
             AllMoney.ReduceMoney(value);
         }
 
-        public void IsMoneyEnough(int value) =>
+        public bool IsMoneyEnough(int value) =>
             AllMoney.IsMoneyEnough(value);
 
         public void StartNewLevel(Scene scene, int targetPlayTime, int totalEnemies)

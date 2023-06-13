@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CodeBase.Data;
 using CodeBase.Data.Perks;
@@ -47,8 +48,8 @@ namespace CodeBase.Hero
         private void Update()
         {
             // _playerMovementInput = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
-            _horizontalInput = Input.GetAxisRaw("Horizontal");
-            _verticalInput = Input.GetAxisRaw("Vertical");
+            // _horizontalInput = Input.GetAxisRaw("Horizontal");
+            // _verticalInput = Input.GetAxisRaw("Vertical");
 
             // if (Input.GetKeyDown(KeyCodeW))
             //     _getForward = 1;
@@ -67,6 +68,11 @@ namespace CodeBase.Hero
             // if (Input.GetKeyUp(KeyCodeD))
             //     _getRight = 0;
 
+            // Move();
+        }
+
+        private void FixedUpdate()
+        {
             Move();
         }
 
@@ -98,9 +104,18 @@ namespace CodeBase.Hero
             // Vector3 moveVector = transform.TransformDirection(_playerMovementInput) * _movementSpeed;
             // _rigidbody.velocity = new Vector3(moveVector.x, _rigidbody.velocity.y, moveVector.z);
 
-            _movementDirection = _cameraTransform.forward * _verticalInput + _cameraTransform.right * _horizontalInput;
-            _rigidbody.velocity = new Vector3(_movementDirection.x, _rigidbody.velocity.y, _movementDirection.z) *
-                                  _movementSpeed;
+            // transform.forward = _cameraTransform.forward;
+
+            // _movementDirection = _cameraTransform.forward * _verticalInput + _cameraTransform.right * _horizontalInput;
+            // _rigidbody.velocity = new Vector3(_movementDirection.x, _rigidbody.velocity.y, _movementDirection.z).normalized *
+            //                       _movementSpeed;
+
+            Vector2 axis = new Vector2(Input.GetAxis("Vertical"), Input.GetAxis("Horizontal")).normalized *
+                           _movementSpeed;
+            Vector3 forward = new Vector3(-_cameraTransform.right.z, 0.0f, _cameraTransform.right.x);
+            Vector3 wishDirection =
+                (forward * axis.x + _cameraTransform.right * axis.y + Vector3.up * _rigidbody.velocity.y);
+            _rigidbody.velocity = wishDirection;
         }
 
         private void OnEnable()

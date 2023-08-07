@@ -4,15 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - EnemySpawn
   - Enemy
   - Hero
-  - InitialPoint
-  - EnemySpawn
-  - Ground
-  - Destructable
-  - Obstacle
-  - Wall
-  - FinishPoint
   layers:
   - Default
   - TransparentFX
@@ -20,9 +14,9 @@ TagManager:
   - 
   - Water
   - UI
+  - Hero
   - Enemy
   - Obstacle
-  - Hero
   - Ground
   - Trigger
   - Died

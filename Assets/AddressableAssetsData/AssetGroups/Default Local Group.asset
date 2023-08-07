@@ -130,7 +130,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: 044089875f72b2a408a6c7c45a63f9a7
-    m_Address: WithSniperRifle
+    m_Address: WithSR
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: fa18f3a056ece684892e62906e87d02b
@@ -159,6 +159,34 @@ MonoBehaviour:
     m_SerializedLabels: []
   - m_GUID: 4198acde34373b3409ac05fdf03c8a6f
     m_Address: AuthorizationWindow
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 197cd41d6d0f0c441a4962c1cc67806e
+    m_Address: BombExplosion
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e6ea0c2b13012484ba2f5dc1054e6d75
+    m_Address: ExplosionRoundFire
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: d166c8ca466ba4a42a2c22afdee2d7e1
+    m_Address: GrenadeLauncherExplosion
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 07bf9ced87963e24299c2c2a22bfeeb6
+    m_Address: NukeExplosionFire
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 9f03f372adf02874cb666857a9f97abd
+    m_Address: NukeVerticalExplosionFire
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 2963452af690ade448ed3146173416fa
+    m_Address: RocketLauncherExplosion
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: f21797a0db2754848a9bbc535e1a8666
+    m_Address: RpgExplosion
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0

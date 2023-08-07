@@ -380,7 +380,7 @@ GameObject:
   - component: {fileID: 8027270677975631171}
   - component: {fileID: 5913367420521618631}
   - component: {fileID: 6544437507461944932}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: HitBox
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -439,7 +439,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7282656571530433564}
   - component: {fileID: 9189682587486684162}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: DeadBox
   m_TagString: Enemy
   m_Icon: {fileID: 0}

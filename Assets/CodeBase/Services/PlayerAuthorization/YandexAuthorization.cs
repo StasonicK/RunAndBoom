@@ -30,9 +30,9 @@ namespace CodeBase.Services.PlayerAuthorization
             PlayerAccount.GetProfileData(OnGetProfileDataSuccessCallback, OnGetDataErrorCallback);
 
         public void GetPlayerData() =>
-            PlayerAccount.GetPlayerData(OnGetPlayerDataSuccessCallback, OnGetDataErrorCallback);
+            PlayerAccount.GetCloudSaveData(OnGetPlayerDataSuccessCallback, OnGetDataErrorCallback);
 
         public void SetPlayerData(string data) =>
-            PlayerAccount.SetPlayerData(data, OnSetPlayerDataSuccessCallback, OnSetDataErrorCallback);
+            PlayerAccount.SetCloudSaveData(data, OnSetPlayerDataSuccessCallback, OnSetDataErrorCallback);
     }
 }

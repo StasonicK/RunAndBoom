@@ -289,7 +289,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1218350937860728573}
   - component: {fileID: 734849052}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: vehicle2-blue
   m_TagString: Untagged
   m_Icon: {fileID: 0}

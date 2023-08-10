@@ -741,7 +741,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3700183097348009938, guid: 1e7250932be338a4b8fbf477c0ba8e94, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 3741906674963251102, guid: 1e7250932be338a4b8fbf477c0ba8e94, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -12322,11 +12322,11 @@ LightingSettings:
   m_AlbedoBoost: 1
   m_IndirectOutputScale: 1
   m_UsingShadowmask: 1
-  m_BakeBackend: 1
-  m_LightmapMaxSize: 1024
+  m_BakeBackend: 2
+  m_LightmapMaxSize: 128
   m_BakeResolution: 40
   m_Padding: 2
-  m_LightmapCompression: 3
+  m_LightmapCompression: 1
   m_AO: 0
   m_AOMaxDistance: 1
   m_CompAOExponent: 1
@@ -12346,9 +12346,9 @@ LightingSettings:
   m_FinalGatherFiltering: 1
   m_PVRCulling: 1
   m_PVRSampling: 1
-  m_PVRDirectSampleCount: 32
-  m_PVRSampleCount: 512
-  m_PVREnvironmentSampleCount: 256
+  m_PVRDirectSampleCount: 16
+  m_PVRSampleCount: 128
+  m_PVREnvironmentSampleCount: 128
   m_PVREnvironmentReferencePointCount: 2048
   m_LightProbeSampleCountMultiplier: 4
   m_PVRBounces: 2

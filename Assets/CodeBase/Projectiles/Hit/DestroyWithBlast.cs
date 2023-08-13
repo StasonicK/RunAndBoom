@@ -27,8 +27,6 @@ namespace CodeBase.Projectiles.Hit
 
                 if (objectTag == DestructableTag)
                     objectsHits[i].transform.gameObject.GetComponent<IDeath>()?.Die();
-                // objectsHits[i].transform.parent.gameObject.transform.parent.gameObject
-                //     .GetComponent<IDeath>()?.Die();
                 else
                     objectsHits[i].transform.gameObject.GetComponent<IHealth>()?.TakeDamage(damage);
             }

@@ -257,7 +257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _groundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   _groundYOffset: -0.1
   _gravity: -9.81
 --- !u!114 &4801597986677240934
@@ -503,7 +503,7 @@ MonoBehaviour:
   _weaponSelection: {fileID: 2265719662692678730}
   _collidableLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4992
 --- !u!1001 &3417579637988439783
 PrefabInstance:
   m_ObjectHideFlags: 0

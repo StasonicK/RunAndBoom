@@ -64,10 +64,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="24852">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="14128">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="24852" />
+      <option name="pid" value="14128" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -87,6 +87,7 @@
       <workItem from="1691422477844" duration="1363000" />
       <workItem from="1691493877722" duration="1000" />
       <workItem from="1691642720521" duration="1209000" />
+      <workItem from="1691665368359" duration="2061000" />
     </task>
     <servers />
   </component>
@@ -97,37 +98,5 @@
   <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/CodeBase/Projectiles/Hit/DestroyWithBlast.cs</url>
-          <line>23</line>
-          <properties documentPath="E:\Unity projects\My projects\RunAndShoot\Assets\CodeBase\Projectiles\Hit\DestroyWithBlast.cs" initialLine="23" containingFunctionPresentation="Method 'HitAllAround'">
-            <startOffsets>
-              <option value="748" />
-            </startOffsets>
-            <endOffsets>
-              <option value="790" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/CodeBase/Projectiles/Hit/DestroyWithBlast.cs</url>
-          <line>38</line>
-          <properties documentPath="E:\Unity projects\My projects\RunAndShoot\Assets\CodeBase\Projectiles\Hit\DestroyWithBlast.cs" initialLine="38" containingFunctionPresentation="Method 'GetObjectsHits'">
-            <startOffsets>
-              <option value="1407" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1469" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

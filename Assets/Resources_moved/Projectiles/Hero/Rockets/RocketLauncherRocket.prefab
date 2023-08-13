@@ -140,6 +140,10 @@ PrefabInstance:
       propertyPath: Movement
       value: 
       objectReference: {fileID: 3657232964815249025}
+    - target: {fileID: 6591293771587382832, guid: d19b11a31f792cd4c8aada8b50d1a233, type: 3}
+      propertyPath: _layerMask.m_Bits
+      value: 5056
+      objectReference: {fileID: 0}
     - target: {fileID: 6845473786046702743, guid: d19b11a31f792cd4c8aada8b50d1a233, type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.35
@@ -150,7 +154,7 @@ PrefabInstance:
       objectReference: {fileID: 4970162989725237654}
     - target: {fileID: 8976935804904259732, guid: d19b11a31f792cd4c8aada8b50d1a233, type: 3}
       propertyPath: _objectLayerMask.m_Bits
-      value: 0
+      value: 5056
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5527097590347584361, guid: d19b11a31f792cd4c8aada8b50d1a233, type: 3}

@@ -51,7 +51,7 @@ MeshRenderer:
   m_GameObject: {fileID: 3081022351877411582}
   m_Enabled: 1
   m_CastShadows: 0
-  m_ReceiveShadows: 1
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -62,18 +62,18 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 69bb725cfe9ae0446bfddd8e8cd284b8, type: 2}
-  - {fileID: 2100000, guid: 1f54772f94881884a99d4dccaf88049f, type: 2}
-  - {fileID: 2100000, guid: 69bb725cfe9ae0446bfddd8e8cd284b8, type: 2}
-  - {fileID: 2100000, guid: ecf0c8c920ea9b24dac7bc5e61487e27, type: 2}
-  - {fileID: 2100000, guid: 69bb725cfe9ae0446bfddd8e8cd284b8, type: 2}
-  - {fileID: 2100000, guid: 69bb725cfe9ae0446bfddd8e8cd284b8, type: 2}
-  - {fileID: 2100000, guid: 1f54772f94881884a99d4dccaf88049f, type: 2}
-  - {fileID: 2100000, guid: 69bb725cfe9ae0446bfddd8e8cd284b8, type: 2}
-  - {fileID: 2100000, guid: 69bb725cfe9ae0446bfddd8e8cd284b8, type: 2}
-  - {fileID: 2100000, guid: 69bb725cfe9ae0446bfddd8e8cd284b8, type: 2}
-  - {fileID: 2100000, guid: 69bb725cfe9ae0446bfddd8e8cd284b8, type: 2}
-  - {fileID: 2100000, guid: 69bb725cfe9ae0446bfddd8e8cd284b8, type: 2}
+  - {fileID: 2100000, guid: 7a568ba34217c3b43960cc457d7d5331, type: 2}
+  - {fileID: 2100000, guid: 5988749164f16474ba8fbd3a5213e5e8, type: 2}
+  - {fileID: 2100000, guid: 7a568ba34217c3b43960cc457d7d5331, type: 2}
+  - {fileID: 2100000, guid: d94fdaf1904d4264b9dfd58acb8618da, type: 2}
+  - {fileID: 2100000, guid: 7a568ba34217c3b43960cc457d7d5331, type: 2}
+  - {fileID: 2100000, guid: 7a568ba34217c3b43960cc457d7d5331, type: 2}
+  - {fileID: 2100000, guid: 5988749164f16474ba8fbd3a5213e5e8, type: 2}
+  - {fileID: 2100000, guid: 7a568ba34217c3b43960cc457d7d5331, type: 2}
+  - {fileID: 2100000, guid: 7a568ba34217c3b43960cc457d7d5331, type: 2}
+  - {fileID: 2100000, guid: 7a568ba34217c3b43960cc457d7d5331, type: 2}
+  - {fileID: 2100000, guid: 7a568ba34217c3b43960cc457d7d5331, type: 2}
+  - {fileID: 2100000, guid: 7a568ba34217c3b43960cc457d7d5331, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

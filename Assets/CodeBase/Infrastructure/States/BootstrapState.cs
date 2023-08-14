@@ -37,7 +37,7 @@ namespace CodeBase.Infrastructure.States
             _language = language;
 
             RegisterServices();
-            // SetTargetFrameRate();
+            SetTargetFrameRate();
         }
 
         public void Enter() =>

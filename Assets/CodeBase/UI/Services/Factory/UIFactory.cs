@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
+using CodeBase.Hero;
 using CodeBase.Infrastructure.AssetManagement;
 using CodeBase.Services.Registrator;
+using CodeBase.UI.Elements.Hud.MobileInputPanel;
 using CodeBase.UI.Elements.Hud.TutorialPanel;
 using UnityEngine;
 
@@ -29,10 +31,11 @@ namespace CodeBase.UI.Services.Factory
         public Transform GetUIRoot() =>
             _uiRoot;
 
-        public async Task<GameObject> CreateHud()
+        public async Task<GameObject> CreateHud(GameObject hero)
         {
             var hudGameObject = await _registratorService.InstantiateRegisteredAsync(AssetAddresses.Hud);
             _tutorialPanel = hudGameObject.GetComponentInChildren<TutorialPanel>();
+            hudGameObject.GetComponentInChildren<LookArea>().Construct(hero.GetComponent<HeroRotating>());
             return hudGameObject;
         }
 

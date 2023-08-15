@@ -35,8 +35,8 @@ namespace CodeBase.Hero
 
         private void Rotate()
         {
-            Debug.Log($"y {_inputService.LookAxis.y}");
-            Debug.Log($"x {_inputService.LookAxis.x}");
+            // Debug.Log($"y {_inputService.LookAxis.y}");
+            // Debug.Log($"x {_inputService.LookAxis.x}");
             RotateVertical();
             RotateHorizontal();
             // RotateVerticalOld();
@@ -54,7 +54,7 @@ namespace CodeBase.Hero
             _camera.transform.localRotation =
                 Quaternion.Euler(_verticalRotation * _verticalSensitivity, 0, 0);
 
-            Debug.Log($"sqrMagnitude {_inputService.LookAxis.sqrMagnitude}");
+            // Debug.Log($"sqrMagnitude {_inputService.LookAxis.sqrMagnitude}");
         }
 
         private void CalculateVertical() =>
@@ -66,44 +66,16 @@ namespace CodeBase.Hero
             _verticalRotation = Mathf.Clamp(_verticalRotation, -verticalAngle, verticalAngle);
         }
 
-        private void RotateHorizontal()
-        {
-            if (_inputService.LookAxis.sqrMagnitude > Constants.RotationEpsilon)
-                transform.Rotate(Vector3.up * _inputService.LookAxis.x * _horizontalSensitivity * Time.deltaTime);
-            else
-                transform.Rotate(Vector3.zero);
-            
-            transform.Rotate(Vector3.zero);
-        }
+        private void RotateHorizontal() =>
+            transform.Rotate(Vector3.up * _inputService.LookAxis.x * _horizontalSensitivity * Time.deltaTime);
 
         public void TurnOn() =>
             _canRotate = true;
 
-        public void TurnOff() =>
+        public void TurnOff()
+        {
             _canRotate = false;
-
-        private void RotateVerticalOld()
-        {
-            if (_inputService.LookAxis.sqrMagnitude > Constants.RotationEpsilon)
-            {
-                CalculateVerticalOld();
-                ClampAngleOld();
-                _camera.transform.localRotation = Quaternion.Euler(_verticalRotation * _verticalSensitivity, 0, 0);
-            }
-
-            Debug.Log($"sqrMagnitude {_inputService.LookAxis.sqrMagnitude}");
+            transform.Rotate(Vector3.zero);
         }
-
-        private void CalculateVerticalOld() =>
-            _verticalRotation -= _inputService.LookAxis.y;
-
-        private void ClampAngleOld()
-        {
-            float verticalAngle = _edgeAngle / _verticalSensitivity;
-            _verticalRotation = Mathf.Clamp(_verticalRotation, -verticalAngle, verticalAngle);
-        }
-
-        private void RotateHorizontalOld() =>
-            transform.Rotate(Vector3.up * _inputService.LookAxis.x * _horizontalSensitivity);
     }
 }

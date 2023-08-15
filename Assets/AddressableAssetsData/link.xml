@@ -41,6 +41,7 @@
     <type fullname="CodeBase.UI.Elements.Hud.LeaderBoardButton.LeaderBoardButton" preserve="all" />
     <type fullname="CodeBase.UI.Elements.Hud.LeaderBoardButton.LeaderBoardButtonText" preserve="all" />
     <type fullname="CodeBase.UI.Elements.Hud.LevelName" preserve="all" />
+    <type fullname="CodeBase.UI.Elements.Hud.MobileInputPanel.LookArea" preserve="all" />
     <type fullname="CodeBase.UI.Elements.Hud.MobileInputPanel.MobileInput" preserve="all" />
     <type fullname="CodeBase.UI.Elements.Hud.OpenSettings" preserve="all" />
     <type fullname="CodeBase.UI.Elements.Hud.PerksPanel.PerkList" preserve="all" />

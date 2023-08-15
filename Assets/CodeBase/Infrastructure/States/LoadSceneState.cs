@@ -189,7 +189,7 @@ namespace CodeBase.Infrastructure.States
         private async Task InitHud(GameObject hero)
         {
             if (_hud == null)
-                _hud = await _uiFactory.CreateHud();
+                _hud = await _uiFactory.CreateHud(hero);
 
             HeroHealth heroHealth = hero.GetComponentInChildren<HeroHealth>();
             heroHealth.Construct(_staticDataService);

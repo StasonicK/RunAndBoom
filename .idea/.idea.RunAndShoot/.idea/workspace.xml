@@ -10,6 +10,10 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/cb57952d33a94ff9b25d8cd51b97d0023d200/56/17d7c8cd/IPointerUpHandler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/UI/Core/Scrollbar.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -91,7 +95,7 @@
       <workItem from="1691938169779" duration="638000" />
       <workItem from="1691990720845" duration="1366000" />
       <workItem from="1692008143397" duration="1865000" />
-      <workItem from="1692076353676" duration="5568000" />
+      <workItem from="1692076353676" duration="8670000" />
     </task>
     <servers />
   </component>

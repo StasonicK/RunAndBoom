@@ -35,6 +35,8 @@ namespace CodeBase.Hero
 
         private void Rotate()
         {
+            Debug.Log($"y {_inputService.LookAxis.y}");
+            Debug.Log($"x {_inputService.LookAxis.x}");
             RotateVertical();
             RotateHorizontal();
             // RotateVerticalOld();
@@ -70,6 +72,8 @@ namespace CodeBase.Hero
                 transform.Rotate(Vector3.up * _inputService.LookAxis.x * _horizontalSensitivity * Time.deltaTime);
             else
                 transform.Rotate(Vector3.zero);
+            
+            transform.Rotate(Vector3.zero);
         }
 
         public void TurnOn() =>

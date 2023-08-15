@@ -18,12 +18,12 @@ namespace CodeBase.Services.Input
 
                 Debug.Log($"LookSimpleInputAxis: {axis}");
 
-                if (axis == Vector2.zero)
-                {
-                    axis = UnityAxis();
-
-                    Debug.Log($"UnityAxis: {axis}");
-                }
+                // if (axis == Vector2.zero)
+                // {
+                //     axis = UnityAxis();
+                //
+                //     Debug.Log($"UnityAxis: {axis}");
+                // }
 
                 return axis;
             }

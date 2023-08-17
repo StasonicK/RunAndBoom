@@ -88,7 +88,7 @@ ModelImporter:
   tangentSpace:
     normalSmoothAngle: 0
     normalImportMode: 1
-    tangentImportMode: 3
+    tangentImportMode: 2
     normalCalculationMode: 0
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
     blendShapeNormalImportMode: 1

@@ -35,7 +35,10 @@ namespace CodeBase.UI.Services.Factory
         {
             var hudGameObject = await _registratorService.InstantiateRegisteredAsync(AssetAddresses.Hud);
             _tutorialPanel = hudGameObject.GetComponentInChildren<TutorialPanel>();
-            hudGameObject.GetComponentInChildren<LookArea>().Construct(hero.GetComponent<HeroRotating>());
+
+            if (Application.isMobilePlatform)
+                hudGameObject.GetComponentInChildren<LookArea>().Construct(hero.GetComponent<HeroRotating>());
+
             return hudGameObject;
         }
 

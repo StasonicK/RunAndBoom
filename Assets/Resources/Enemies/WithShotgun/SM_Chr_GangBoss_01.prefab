@@ -2986,8 +2986,8 @@ SkinnedMeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5443562326888798465}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -2998,7 +2998,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c62a30d4e0ec0844da85575bb614775b, type: 2}
+  - {fileID: 2100000, guid: 4dc86af8af72c0c499eb9f06309c7c74, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3993,18 +3993,6 @@ PrefabInstance:
     - target: {fileID: 2365040147202602431, guid: 76c1c50818829af418118bc7a66bba3d, type: 3}
       propertyPath: m_RootOrder
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2365040147202602431, guid: 76c1c50818829af418118bc7a66bba3d, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 2365040147202602431, guid: 76c1c50818829af418118bc7a66bba3d, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 100.00003
-      objectReference: {fileID: 0}
-    - target: {fileID: 2365040147202602431, guid: 76c1c50818829af418118bc7a66bba3d, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2365040147202602431, guid: 76c1c50818829af418118bc7a66bba3d, type: 3}
       propertyPath: m_LocalPosition.x

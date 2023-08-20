@@ -148,6 +148,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 386087593062180436}
     m_Modifications:
+    - target: {fileID: 421445356603371059, guid: af73e22af3472584fb0756f23eba0c80, type: 3}
+      propertyPath: deadzoneRadius
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 6142806740087211924, guid: af73e22af3472584fb0756f23eba0c80, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

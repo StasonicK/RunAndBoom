@@ -35,12 +35,8 @@ namespace CodeBase.Hero
 
         private void Rotate()
         {
-            // Debug.Log($"y {_inputService.LookAxis.y}");
-            // Debug.Log($"x {_inputService.LookAxis.x}");
             RotateVertical();
             RotateHorizontal();
-            // RotateVerticalOld();
-            // RotateHorizontalOld();
         }
 
         private void RotateVertical()
@@ -53,8 +49,6 @@ namespace CodeBase.Hero
 
             _camera.transform.localRotation =
                 Quaternion.Euler(_verticalRotation * _verticalSensitivity, 0, 0);
-
-            // Debug.Log($"sqrMagnitude {_inputService.LookAxis.sqrMagnitude}");
         }
 
         private void CalculateVertical() =>

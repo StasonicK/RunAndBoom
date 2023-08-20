@@ -11,9 +11,9 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/bae255e3e08e46f7bc2fbd23dde96338158800/fd/57e00994/GameObject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/cb57952d33a94ff9b25d8cd51b97d0023d200/56/17d7c8cd/IPointerUpHandler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.agava.webutility@8b3ff53334/Runtime/WebApplication.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/UI/Core/Scrollbar.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -105,6 +105,8 @@
       <workItem from="1692256660632" duration="1641000" />
       <workItem from="1692267859014" duration="2422000" />
       <workItem from="1692272062807" duration="2263000" />
+      <workItem from="1692336343694" duration="5103000" />
+      <workItem from="1692351227725" duration="1123000" />
     </task>
     <servers />
   </component>

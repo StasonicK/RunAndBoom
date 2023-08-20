@@ -177,6 +177,6 @@ MonoBehaviour:
   thumb: {fileID: 2957713664480587606}
   movementAreaRadius: 75
   deadzoneRadius: 0
-  isDynamicJoystick: 0
+  isDynamicJoystick: 1
   dynamicJoystickMovementArea: {fileID: 0}
-  canFollowPointer: 0
+  canFollowPointer: 1

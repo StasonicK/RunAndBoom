@@ -189,6 +189,10 @@ MonoBehaviour:
     m_Address: RpgExplosion
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 826fc8d045452fa4584f56af01aa9f2f
+    m_Address: Hud 1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 9cc2a55e604bc944590d8a935a0bb2a9, type: 2}
   m_SchemaSet:

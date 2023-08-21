@@ -31,6 +31,8 @@ namespace CodeBase.Hero
         private float _airSpeed = 1.5f;
         private Vector3 _spherePosition;
         private Vector3 _velocity;
+        private FixedJoystick _joystick;
+        private bool _isMobile = false;
 
         private void Awake() =>
             _characterController = GetComponent<CharacterController>();
@@ -48,21 +50,37 @@ namespace CodeBase.Hero
         {
             _staticDataService = staticDataService;
             _inputService = inputService;
+            _isMobile = inputService is MobileInputService;
         }
 
         private void Move()
         {
             Vector3 airDirection = Vector3.zero;
             Vector3 direction = Vector3.zero;
+            Vector3 moveVelocity = Vector3.zero;
+            Vector3 moveInput = Vector3.zero;
 
-            if (_inputService.MoveAxis.sqrMagnitude > Constants.MovementEpsilon)
+            if (_isMobile!)
             {
+                if (_inputService.MoveAxis.sqrMagnitude > Constants.MovementEpsilon)
+                {
+                    if (IsGrounded())
+                        airDirection = transform.forward * _inputService.MoveAxis.y +
+                                       transform.right * _inputService.MoveAxis.x;
+                    else
+                        direction = transform.forward * _inputService.MoveAxis.y +
+                                    transform.right * _inputService.MoveAxis.x;
+                }
+            }
+            else
+            {
+                moveVelocity = new Vector3(_joystick.Horizontal, Constants.Zero, _joystick.Vertical);
+                moveInput = new Vector3(moveVelocity.x, Constants.Zero, moveVelocity.z);
+
                 if (IsGrounded())
-                    airDirection = transform.forward * _inputService.MoveAxis.y +
-                                   transform.right * _inputService.MoveAxis.x;
+                    airDirection = transform.forward * moveInput.y + transform.right * moveInput.x;
                 else
-                    direction = transform.forward * _inputService.MoveAxis.y +
-                                transform.right * _inputService.MoveAxis.x;
+                    direction = transform.forward * moveInput.y + transform.right * moveInput.x;
             }
 
             _characterController.Move((direction.normalized * _movementSpeed + airDirection * _airSpeed) *
@@ -73,7 +91,10 @@ namespace CodeBase.Hero
         {
             _spherePosition = new Vector3(transform.position.x, transform.position.y - _groundYOffset,
                 transform.position.z);
-            if (Physics.CheckSphere(_spherePosition, _characterController.radius - 0.05f, _groundMask)) return true;
+
+            if (Physics.CheckSphere(_spherePosition, _characterController.radius - 0.05f, _groundMask))
+                return true;
+
             return false;
         }
 

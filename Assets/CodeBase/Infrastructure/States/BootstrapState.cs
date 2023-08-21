@@ -104,10 +104,10 @@ namespace CodeBase.Infrastructure.States
         }
 
         private static IInputService InputService() =>
-            Application.isMobilePlatform
-            ? 
+            // Application.isMobilePlatform
+            // ? 
                 new MobileInputService()
-                : new DesktopInputService()
+                // : new DesktopInputService()
                 ;
 
         private void SetTargetFrameRate()

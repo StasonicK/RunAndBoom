@@ -11,6 +11,7 @@ using CodeBase.Services.StaticData;
 using CodeBase.StaticData;
 using CodeBase.StaticData.Levels;
 using CodeBase.UI.Elements.Hud;
+using CodeBase.UI.Elements.Hud.MobileInputPanel;
 using CodeBase.UI.Elements.Hud.WeaponsPanel;
 using CodeBase.UI.Services.Factory;
 using CodeBase.UI.Services.Windows;
@@ -193,7 +194,20 @@ namespace CodeBase.Infrastructure.States
 
             HeroHealth heroHealth = hero.GetComponentInChildren<HeroHealth>();
             heroHealth.Construct(_staticDataService);
-            hero.GetComponent<HeroMovement>().Construct(_staticDataService, _inputService);
+
+            if (_inputService is MobileInputService)
+            {
+                MobileInput mobileInput = _hud.GetComponentInChildren<MobileInput>();
+                LookByTouch lookByTouch = _hud.GetComponentInChildren<LookByTouch>();
+                hero.GetComponent<HeroMovement>().Construct(_staticDataService, mobileInput);
+                hero.GetComponent<HeroRotating>().Construct(lookByTouch);
+            }
+            else
+            {
+                hero.GetComponent<HeroMovement>().Construct(_staticDataService, _inputService);
+                hero.GetComponent<HeroRotating>().Construct(_inputService);
+            }
+
             hero.GetComponent<HeroReloading>().Construct(_staticDataService);
             HeroReloading heroReloading = hero.GetComponent<HeroReloading>();
             HeroDeath heroDeath = hero.GetComponentInChildren<HeroDeath>();

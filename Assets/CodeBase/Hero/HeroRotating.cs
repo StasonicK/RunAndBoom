@@ -1,5 +1,5 @@
-using CodeBase.Services;
 using CodeBase.Services.Input;
+using CodeBase.UI.Elements.Hud.MobileInputPanel;
 using UnityEngine;
 
 namespace CodeBase.Hero
@@ -12,16 +12,35 @@ namespace CodeBase.Hero
         [SerializeField] private float _edgeAngle = 85f;
 
         private IInputService _inputService;
+        private VariableJoystick _joystick;
+        private LookByTouch _lookByTouch;
+        private bool _isMobile = false;
+        private bool _update;
         private float _xAxisClamp = 0;
         private bool _canRotate = true;
         private float _verticalRotation;
 
-        private void Awake() =>
-            _inputService = AllServices.Container.Single<IInputService>();
+        public void Construct(IInputService inputService)
+        {
+            _inputService = inputService;
+            _isMobile = false;
+
+            _update = true;
+        }
+
+        // public void Construct(MobileInput mobileInput)
+        public void Construct(LookByTouch lookByTouch)
+        {
+            _lookByTouch = lookByTouch;
+            // _joystick = mobileInput.LookJoystick;
+            _isMobile = true;
+
+            _update = true;
+        }
 
         private void Start()
         {
-            if (AllServices.Container.Single<IInputService>() is DesktopInputService)
+            if (_inputService is DesktopInputService)
                 Cursor.lockState = CursorLockMode.Locked;
             else
                 Cursor.lockState = CursorLockMode.Confined;
@@ -29,6 +48,9 @@ namespace CodeBase.Hero
 
         private void Update()
         {
+            if (_update == false)
+                return;
+
             if (_canRotate)
                 Rotate();
         }
@@ -41,18 +63,28 @@ namespace CodeBase.Hero
 
         private void RotateVertical()
         {
-            if (_inputService.LookAxis.sqrMagnitude > Constants.RotationEpsilon)
+            if (_isMobile == false)
             {
-                CalculateVertical();
-                ClampAngle();
+                if (_inputService.LookAxis.sqrMagnitude <= Constants.RotationEpsilon)
+                    return;
+
+                _verticalRotation -= _inputService.LookAxis.y;
             }
+            else
+            {
+                if (_lookByTouch.JoystickVec.sqrMagnitude > Constants.RotationEpsilon)
+                    _verticalRotation -= _lookByTouch.JoystickVec.y;
+                // if (_joystick.Magnitude <= Constants.MovementEpsilon)
+                //     return;
+                //
+                // _verticalRotation -= _joystick.Vertical;
+            }
+
+            ClampAngle();
 
             _camera.transform.localRotation =
                 Quaternion.Euler(_verticalRotation * _verticalSensitivity, 0, 0);
         }
-
-        private void CalculateVertical() =>
-            _verticalRotation -= _inputService.LookAxis.y;
 
         private void ClampAngle()
         {
@@ -60,8 +92,23 @@ namespace CodeBase.Hero
             _verticalRotation = Mathf.Clamp(_verticalRotation, -verticalAngle, verticalAngle);
         }
 
-        private void RotateHorizontal() =>
-            transform.Rotate(Vector3.up * _inputService.LookAxis.x * _horizontalSensitivity * Time.deltaTime);
+        private void RotateHorizontal()
+        {
+            if (_isMobile == false)
+            {
+                if (_inputService.LookAxis.sqrMagnitude > Constants.RotationEpsilon)
+                    transform.Rotate(Vector3.up * _inputService.LookAxis.x * _horizontalSensitivity * Time.deltaTime);
+            }
+            else
+            {
+                if (_lookByTouch.JoystickVec.sqrMagnitude > Constants.RotationEpsilon)
+                    transform.Rotate(Vector3.up * _lookByTouch.JoystickVec.x * _horizontalSensitivity * Time.deltaTime);
+                // if (_joystick.Magnitude > Constants.RotationEpsilon)
+                // transform.Rotate(Vector3.up * _joystick.Horizontal * _horizontalSensitivity * Time.deltaTime);
+            }
+
+            transform.Rotate(Vector3.up * Constants.Zero * _horizontalSensitivity * Time.deltaTime);
+        }
 
         public void TurnOn() =>
             _canRotate = true;

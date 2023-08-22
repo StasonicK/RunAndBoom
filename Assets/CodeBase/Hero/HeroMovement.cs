@@ -7,6 +7,8 @@ using CodeBase.Services.StaticData;
 using CodeBase.StaticData.Items;
 using CodeBase.UI.Elements.Hud.MobileInputPanel;
 using UnityEngine;
+using UnityEngine.InputSystem.EnhancedTouch;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 namespace CodeBase.Hero
 {
@@ -20,8 +22,7 @@ namespace CodeBase.Hero
 
         private IStaticDataService _staticDataService;
         private IInputService _inputService;
-        // private VariableJoystick _joystick;
-        private MoveByTouch _moveByTouch;
+        private MoveJoystick _moveJoystick;
         private bool _isMobile = false;
         private CharacterController _characterController;
         private float _baseMovementSpeed = 5f;
@@ -36,9 +37,32 @@ namespace CodeBase.Hero
         private Vector3 _spherePosition;
         private Vector3 _velocity;
         private bool _update;
+        private Vector2 _moveInput;
 
-        private void Awake() =>
+        private void Awake()
+        {
             _characterController = GetComponent<CharacterController>();
+        }
+
+        private void Move(Vector2 moveInput)
+        {
+            _moveInput = moveInput;
+            // Vector3 airDirection = Vector3.zero;
+            // Vector3 mainDirection = Vector3.zero;
+            // Debug.Log($"magnitude {direction.sqrMagnitude}");
+            // if (direction.sqrMagnitude <= Constants.MovementEpsilon)
+            //     return;
+            //
+            // if (IsGrounded())
+            //     airDirection = transform.forward * _inputService.MoveAxis.y +
+            //                    transform.right * _inputService.MoveAxis.x;
+            // else
+            //     mainDirection = transform.forward * _inputService.MoveAxis.y +
+            //                     transform.right * _inputService.MoveAxis.x;
+            //
+            // _characterController.Move((mainDirection.normalized * _movementSpeed + airDirection * _airSpeed) *
+            //                           Time.deltaTime);
+        }
 
         private void Update()
         {
@@ -55,15 +79,14 @@ namespace CodeBase.Hero
             _inputService = inputService;
             _isMobile = false;
             _update = true;
+            _inputService.Moved += Move;
         }
 
-        public void Construct(IStaticDataService staticDataService, MoveByTouch moveByTouch)
-            // public void Construct(IStaticDataService staticDataService, MobileInput mobileInput)
+        public void Construct(IStaticDataService staticDataService, MoveJoystick moveJoystick)
         {
-            _moveByTouch = moveByTouch;
+            _moveJoystick = moveJoystick;
             _staticDataService = staticDataService;
             _isMobile = true;
-            // _joystick = mobileInput.MoveJoystick;
             _update = true;
         }
 
@@ -74,29 +97,32 @@ namespace CodeBase.Hero
 
             if (_isMobile == false)
             {
-                if (_inputService.MoveAxis.sqrMagnitude <= Constants.MovementEpsilon)
+                if (_moveInput.sqrMagnitude <= Constants.MovementEpsilon)
                     return;
 
                 if (IsGrounded())
-                    airDirection = transform.forward * _inputService.MoveAxis.y +
-                                   transform.right * _inputService.MoveAxis.x;
+                    airDirection = transform.forward * _moveInput.y +
+                                   transform.right * _moveInput.x;
                 else
-                    direction = transform.forward * _inputService.MoveAxis.y +
-                                transform.right * _inputService.MoveAxis.x;
+                    direction = transform.forward * _moveInput.y +
+                                transform.right * _moveInput.x;
             }
             else
             {
-                if (_moveByTouch.JoystickVec.sqrMagnitude <= Constants.MovementEpsilon)
+                if (_moveJoystick.MoveInput.sqrMagnitude <= Constants.MovementEpsilon)
                     return;
 
                 if (IsGrounded())
-                    airDirection = transform.forward * _moveByTouch.JoystickVec.y +
-                                   transform.right * _moveByTouch.JoystickVec.x;
+                    airDirection = transform.forward * _moveJoystick.MoveInput.y +
+                                   transform.right * _moveJoystick.MoveInput.x;
                 else
-                    direction = transform.forward * _moveByTouch.JoystickVec.y +
-                                transform.right * _moveByTouch.JoystickVec.x;
+                    direction = transform.forward * _moveJoystick.MoveInput.y +
+                                transform.right * _moveJoystick.MoveInput.x;
             }
 
+            Debug.Log($"move magnitude {_inputService.MoveAxis.sqrMagnitude}");
+            Debug.Log($"move input {_moveInput}");
+            Debug.Log($"move direction {direction}");
             _characterController.Move((direction.normalized * _movementSpeed + airDirection * _airSpeed) *
                                       Time.deltaTime);
         }
@@ -151,11 +177,35 @@ namespace CodeBase.Hero
             _movementSpeed = _baseMovementSpeed * _movementRatio;
         }
 
-        public void TurnOn() =>
+        public void TurnOn()
+        {
+            EnhancedTouchSupport.Enable();
+            Touch.onFingerDown += HandleFingerDown;
+            Touch.onFingerUp += HandleFingerUp;
+            Touch.onFingerMove += HandleFingerMove;
             _canMove = true;
+        }
 
-        public void TurnOff() =>
+        public void TurnOff()
+        {
+            EnhancedTouchSupport.Disable();
+            Touch.onFingerDown -= HandleFingerDown;
+            Touch.onFingerUp -= HandleFingerUp;
+            Touch.onFingerMove -= HandleFingerMove;
             _canMove = false;
+        }
+
+        private void HandleFingerDown(Finger obj)
+        {
+        }
+
+        private void HandleFingerUp(Finger obj)
+        {
+        }
+
+        private void HandleFingerMove(Finger obj)
+        {
+        }
 
         public void LoadProgress(PlayerProgress progress)
         {

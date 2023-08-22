@@ -103,12 +103,16 @@ namespace CodeBase.Infrastructure.States
         {
         }
 
-        private static IInputService InputService() =>
-            // Application.isMobilePlatform
-            // ? 
+        private static IInputService InputService()
+        {
+            PlayerInput playerInput = new PlayerInput();
+            return 
+                Application.isMobilePlatform
+                ? 
                 new MobileInputService()
-                // : new DesktopInputService()
+                : new DesktopInputService(playerInput)
                 ;
+        }
 
         private void SetTargetFrameRate()
         {

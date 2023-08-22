@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace CodeBase.Services.Input
@@ -8,5 +9,9 @@ namespace CodeBase.Services.Input
         Vector2 LookAxis { get; }
 
         bool IsAttackButtonUp();
+        
+        
+        public event Action<Vector2> Moved;
+        public event Action<Vector2> Looked;
     }
 }

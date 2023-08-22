@@ -199,7 +199,8 @@ namespace CodeBase.Infrastructure.States
             {
                 MobileInput mobileInput = _hud.GetComponentInChildren<MobileInput>();
                 LookByTouch lookByTouch = _hud.GetComponentInChildren<LookByTouch>();
-                hero.GetComponent<HeroMovement>().Construct(_staticDataService, mobileInput);
+                MoveByTouch moveByTouch = _hud.GetComponentInChildren<MoveByTouch>();
+                hero.GetComponent<HeroMovement>().Construct(_staticDataService, moveByTouch);
                 hero.GetComponent<HeroRotating>().Construct(lookByTouch);
             }
             else

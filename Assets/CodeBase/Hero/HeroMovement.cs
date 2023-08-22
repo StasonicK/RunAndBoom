@@ -20,7 +20,8 @@ namespace CodeBase.Hero
 
         private IStaticDataService _staticDataService;
         private IInputService _inputService;
-        private VariableJoystick _joystick;
+        // private VariableJoystick _joystick;
+        private MoveByTouch _moveByTouch;
         private bool _isMobile = false;
         private CharacterController _characterController;
         private float _baseMovementSpeed = 5f;
@@ -56,11 +57,13 @@ namespace CodeBase.Hero
             _update = true;
         }
 
-        public void Construct(IStaticDataService staticDataService, MobileInput mobileInput)
+        public void Construct(IStaticDataService staticDataService, MoveByTouch moveByTouch)
+            // public void Construct(IStaticDataService staticDataService, MobileInput mobileInput)
         {
+            _moveByTouch = moveByTouch;
             _staticDataService = staticDataService;
             _isMobile = true;
-            _joystick = mobileInput.MoveJoystick;
+            // _joystick = mobileInput.MoveJoystick;
             _update = true;
         }
 
@@ -83,13 +86,15 @@ namespace CodeBase.Hero
             }
             else
             {
-                if (_joystick.Magnitude <= Constants.MovementEpsilon)
+                if (_moveByTouch.JoystickVec.sqrMagnitude <= Constants.MovementEpsilon)
                     return;
 
                 if (IsGrounded())
-                    airDirection = transform.forward * _joystick.Vertical + transform.right * _joystick.Horizontal;
+                    airDirection = transform.forward * _moveByTouch.JoystickVec.y +
+                                   transform.right * _moveByTouch.JoystickVec.x;
                 else
-                    direction = transform.forward * _joystick.Vertical + transform.right * _joystick.Horizontal;
+                    direction = transform.forward * _moveByTouch.JoystickVec.y +
+                                transform.right * _moveByTouch.JoystickVec.x;
             }
 
             _characterController.Move((direction.normalized * _movementSpeed + airDirection * _airSpeed) *

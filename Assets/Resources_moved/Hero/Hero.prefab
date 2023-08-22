@@ -274,8 +274,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _camera: {fileID: 330585545}
   _verticalSensitivity: 2
-  _horizontalSensitivity: 120
-  _edgeAngle: 85
+  _horizontalSensitivity: 12
+  _edgeAngle: 10
 --- !u!114 &3576587852183587754
 MonoBehaviour:
   m_ObjectHideFlags: 0

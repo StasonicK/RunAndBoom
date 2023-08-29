@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
-using CodeBase.Hero;
 using CodeBase.Infrastructure.AssetManagement;
 using CodeBase.Services.Registrator;
-using CodeBase.UI.Elements.Hud.MobileInputPanel;
 using CodeBase.UI.Elements.Hud.TutorialPanel;
 using UnityEngine;
 

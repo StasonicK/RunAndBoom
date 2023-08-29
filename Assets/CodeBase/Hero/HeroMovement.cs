@@ -44,6 +44,24 @@ namespace CodeBase.Hero
             _characterController = GetComponent<CharacterController>();
         }
 
+        private void Update()
+        {
+            if (_update == false)
+                return;
+
+            // Move();
+            Gravity();
+        }
+
+        public void ConstructDesktopPlatform(IStaticDataService staticDataService, DesktopInputService inputService)
+        {
+            _staticDataService = staticDataService;
+            _inputService = inputService;
+            _isMobile = false;
+            _update = true;
+            _inputService.Moved += Move;
+        }
+
         private void Move(Vector2 moveInput)
         {
             _moveInput = moveInput;
@@ -64,25 +82,7 @@ namespace CodeBase.Hero
             //                           Time.deltaTime);
         }
 
-        private void Update()
-        {
-            if (_update == false)
-                return;
-
-            Move();
-            Gravity();
-        }
-
-        public void Construct(IStaticDataService staticDataService, IInputService inputService)
-        {
-            _staticDataService = staticDataService;
-            _inputService = inputService;
-            _isMobile = false;
-            _update = true;
-            _inputService.Moved += Move;
-        }
-
-        public void Construct(IStaticDataService staticDataService, MoveJoystick moveJoystick)
+        public void ConstructMobilePlatform(IStaticDataService staticDataService, MoveJoystick moveJoystick)
         {
             _moveJoystick = moveJoystick;
             _staticDataService = staticDataService;
@@ -97,18 +97,21 @@ namespace CodeBase.Hero
 
             if (_isMobile == false)
             {
-                if (_moveInput.sqrMagnitude <= Constants.MovementEpsilon)
-                    return;
-
-                if (IsGrounded())
-                    airDirection = transform.forward * _moveInput.y +
-                                   transform.right * _moveInput.x;
-                else
-                    direction = transform.forward * _moveInput.y +
-                                transform.right * _moveInput.x;
+                // if (_moveInput.sqrMagnitude <= Constants.MovementEpsilon)
+                //     return;
+                //
+                // if (IsGrounded())
+                //     airDirection = transform.forward * _moveInput.y +
+                //                    transform.right * _moveInput.x;
+                // else
+                //     direction = transform.forward * _moveInput.y +
+                //                 transform.right * _moveInput.x;
+                Debug.Log($"move magnitude {_inputService.MoveAxis.sqrMagnitude}");
             }
             else
             {
+                Debug.Log($"move magnitude {_moveJoystick.MoveInput.sqrMagnitude}");
+
                 if (_moveJoystick.MoveInput.sqrMagnitude <= Constants.MovementEpsilon)
                     return;
 
@@ -120,7 +123,6 @@ namespace CodeBase.Hero
                                 transform.right * _moveJoystick.MoveInput.x;
             }
 
-            Debug.Log($"move magnitude {_inputService.MoveAxis.sqrMagnitude}");
             Debug.Log($"move input {_moveInput}");
             Debug.Log($"move direction {direction}");
             _characterController.Move((direction.normalized * _movementSpeed + airDirection * _airSpeed) *

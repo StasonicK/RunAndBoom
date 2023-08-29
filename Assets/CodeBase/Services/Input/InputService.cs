@@ -15,7 +15,7 @@ namespace CodeBase.Services.Input
         public abstract Vector2 LookAxis { get; }
 
         public abstract bool IsAttackButtonUp();
-        
+
         public abstract event Action<Vector2> Moved;
         public abstract event Action<Vector2> Looked;
 

@@ -6,8 +6,7 @@ namespace CodeBase.UI.Elements.Hud.MobileInputPanel
     [DisallowMultipleComponent]
     public class FloatingJoystick : MonoBehaviour
     {
-        [HideInInspector]
-        public RectTransform RectTransform;
+        [HideInInspector] public RectTransform RectTransform;
         public RectTransform Knob;
 
         private void Awake()

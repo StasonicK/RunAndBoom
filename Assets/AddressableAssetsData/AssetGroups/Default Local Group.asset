@@ -197,6 +197,10 @@ MonoBehaviour:
     m_Address: Hud 2
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: f8753c0f794615f4eb6f96367816ebc6
+    m_Address: Hud 3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 9cc2a55e604bc944590d8a935a0bb2a9, type: 2}
   m_SchemaSet:

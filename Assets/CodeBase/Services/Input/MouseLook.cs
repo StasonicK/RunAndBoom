@@ -13,13 +13,7 @@ namespace CodeBase.Services.Input
         public MouseLook(PlayerInput playerInput)
         {
             _playerInput = playerInput;
-            OnEnable();
             Subscribe();
-        }
-
-        private void OnEnable()
-        {
-            _playerInput.Enable();
         }
 
         private void Subscribe()
@@ -35,7 +29,7 @@ namespace CodeBase.Services.Input
             // Looked?.Invoke(lookInput);
         }
 
-        private void LookCanceled(InputAction.CallbackContext obj) => 
+        private void LookCanceled(InputAction.CallbackContext obj) =>
             Looked?.Invoke(Vector2.zero);
     }
 }

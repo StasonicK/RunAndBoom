@@ -26,6 +26,7 @@ namespace CodeBase.Services.Input
 
         private void Subscribe()
         {
+            _playerInput.Enable();
             _keyboardMovement.Moved += MoveTo;
             _mouseLook.Looked += LookTo;
         }
@@ -33,7 +34,7 @@ namespace CodeBase.Services.Input
         private void MoveTo(Vector2 direction) =>
             Moved?.Invoke(direction);
 
-        private void LookTo(Vector2 direction) => 
+        private void LookTo(Vector2 direction) =>
             Looked?.Invoke(direction);
 
         public override Vector2 MoveAxis

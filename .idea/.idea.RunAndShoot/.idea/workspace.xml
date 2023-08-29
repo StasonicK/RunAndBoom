@@ -15,6 +15,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/bae255e3e08e46f7bc2fbd23dde96338158800/fd/57e00994/GameObject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/cb57952d33a94ff9b25d8cd51b97d0023d200/56/17d7c8cd/IPointerUpHandler.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.agava.webutility@8b3ff53334/Runtime/WebApplication.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.addressables@1.19.19/Runtime/AddressablesImpl.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.4/InputSystem/Actions/InputAction.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.4.4/InputSystem/Actions/InputActionState.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/EventSystem/EventData/PointerEventData.cs" root0="SKIP_HIGHLIGHTING" />
@@ -75,10 +76,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="4876">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="4876" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -117,7 +118,19 @@
       <workItem from="1692610571595" duration="11896000" />
       <workItem from="1692631714258" duration="4598000" />
       <workItem from="1692675822643" duration="8791000" />
-      <workItem from="1692696065066" duration="1642000" />
+      <workItem from="1692696065066" duration="8508000" />
+      <workItem from="1692722984286" duration="1314000" />
+      <workItem from="1692759975156" duration="3722000" />
+      <workItem from="1692784445875" duration="1138000" />
+      <workItem from="1692799850787" duration="641000" />
+      <workItem from="1692842763281" duration="837000" />
+      <workItem from="1692857931562" duration="2505000" />
+      <workItem from="1692934740315" duration="2125000" />
+      <workItem from="1692950110997" duration="319000" />
+      <workItem from="1692957759853" duration="3403000" />
+      <workItem from="1693196616160" duration="5823000" />
+      <workItem from="1693216737303" duration="2581000" />
+      <workItem from="1693284911166" duration="4019000" />
     </task>
     <servers />
   </component>
@@ -128,37 +141,5 @@
   <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/CodeBase/Hero/HeroMovement.cs</url>
-          <line>128</line>
-          <properties documentPath="E:\Unity projects\My projects\RunAndShoot\Assets\CodeBase\Hero\HeroMovement.cs" initialLine="126" containingFunctionPresentation="Method 'Move'">
-            <startOffsets>
-              <option value="4734" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4883" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/CodeBase/Hero/HeroMovement.cs</url>
-          <line>109</line>
-          <properties documentPath="E:\Unity projects\My projects\RunAndShoot\Assets\CodeBase\Hero\HeroMovement.cs" initialLine="109" containingFunctionPresentation="Method 'Move'">
-            <startOffsets>
-              <option value="3870" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3980" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

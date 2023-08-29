@@ -5,7 +5,9 @@
         public const string UIRoot = "UIRoot";
         public const string Hero = "Hero";
         public const string Spawner = "SpawnPoint";
-        public const string Hud = "Hud 2";
+
+        public const string Hud = "Hud 3";
+        // public const string Hud = "Hud 2";
         // public const string Hud = "Hud 1";
         // public const string Hud = "Hud";
 

@@ -57,8 +57,8 @@ namespace CodeBase.Hero
 
         private void Rotate()
         {
-            RotateVertical();
-            RotateHorizontal();
+            // RotateVertical();
+            // RotateHorizontal();
         }
 
         private void RotateVertical()

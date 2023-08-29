@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
 using ETouch = UnityEngine.InputSystem.EnhancedTouch;
 
 namespace CodeBase.UI.Elements.Hud.MobileInputPanel
@@ -30,13 +29,13 @@ namespace CodeBase.UI.Elements.Hud.MobileInputPanel
             ETouch.EnhancedTouchSupport.Disable();
         }
 
-        private void HandleFingerMove(ETouch.Finger MovedFinger)
+        private void HandleFingerMove(ETouch.Finger movedFinger)
         {
-            if (MovedFinger == MovementFinger)
+            if (movedFinger == MovementFinger)
             {
                 Vector2 knobPosition;
                 float maxMovement = JoystickSize.x / 2f;
-                ETouch.Touch currentTouch = MovedFinger.currentTouch;
+                ETouch.Touch currentTouch = movedFinger.currentTouch;
 
                 if (Vector2.Distance(
                         currentTouch.screenPosition,
@@ -55,13 +54,15 @@ namespace CodeBase.UI.Elements.Hud.MobileInputPanel
 
                 Joystick.Knob.anchoredPosition = knobPosition;
                 _moveInput = knobPosition / maxMovement;
+                Debug.Log($"knobPosition {knobPosition}");
+                Debug.Log($"maxMovement {maxMovement}");
                 Debug.Log($"move input {_moveInput}");
             }
         }
 
-        private void HandleLoseFinger(ETouch.Finger LostFinger)
+        private void HandleLoseFinger(ETouch.Finger lostFinger)
         {
-            if (LostFinger == MovementFinger)
+            if (lostFinger == MovementFinger)
             {
                 MovementFinger = null;
                 Joystick.Knob.anchoredPosition = Vector2.zero;
@@ -70,29 +71,29 @@ namespace CodeBase.UI.Elements.Hud.MobileInputPanel
             }
         }
 
-        private void HandleFingerDown(ETouch.Finger TouchedFinger)
+        private void HandleFingerDown(ETouch.Finger touchedFinger)
         {
-            if (MovementFinger == null && TouchedFinger.screenPosition.x <= Screen.width / 2f)
+            if (MovementFinger == null && touchedFinger.screenPosition.x <= Screen.width / 2f)
             {
-                MovementFinger = TouchedFinger;
+                MovementFinger = touchedFinger;
                 _moveInput = Vector2.zero;
                 Joystick.gameObject.SetActive(true);
                 Joystick.RectTransform.sizeDelta = JoystickSize;
-                Joystick.RectTransform.anchoredPosition = ClampStartPosition(TouchedFinger.screenPosition);
+                Joystick.RectTransform.anchoredPosition = ClampStartPosition(touchedFinger.screenPosition);
             }
         }
 
-        private Vector2 ClampStartPosition(Vector2 StartPosition)
+        private Vector2 ClampStartPosition(Vector2 startPosition)
         {
-            if (StartPosition.x < JoystickSize.x / 2)
-                StartPosition.x = JoystickSize.x / 2;
+            if (startPosition.x < JoystickSize.x / 2)
+                startPosition.x = JoystickSize.x / 2;
 
-            if (StartPosition.y < JoystickSize.y / 2)
-                StartPosition.y = JoystickSize.y / 2;
-            else if (StartPosition.y > Screen.height - JoystickSize.y / 2)
-                StartPosition.y = Screen.height - JoystickSize.y / 2;
+            if (startPosition.y < JoystickSize.y / 2)
+                startPosition.y = JoystickSize.y / 2;
+            else if (startPosition.y > Screen.height - JoystickSize.y / 2)
+                startPosition.y = Screen.height - JoystickSize.y / 2;
 
-            return StartPosition;
+            return startPosition;
         }
 
         private void Update()

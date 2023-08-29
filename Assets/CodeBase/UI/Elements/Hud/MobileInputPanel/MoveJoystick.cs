@@ -35,12 +35,13 @@ namespace CodeBase.UI.Elements.Hud.MobileInputPanel
             {
                 Vector2 knobPosition;
                 float maxMovement = JoystickSize.x / 2f;
+                Debug.Log($"maxMovement {maxMovement}");
                 ETouch.Touch currentTouch = movedFinger.currentTouch;
 
-                if (Vector2.Distance(
-                        currentTouch.screenPosition,
-                        Joystick.RectTransform.anchoredPosition
-                    ) > maxMovement)
+                float distance = Vector2.Distance(currentTouch.screenPosition, Joystick.RectTransform.anchoredPosition);
+                Debug.Log($"distance {distance}");
+                
+                if (distance > maxMovement)
                 {
                     knobPosition = (
                                        currentTouch.screenPosition - Joystick.RectTransform.anchoredPosition
@@ -52,10 +53,9 @@ namespace CodeBase.UI.Elements.Hud.MobileInputPanel
                     knobPosition = currentTouch.screenPosition - Joystick.RectTransform.anchoredPosition;
                 }
 
+                Debug.Log($"knobPosition {knobPosition}");
                 Joystick.Knob.anchoredPosition = knobPosition;
                 _moveInput = knobPosition / maxMovement;
-                Debug.Log($"knobPosition {knobPosition}");
-                Debug.Log($"maxMovement {maxMovement}");
                 Debug.Log($"move input {_moveInput}");
             }
         }
@@ -101,7 +101,7 @@ namespace CodeBase.UI.Elements.Hud.MobileInputPanel
             // Vector3 scaledMovement = Player.speed * Time.deltaTime * new Vector3(
             //     _moveInput.x,
             //     0,
-            //     MovementAmount.y
+            //     _moveInput.y
             // );
             //
             // Player.transform.LookAt(Player.transform.position + scaledMovement, Vector3.up);

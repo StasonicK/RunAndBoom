@@ -60,36 +60,36 @@ namespace CodeBase.UI.Elements.Hud.TutorialPanel
             if (_hidden)
                 return;
 
-            if (_inputService.IsAttackButtonUp())
-                HidePanel();
-
-            if (_inputService is MobileInputService && _inputService.LookAxis.magnitude > Constants.RotationEpsilon)
-                HidePanel();
-
-            if (_inputService is MobileInputService && _inputService.MoveAxis.magnitude > Constants.MovementEpsilon)
-                HidePanel();
-
-            if (Input.GetKeyDown(KeyCode.W))
-                HidePanel();
-
-            if (Input.GetKeyDown(KeyCode.S))
-                HidePanel();
-
-            if (Input.GetKeyDown(KeyCode.A))
-                HidePanel();
-
-            if (Input.GetKeyDown(KeyCode.D))
-                HidePanel();
-
-            if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Alpha2) ||
-                Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Alpha4))
-                HidePanel();
-
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-                HidePanel();
-
-            if (Input.GetKeyDown(KeyCode.Escape))
-                HidePanel();
+            // if (_inputService.IsAttackButtonUp())
+            //     HidePanel();
+            //
+            // if (_inputService is MobileInputService && _inputService.LookAxis.magnitude > Constants.RotationEpsilon)
+            //     HidePanel();
+            //
+            // if (_inputService is MobileInputService && _inputService.MoveAxis.magnitude > Constants.MovementEpsilon)
+            //     HidePanel();
+            //
+            // if (Input.GetKeyDown(KeyCode.W))
+            //     HidePanel();
+            //
+            // if (Input.GetKeyDown(KeyCode.S))
+            //     HidePanel();
+            //
+            // if (Input.GetKeyDown(KeyCode.A))
+            //     HidePanel();
+            //
+            // if (Input.GetKeyDown(KeyCode.D))
+            //     HidePanel();
+            //
+            // if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Alpha2) ||
+            //     Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Alpha4))
+            //     HidePanel();
+            //
+            // if (Input.GetKeyDown(KeyCode.Mouse0))
+            //     HidePanel();
+            //
+            // if (Input.GetKeyDown(KeyCode.Escape))
+            //     HidePanel();
         }
 
         public void HidePanel()

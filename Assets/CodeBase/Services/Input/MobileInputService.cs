@@ -16,9 +16,5 @@ namespace CodeBase.Services.Input
         public override bool IsAttackButtonUp() => SimpleInput.GetButtonDown(Button);
         public override event Action<Vector2> Moved;
         public override event Action<Vector2> Looked;
-
-        public override Vector2 MoveAxis => MoveSimpleInputAxis();
-
-        public override Vector2 LookAxis => LookSimpleInputAxis();
     }
 }

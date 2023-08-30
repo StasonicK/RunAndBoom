@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CodeBase.UI.Elements.Hud.MobileInputPanel
+namespace CodeBase.UI.Elements.Hud.MobileInputPanel.Joysticks
 {
     [RequireComponent(typeof(RectTransform))]
     [DisallowMultipleComponent]
@@ -9,9 +9,7 @@ namespace CodeBase.UI.Elements.Hud.MobileInputPanel
         [HideInInspector] public RectTransform RectTransform;
         public RectTransform Knob;
 
-        private void Awake()
-        {
+        private void Awake() =>
             RectTransform = GetComponent<RectTransform>();
-        }
     }
 }

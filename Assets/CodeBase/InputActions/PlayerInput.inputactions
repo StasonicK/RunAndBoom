@@ -18,10 +18,19 @@
                     "name": "Look",
                     "type": "Value",
                     "id": "1eb50bcc-6f79-4c91-b1d6-6b519cfd1fc6",
-                    "expectedControlType": "Axis",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Shoot",
+                    "type": "Button",
+                    "id": "53667391-22ee-4491-9a02-c5cf8731d22e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -82,8 +91,8 @@
                 },
                 {
                     "name": "",
-                    "id": "7d169fcd-6aca-486f-b7ad-098d3513c70f",
-                    "path": "<Mouse>/delta/y",
+                    "id": "838ec3f9-dbb3-4ae7-825f-27a0ad21c68b",
+                    "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard and mouse",
@@ -93,12 +102,12 @@
                 },
                 {
                     "name": "",
-                    "id": "3c75d7ad-0fa9-4cd0-b4a7-32207fe5ccba",
-                    "path": "<Mouse>/delta/x",
+                    "id": "6d8cdce0-ac2d-4b84-88e0-913d98836eb2",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard and mouse",
-                    "action": "Look",
+                    "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

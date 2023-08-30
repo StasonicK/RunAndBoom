@@ -37,10 +37,6 @@ MonoBehaviour:
     m_Address: UIRoot
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: c3e8cbfc43efdb94ab494fb89da557ab
-    m_Address: Hud
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: 0cc9c3825f5725c4cacaa0350aa89e2b
     m_Address: DeathWindow
     m_ReadOnly: 0
@@ -189,16 +185,8 @@ MonoBehaviour:
     m_Address: RpgExplosion
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 826fc8d045452fa4584f56af01aa9f2f
-    m_Address: Hud 1
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: bc709a621e47ba747a4c86e278702e6d
-    m_Address: Hud 2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: f8753c0f794615f4eb6f96367816ebc6
-    m_Address: Hud 3
+    m_Address: Hud
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0

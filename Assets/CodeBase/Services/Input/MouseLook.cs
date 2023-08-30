@@ -18,16 +18,12 @@ namespace CodeBase.Services.Input
 
         private void Subscribe()
         {
-            _playerInput.Player.Look.started += LookStarted;
-            _playerInput.Player.Look.canceled -= LookCanceled;
-            // _playerInput.Player.Look.performed -= Look;
+            _playerInput.Player.Look.performed += LookStarted;
+            _playerInput.Player.Look.canceled += LookCanceled;
         }
 
-        private void LookStarted(InputAction.CallbackContext ctx)
-        {
-            float lookInput = ctx.ReadValue<float>();
-            // Looked?.Invoke(lookInput);
-        }
+        private void LookStarted(InputAction.CallbackContext ctx) =>
+            Looked?.Invoke(ctx.ReadValue<Vector2>());
 
         private void LookCanceled(InputAction.CallbackContext obj) =>
             Looked?.Invoke(Vector2.zero);

@@ -13,14 +13,10 @@ namespace CodeBase.Services.Input
         public KeyboardMovement(PlayerInput playerInput)
         {
             _playerInput = playerInput;
-            OnEnable();
             Subscribe();
-        }
-
-        private void OnEnable()
-        {
             _playerInput.Enable();
         }
+
 
         private void Subscribe()
         {
@@ -28,13 +24,10 @@ namespace CodeBase.Services.Input
             _playerInput.Player.Move.canceled += MoveCanceled;
         }
 
-        private void MoveStarted(InputAction.CallbackContext ctx)
-        {
-            Vector2 moveInput = _playerInput.Player.Move.ReadValue<Vector2>();
-            Moved?.Invoke(moveInput);
-        }
+        private void MoveStarted(InputAction.CallbackContext ctx) => 
+            Moved?.Invoke(ctx.ReadValue<Vector2>());
 
-        private void MoveCanceled(InputAction.CallbackContext ctx) =>
+        private void MoveCanceled(InputAction.CallbackContext ctx) => 
             Moved?.Invoke(Vector2.zero);
     }
 }

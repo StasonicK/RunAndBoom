@@ -29,7 +29,6 @@ namespace CodeBase.Infrastructure
 
         private void InitializeAdsService()
         {
-            Debug.Log("InitializeAdsService");
             _adsService.OnInitializeSuccess += SubscribeAdsEvents;
 
             if (_adsService.IsInitialized())
@@ -39,25 +38,18 @@ namespace CodeBase.Infrastructure
         }
 
         private void SubscribeAdsEvents()
-        {
-            Debug.Log($"SubscribeAdsEvents");
+        { Debug.Log($"SubscribeAdsEvents");
             _adsService.OnInitializeSuccess -= SubscribeAdsEvents;
             _adsService.OnOfflineInterstitialAd += OnOfflineAd;
             _adsService.OnClosedInterstitialAd += AdClosed;
             _adsService.OnShowInterstitialAdError += ShowError;
         }
 
-        private void OnOfflineAd()
-        {
-            Debug.Log($"InterstitialAd OnOfflineAd");
+        private void OnOfflineAd() => 
             ResumeGame();
-        }
 
-        private void AdClosed(bool isShowed)
-        {
-            Debug.Log($"InterstitialAd AdClosed {isShowed}");
+        private void AdClosed(bool isShowed) => 
             ResumeGame();
-        }
 
         private void ShowError(string error)
         {

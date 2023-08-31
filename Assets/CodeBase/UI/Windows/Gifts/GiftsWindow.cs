@@ -71,7 +71,6 @@ namespace CodeBase.UI.Windows.Gifts
 
         private void ShowClosed()
         {
-            Debug.Log("OnClosedVideoAd");
             AdsService.OnClosedVideoAd -= ShowClosed;
             SoundInstance.StartRandomMusic();
         }
@@ -85,7 +84,6 @@ namespace CodeBase.UI.Windows.Gifts
 
         private void ToNextLevel()
         {
-            Debug.Log("ToNextLevel");
             LevelStaticData levelStaticData = StaticDataService.ForLevel(_nextScene);
             Progress.WorldData.LevelNameData.ChangeLevel(_nextScene.ToString());
             Progress.AllStats.StartNewLevel(_nextScene, levelStaticData.TargetPlayTime,
@@ -124,7 +122,6 @@ namespace CodeBase.UI.Windows.Gifts
 
         private void AddCoins()
         {
-            Debug.Log("AddCoins");
             Progress.AllStats.AddMoney(_coinsCount);
             _addCoinsButton.enabled = false;
         }

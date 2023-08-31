@@ -60,7 +60,6 @@ namespace CodeBase.UI.Windows.Results
 
         public void ShowData()
         {
-            Debug.Log($"ShowData LevelStats.StarsCount {LevelStats.StarsCount}");
             _starsPanel.ShowStars(LevelStats.StarsCount);
             _playTimeCount.text = $"{LevelStats.PlayTimeData.PlayTime.ToInt()}";
             _killed.text = $"{LevelStats.KillsData.KilledEnemies}";

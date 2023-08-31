@@ -1,5 +1,4 @@
 using CodeBase.Services.Input;
-using CodeBase.UI.Elements.Hud.MobileInputPanel;
 using CodeBase.UI.Elements.Hud.MobileInputPanel.Joysticks;
 using UnityEngine;
 
@@ -98,7 +97,7 @@ namespace CodeBase.Hero
                 _verticalAngle = _edgeAngle / _mobileVerticalSensitivity;
             else
                 _verticalAngle = _edgeAngle / _desktopVerticalSensitivity;
-            
+
             _verticalRotation = Mathf.Clamp(_verticalRotation, -_verticalAngle, _verticalAngle);
         }
 

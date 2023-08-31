@@ -5,7 +5,6 @@ using CodeBase.Services.Input;
 using CodeBase.Services.PersistentProgress;
 using CodeBase.Services.StaticData;
 using CodeBase.StaticData.Items;
-using CodeBase.UI.Elements.Hud.MobileInputPanel;
 using CodeBase.UI.Elements.Hud.MobileInputPanel.Joysticks;
 using UnityEngine;
 

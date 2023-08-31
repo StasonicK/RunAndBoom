@@ -5,15 +5,15 @@ namespace CodeBase.Services.Input
 {
     public class MobileInputService : InputService
     {
-        private const string Button = "Fire";
         private PlayerInput _playerInput;
 
-        public MobileInputService()
+        public MobileInputService(PlayerInput playerInput)
         {
-            _playerInput = new PlayerInput();
+            _playerInput = playerInput;
+            _playerInput.Enable();
         }
 
-        public override bool IsAttackButtonUp() => SimpleInput.GetButtonDown(Button);
+        public override bool IsAttackButtonUp() => _playerInput.Player.Shoot.IsPressed();
         public override event Action<Vector2> Moved;
         public override event Action<Vector2> Looked;
     }

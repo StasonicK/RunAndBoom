@@ -24,10 +24,10 @@ namespace CodeBase.Services.Input
             _playerInput.Player.Move.canceled += MoveCanceled;
         }
 
-        private void MoveStarted(InputAction.CallbackContext ctx) => 
+        private void MoveStarted(InputAction.CallbackContext ctx) =>
             Moved?.Invoke(ctx.ReadValue<Vector2>());
 
-        private void MoveCanceled(InputAction.CallbackContext ctx) => 
+        private void MoveCanceled(InputAction.CallbackContext ctx) =>
             Moved?.Invoke(Vector2.zero);
     }
 }

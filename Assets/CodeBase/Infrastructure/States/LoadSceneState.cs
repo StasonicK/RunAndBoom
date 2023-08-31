@@ -11,7 +11,6 @@ using CodeBase.Services.StaticData;
 using CodeBase.StaticData;
 using CodeBase.StaticData.Levels;
 using CodeBase.UI.Elements.Hud;
-using CodeBase.UI.Elements.Hud.MobileInputPanel;
 using CodeBase.UI.Elements.Hud.MobileInputPanel.Joysticks;
 using CodeBase.UI.Elements.Hud.WeaponsPanel;
 using CodeBase.UI.Services.Factory;

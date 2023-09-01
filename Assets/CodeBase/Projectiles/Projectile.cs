@@ -2,19 +2,16 @@
 using CodeBase.Services;
 using CodeBase.Services.Pool;
 using CodeBase.StaticData.Projectiles;
-using UnityEngine;
+using NTC.Global.Cache;
 
 namespace CodeBase.Projectiles
 {
-    public class Projectile : MonoBehaviour
+    public class Projectile : MonoCache
     {
         private IObjectsPoolService _objectsPoolService;
         private ProjectileMovement _projectileMovement;
 
         public ProjectileTypeId ProjectileTypeId { get; private set; }
-
-        public void Construct(ProjectileTypeId projectileTypeId) =>
-            ProjectileTypeId = projectileTypeId;
 
         private void Awake()
         {
@@ -22,6 +19,9 @@ namespace CodeBase.Projectiles
             _projectileMovement = GetComponent<ProjectileMovement>();
             _projectileMovement.Stoped += ReturnToRoot;
         }
+
+        public void Construct(ProjectileTypeId projectileTypeId) =>
+            ProjectileTypeId = projectileTypeId;
 
         private void ReturnToRoot()
         {

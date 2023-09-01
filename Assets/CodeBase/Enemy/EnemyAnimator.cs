@@ -1,10 +1,11 @@
 ﻿using System;
 using CodeBase.Logic;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Enemy
 {
-    public class EnemyAnimator : MonoBehaviour, IAnimationStateReader
+    public class EnemyAnimator : MonoCache, IAnimationStateReader
     {
         private readonly int _attackTriggerHash = Animator.StringToHash("Attack");
         private readonly int _isMovingTriggerHash = Animator.StringToHash("IsMoving");
@@ -23,7 +24,7 @@ namespace CodeBase.Enemy
         public event Action<AnimatorState> StateExited;
 
         private void Awake() =>
-            _animator = GetComponent<Animator>();
+            _animator = Get<Animator>();
 
         public void Move() =>
             _animator.SetBool(_isMovingTriggerHash, true);

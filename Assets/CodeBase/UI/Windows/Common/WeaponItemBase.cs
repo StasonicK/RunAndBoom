@@ -10,13 +10,13 @@ namespace CodeBase.UI.Windows.Common
         protected HeroWeaponTypeId _weaponTypeId;
         protected ShopWeaponStaticData _weaponStaticData;
 
-        private void OnEnable() =>
+        protected override void OnEnabled() =>
             Button?.onClick.AddListener(Clicked);
 
-        private void OnDisable() =>
+        protected override void OnDisabled() =>
             Button?.onClick.RemoveListener(Clicked);
 
-        public void Construct(HeroWeaponTypeId weaponTypeId, PlayerProgress progress)
+        protected void Construct(HeroWeaponTypeId weaponTypeId, PlayerProgress progress)
         {
             base.Construct(progress);
             _weaponTypeId = weaponTypeId;
@@ -37,7 +37,6 @@ namespace CodeBase.UI.Windows.Common
             if (CostText != null)
                 CostText.text = $"{_weaponStaticData.Cost} $";
 
-            // CostText.color = Constants.ShopItemPerk;
             CountText.text = "";
             TitleText.text =
                 $"{LocalizationService.GetText(russian: _weaponStaticData.RuTitle, turkish: _weaponStaticData.TrTitle, english: _weaponStaticData.EnTitle)}";

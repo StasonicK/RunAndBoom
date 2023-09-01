@@ -6,11 +6,12 @@ using CodeBase.UI.Services.Factory;
 using CodeBase.UI.Services.Windows;
 using CodeBase.UI.Windows.Common;
 using CodeBase.UI.Windows.Shop;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Logic.Level
 {
-    public class LevelSectorTrigger : MonoBehaviour
+    public class LevelSectorTrigger : MonoCache
     {
         [SerializeField] private int _number;
         [SerializeField] private int _refreshCount;

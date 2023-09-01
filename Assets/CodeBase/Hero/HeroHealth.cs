@@ -7,11 +7,12 @@ using CodeBase.Services.Input;
 using CodeBase.Services.PersistentProgress;
 using CodeBase.Services.StaticData;
 using CodeBase.StaticData.Items;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Hero
 {
-    public class HeroHealth : MonoBehaviour, IHealth, IProgressSaver
+    public class HeroHealth : MonoCache, IHealth, IProgressSaver
     {
         private const float BaseRatio = 1f;
         private const float BaseArmorRatio = 0f;
@@ -39,7 +40,7 @@ namespace CodeBase.Hero
         private void Awake() =>
             _inputService = AllServices.Container.Single<IInputService>();
 
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             if (_regenerationItemData != null)
                 _regenerationItemData.LevelChanged += ChangeRegeneration;
@@ -54,7 +55,7 @@ namespace CodeBase.Hero
                 _armorItemData.LevelChanged += ChangeArmor;
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             if (_regenerationItemData != null)
                 _regenerationItemData.LevelChanged -= ChangeRegeneration;
@@ -69,10 +70,8 @@ namespace CodeBase.Hero
                 _armorItemData.LevelChanged -= ChangeArmor;
         }
 
-        private void Update()
-        {
+        protected override void Run() =>
             TryRegenerate();
-        }
 
         public void Recover()
         {

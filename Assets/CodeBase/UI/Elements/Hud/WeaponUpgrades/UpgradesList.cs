@@ -7,11 +7,12 @@ using CodeBase.Services.PersistentProgress;
 using CodeBase.StaticData.Items;
 using CodeBase.StaticData.Items.Shop.WeaponsUpgrades;
 using CodeBase.StaticData.Weapons;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.UI.Elements.Hud.WeaponUpgrades
 {
-    public class UpgradesList : MonoBehaviour, IProgressReader
+    public class UpgradesList : MonoCache, IProgressReader
     {
         [SerializeField] private Transform _container;
         [SerializeField] private UpgradeView perkView;

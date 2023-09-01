@@ -1,12 +1,13 @@
 ﻿using CodeBase.Logic;
 using CodeBase.Services.Ads;
 using CodeBase.Services.PersistentProgress;
+using NTC.Global.Cache;
 using Plugins.SoundInstance.Core.Static;
 using UnityEngine;
 
 namespace CodeBase.Infrastructure
 {
-    public class AdListener : MonoBehaviour, IAdListener
+    public class AdListener : MonoCache, IAdListener
     {
         private IAdsService _adsService;
         private GameObject _hero;
@@ -38,24 +39,21 @@ namespace CodeBase.Infrastructure
         }
 
         private void SubscribeAdsEvents()
-        { Debug.Log($"SubscribeAdsEvents");
+        {
             _adsService.OnInitializeSuccess -= SubscribeAdsEvents;
             _adsService.OnOfflineInterstitialAd += OnOfflineAd;
             _adsService.OnClosedInterstitialAd += AdClosed;
             _adsService.OnShowInterstitialAdError += ShowError;
         }
 
-        private void OnOfflineAd() => 
+        private void OnOfflineAd() =>
             ResumeGame();
 
-        private void AdClosed(bool isShowed) => 
+        private void AdClosed(bool isShowed) =>
             ResumeGame();
 
-        private void ShowError(string error)
-        {
-            Debug.Log($"InterstitialAd ShowError {error}");
+        private void ShowError(string error) =>
             ResumeGame();
-        }
 
         private void ResumeGame()
         {

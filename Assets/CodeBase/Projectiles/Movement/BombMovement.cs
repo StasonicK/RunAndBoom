@@ -12,7 +12,7 @@ namespace CodeBase.Projectiles.Movement
         public override event Action Stoped;
 
         private void Awake() =>
-            Rigidbody = GetComponent<Rigidbody>();
+            Rigidbody = Get<Rigidbody>();
 
         public void SetTargetPosition(Vector3 targetPosition) =>
             _targetPosition = targetPosition;

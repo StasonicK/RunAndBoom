@@ -1,11 +1,12 @@
 ﻿using System;
 using CodeBase.StaticData.Projectiles;
 using CodeBase.StaticData.Weapons;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Hero
 {
-    public class WeaponRotation : MonoBehaviour
+    public class WeaponRotation : MonoCache
     {
         [SerializeField] private HeroWeaponSelection _weaponSelection;
         [SerializeField] private LayerMask _collidableLayers;
@@ -25,14 +26,7 @@ namespace CodeBase.Hero
         private void Awake() =>
             _weaponSelection.WeaponSelected += WeaponChosen;
 
-        private void WeaponChosen(GameObject selectedWeapon, HeroWeaponStaticData weaponStaticData,
-            TrailStaticData arg3)
-        {
-            _currentWeapon = selectedWeapon;
-            _weaponStaticData = weaponStaticData;
-        }
-
-        private void FixedUpdate()
+        protected override void FixedRun()
         {
             if (_currentWeapon != null)
             {
@@ -40,6 +34,13 @@ namespace CodeBase.Hero
                 var targetPosition = MaxDistancePosition(ray);
                 WeaponLookAt(targetPosition);
             }
+        }
+
+        private void WeaponChosen(GameObject selectedWeapon, HeroWeaponStaticData weaponStaticData,
+            TrailStaticData arg3)
+        {
+            _currentWeapon = selectedWeapon;
+            _weaponStaticData = weaponStaticData;
         }
 
         private void WeaponLookAt(Vector3 targetPosition)

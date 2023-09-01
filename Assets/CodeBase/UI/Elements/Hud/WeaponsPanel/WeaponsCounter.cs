@@ -3,12 +3,13 @@ using CodeBase.Services;
 using CodeBase.Services.Localization;
 using CodeBase.Services.PersistentProgress;
 using CodeBase.StaticData.Weapons;
+using NTC.Global.Cache;
 using TMPro;
 using UnityEngine;
 
 namespace CodeBase.UI.Elements.Hud.WeaponsPanel
 {
-    public class WeaponsCounter : MonoBehaviour, IProgressReader
+    public class WeaponsCounter : MonoCache, IProgressReader
     {
         [SerializeField] private TextMeshProUGUI _grenadeLaucher;
         [SerializeField] private TextMeshProUGUI _rpg;
@@ -18,7 +19,7 @@ namespace CodeBase.UI.Elements.Hud.WeaponsPanel
         private ILocalizationService _localizationService;
         private PlayerProgress _progress;
 
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             if (_progress != null)
             {
@@ -36,7 +37,7 @@ namespace CodeBase.UI.Elements.Hud.WeaponsPanel
             _localizationService.LanguageChanged += RefreshAmmo;
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             if (_progress?.WeaponsData != null)
             {

@@ -1,12 +1,10 @@
-﻿using UnityEngine;
+﻿using NTC.Global.Cache;
 
 namespace CodeBase.Infrastructure
 {
-    public class CoroutineRunner : MonoBehaviour, ICoroutineRunner
+    public class CoroutineRunner : MonoCache, ICoroutineRunner
     {
-        private void Awake()
-        {
+        private void Awake() =>
             DontDestroyOnLoad(this);
-        }
     }
 }

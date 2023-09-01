@@ -1,10 +1,11 @@
 ﻿using CodeBase.Services;
 using CodeBase.Services.PersistentProgress;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Hero
 {
-    public class PlayTimer : MonoBehaviour
+    public class PlayTimer : MonoCache
     {
         private IPlayerProgressService _progressService;
         private bool _isPlaying;
@@ -13,16 +14,16 @@ namespace CodeBase.Hero
         private void Start() =>
             _progressService = AllServices.Container.Single<IPlayerProgressService>();
 
-        private void OnEnable() =>
+        protected override void OnEnabled() =>
             _isPlaying = true;
 
-        private void Update()
+        protected override void Run()
         {
             if (_isPlaying)
                 _playTime += Time.deltaTime;
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             _progressService.Progress.AllStats.CurrentLevelStats.PlayTimeData.Add(_playTime);
             _isPlaying = false;

@@ -1,11 +1,13 @@
 ﻿using CodeBase.Hero;
 using CodeBase.StaticData.Projectiles;
 using CodeBase.StaticData.Weapons;
+using NTC.Global.Cache;
+using NTC.Global.System;
 using UnityEngine;
 
 namespace CodeBase.UI.Elements.Hud
 {
-    public class Crosshairs : MonoBehaviour
+    public class Crosshairs : MonoCache
     {
         [SerializeField] private GameObject _grenadeLauncher;
         [SerializeField] private GameObject _rpg;
@@ -34,10 +36,10 @@ namespace CodeBase.UI.Elements.Hud
 
         private void Hide(float f)
         {
-            _grenadeLauncher.SetActive(false);
-            _rpg.SetActive(false);
-            _rocketLauncher.SetActive(false);
-            _mortar.SetActive(false);
+            _grenadeLauncher.Disable();
+            _rpg.Disable();
+            _rocketLauncher.Disable();
+            _mortar.Disable();
         }
 
         private void Show()
@@ -45,31 +47,31 @@ namespace CodeBase.UI.Elements.Hud
             switch (_heroWeaponTypeId)
             {
                 case HeroWeaponTypeId.GrenadeLauncher:
-                    _grenadeLauncher.SetActive(true);
-                    _rpg.SetActive(false);
-                    _rocketLauncher.SetActive(false);
-                    _mortar.SetActive(false);
+                    _grenadeLauncher.Enable();
+                    _rpg.Disable();
+                    _rocketLauncher.Disable();
+                    _mortar.Disable();
                     break;
 
                 case HeroWeaponTypeId.RPG:
-                    _rpg.SetActive(true);
-                    _grenadeLauncher.SetActive(false);
-                    _rocketLauncher.SetActive(false);
-                    _mortar.SetActive(false);
+                    _rpg.Enable();
+                    _grenadeLauncher.Disable();
+                    _rocketLauncher.Disable();
+                    _mortar.Disable();
                     break;
 
                 case HeroWeaponTypeId.RocketLauncher:
-                    _rocketLauncher.SetActive(true);
-                    _grenadeLauncher.SetActive(false);
-                    _rpg.SetActive(false);
-                    _mortar.SetActive(false);
+                    _rocketLauncher.Enable();
+                    _grenadeLauncher.Disable();
+                    _rpg.Disable();
+                    _mortar.Disable();
                     break;
 
                 case HeroWeaponTypeId.Mortar:
-                    _mortar.SetActive(true);
-                    _rocketLauncher.SetActive(false);
-                    _grenadeLauncher.SetActive(false);
-                    _rpg.SetActive(false);
+                    _mortar.Enable();
+                    _rocketLauncher.Disable();
+                    _grenadeLauncher.Disable();
+                    _rpg.Disable();
                     break;
             }
         }

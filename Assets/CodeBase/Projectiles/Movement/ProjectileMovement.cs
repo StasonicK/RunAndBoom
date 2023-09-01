@@ -10,11 +10,12 @@ using CodeBase.StaticData.Items;
 using CodeBase.StaticData.Items.Shop.WeaponsUpgrades;
 using CodeBase.StaticData.Projectiles;
 using CodeBase.StaticData.Weapons;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Projectiles.Movement
 {
-    public abstract class ProjectileMovement : MonoBehaviour
+    public abstract class ProjectileMovement : MonoCache
     {
         private const float BaseRatio = 1f;
 
@@ -32,13 +33,13 @@ namespace CodeBase.Projectiles.Movement
 
         public abstract event Action Stoped;
 
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             if (_speedItemData != null)
                 _speedItemData.LevelChanged += ChangeSpeed;
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             if (_speedItemData != null)
                 _speedItemData.LevelChanged -= ChangeSpeed;

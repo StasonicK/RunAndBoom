@@ -1,6 +1,7 @@
 ﻿using System;
 using CodeBase.UI.Services.Windows;
 using CodeBase.UI.Windows.Common;
+using NTC.Global.System;
 using Plugins.SoundInstance.Core.Static;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +18,7 @@ namespace CodeBase.UI.Windows.Shop
         private int _maxRefreshCount;
         private int _watchAdsNumber;
 
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             _skipButton.onClick.AddListener(CloseShop);
             _refreshButton.onClick.AddListener(GenerateShopItems);
@@ -25,7 +26,7 @@ namespace CodeBase.UI.Windows.Shop
             _generator.GenerationEnded += CheckRefreshButtons;
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             _skipButton.onClick.RemoveListener(CloseShop);
             _refreshButton.onClick.RemoveListener(GenerateShopItems);
@@ -78,10 +79,10 @@ namespace CodeBase.UI.Windows.Shop
         }
 
         private void ShowRefreshButton() =>
-            _refreshButton.gameObject.SetActive(true);
+            _refreshButton.gameObject.Enable();
 
         private void HideRefreshButton() =>
-            _refreshButton.gameObject.SetActive(false);
+            _refreshButton.gameObject.Disable();
 
         private void Start() =>
             Cursor.lockState = CursorLockMode.Confined;

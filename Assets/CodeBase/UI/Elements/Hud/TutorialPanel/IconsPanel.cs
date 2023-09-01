@@ -1,4 +1,5 @@
 ﻿using CodeBase.UI.Windows.Common;
+using NTC.Global.System;
 
 namespace CodeBase.UI.Elements.Hud.TutorialPanel
 {
@@ -9,9 +10,9 @@ namespace CodeBase.UI.Elements.Hud.TutorialPanel
         public abstract void ShowForMobile();
 
         public void Show() =>
-            gameObject.SetActive(true);
+            gameObject.Enable();
 
         public void Hide() =>
-            gameObject.SetActive(false);
+            gameObject.Disable();
     }
 }

@@ -2,12 +2,14 @@
 using CodeBase.Data.Settings;
 using CodeBase.Services;
 using CodeBase.Services.Localization;
+using NTC.Global.Cache;
+using NTC.Global.System;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace CodeBase.UI.Windows.Settings
 {
-    public class LanguageChanger : MonoBehaviour
+    public class LanguageChanger : MonoCache
     {
         [SerializeField] private Button _ruButton;
         [SerializeField] private Button _trButton;
@@ -19,11 +21,7 @@ namespace CodeBase.UI.Windows.Settings
         private PlayerProgress _progress;
         private ILocalizationService _localizationService;
 
-        private void Start()
-        {
-        }
-
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             _ruButton.onClick.AddListener(RuClicked);
             _trButton.onClick.AddListener(TrClicked);
@@ -33,7 +31,7 @@ namespace CodeBase.UI.Windows.Settings
             ChangeHighlighting();
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             _ruButton.onClick.RemoveListener(RuClicked);
             _trButton.onClick.RemoveListener(TrClicked);
@@ -57,19 +55,19 @@ namespace CodeBase.UI.Windows.Settings
             switch (_localizationService.Language)
             {
                 case Language.RU:
-                    _ruSelection.SetActive(true);
-                    _trSelection.SetActive(false);
-                    _enSelection.SetActive(false);
+                    _ruSelection.Enable();
+                    _trSelection.Disable();
+                    _enSelection.Disable();
                     break;
                 case Language.TR:
-                    _trSelection.SetActive(true);
-                    _ruSelection.SetActive(false);
-                    _enSelection.SetActive(false);
+                    _trSelection.Enable();
+                    _ruSelection.Disable();
+                    _enSelection.Disable();
                     break;
                 default:
-                    _enSelection.SetActive(true);
-                    _ruSelection.SetActive(false);
-                    _trSelection.SetActive(false);
+                    _enSelection.Enable();
+                    _ruSelection.Disable();
+                    _trSelection.Disable();
                     break;
             }
         }

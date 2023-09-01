@@ -2,11 +2,13 @@
 using CodeBase.UI.Windows.Common;
 using CodeBase.UI.Windows.Gifts.Items;
 using CodeBase.UI.Windows.Shop.Items;
+using NTC.Global.Cache;
+using NTC.Global.System;
 using UnityEngine;
 
 namespace CodeBase.UI.Windows.Shop
 {
-    public class ShopCell : MonoBehaviour
+    public class ShopCell : MonoCache
     {
         [SerializeField] private AmmoItemBase _ammoItemBase;
         [SerializeField] private ItemItemBase _itemItemBase;
@@ -31,67 +33,67 @@ namespace CodeBase.UI.Windows.Shop
         {
             if (type == _ammoShopType || type == _ammoGiftType)
             {
-                _ammoItemBase.gameObject.SetActive(true);
-                _itemItemBase.gameObject.SetActive(false);
-                _upgradeItemBase.gameObject.SetActive(false);
-                _perkItemBase.gameObject.SetActive(false);
-                _weaponItemBase.gameObject.SetActive(false);
-                _moneyItemBase?.gameObject.SetActive(false);
+                _ammoItemBase.gameObject.Enable();
+                _itemItemBase.gameObject.Disable();
+                _upgradeItemBase.gameObject.Disable();
+                _perkItemBase.gameObject.Disable();
+                _weaponItemBase.gameObject.Disable();
+                _moneyItemBase?.gameObject.Disable();
                 return _ammoItemBase;
             }
 
             if (type == _itemShopType || type == _itemGiftType)
             {
-                _itemItemBase.gameObject.SetActive(true);
-                _ammoItemBase.gameObject.SetActive(false);
-                _upgradeItemBase.gameObject.SetActive(false);
-                _perkItemBase.gameObject.SetActive(false);
-                _weaponItemBase.gameObject.SetActive(false);
-                _moneyItemBase?.gameObject.SetActive(false);
+                _itemItemBase.gameObject.Enable();
+                _ammoItemBase.gameObject.Disable();
+                _upgradeItemBase.gameObject.Disable();
+                _perkItemBase.gameObject.Disable();
+                _weaponItemBase.gameObject.Disable();
+                _moneyItemBase?.gameObject.Disable();
                 return _itemItemBase;
             }
 
             if (type == _upgradeShopType || type == _upgradeGiftType)
             {
-                _upgradeItemBase.gameObject.SetActive(true);
-                _ammoItemBase.gameObject.SetActive(false);
-                _itemItemBase.gameObject.SetActive(false);
-                _perkItemBase.gameObject.SetActive(false);
-                _weaponItemBase.gameObject.SetActive(false);
-                _moneyItemBase?.gameObject.SetActive(false);
+                _upgradeItemBase.gameObject.Enable();
+                _ammoItemBase.gameObject.Disable();
+                _itemItemBase.gameObject.Disable();
+                _perkItemBase.gameObject.Disable();
+                _weaponItemBase.gameObject.Disable();
+                _moneyItemBase?.gameObject.Disable();
                 return _upgradeItemBase;
             }
 
             if (type == _perkShopType || type == _perkGiftType)
             {
-                _perkItemBase.gameObject.SetActive(true);
-                _ammoItemBase.gameObject.SetActive(false);
-                _itemItemBase.gameObject.SetActive(false);
-                _upgradeItemBase.gameObject.SetActive(false);
-                _weaponItemBase.gameObject.SetActive(false);
-                _moneyItemBase?.gameObject.SetActive(false);
+                _perkItemBase.gameObject.Enable();
+                _ammoItemBase.gameObject.Disable();
+                _itemItemBase.gameObject.Disable();
+                _upgradeItemBase.gameObject.Disable();
+                _weaponItemBase.gameObject.Disable();
+                _moneyItemBase?.gameObject.Disable();
                 return _perkItemBase;
             }
 
             if (type == _weaponShopType || type == _weaponGiftType)
             {
-                _weaponItemBase.gameObject.SetActive(true);
-                _ammoItemBase.gameObject.SetActive(false);
-                _itemItemBase.gameObject.SetActive(false);
-                _upgradeItemBase.gameObject.SetActive(false);
-                _perkItemBase.gameObject.SetActive(false);
-                _moneyItemBase?.gameObject.SetActive(false);
+                _weaponItemBase.gameObject.Enable();
+                _ammoItemBase.gameObject.Disable();
+                _itemItemBase.gameObject.Disable();
+                _upgradeItemBase.gameObject.Disable();
+                _perkItemBase.gameObject.Disable();
+                _moneyItemBase?.gameObject.Disable();
                 return _weaponItemBase;
             }
 
             if (type == _moneyGiftType)
             {
-                _moneyItemBase.gameObject.SetActive(true);
-                _weaponItemBase.gameObject.SetActive(false);
-                _ammoItemBase.gameObject.SetActive(false);
-                _itemItemBase.gameObject.SetActive(false);
-                _upgradeItemBase.gameObject.SetActive(false);
-                _perkItemBase.gameObject.SetActive(false);
+                _moneyItemBase.gameObject.Enable();
+                _weaponItemBase.gameObject.Disable();
+                _ammoItemBase.gameObject.Disable();
+                _itemItemBase.gameObject.Disable();
+                _upgradeItemBase.gameObject.Disable();
+                _perkItemBase.gameObject.Disable();
                 return _moneyItemBase;
             }
             else return _weaponItemBase;

@@ -1,10 +1,11 @@
 using CodeBase.Services.Input;
 using CodeBase.UI.Elements.Hud.MobileInputPanel.Joysticks;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Hero
 {
-    public class HeroRotating : MonoBehaviour
+    public class HeroRotating : MonoCache
     {
         [SerializeField] private Camera _camera;
         [SerializeField] private float _desktopVerticalSensitivity = 1.0f;
@@ -14,7 +15,6 @@ namespace CodeBase.Hero
         [SerializeField] private float _edgeAngle = 85f;
 
         private IInputService _inputService;
-
         private LookJoystick _lookJoystick;
         private bool _isMobile;
         private bool _update;
@@ -32,12 +32,8 @@ namespace CodeBase.Hero
             _inputService.Looked += DesktopRotate;
         }
 
-        private void DesktopRotate(Vector2 lookInput)
-        {
+        private void DesktopRotate(Vector2 lookInput) =>
             _lookInput = lookInput;
-            // RotateVertical();
-            // RotateHorizontal();
-        }
 
         public void ConstructMobilePlatform(LookJoystick lookJoystick)
         {
@@ -54,7 +50,7 @@ namespace CodeBase.Hero
                 Cursor.lockState = CursorLockMode.Confined;
         }
 
-        private void Update()
+        protected override void Run()
         {
             if (_update == false)
                 return;
@@ -68,12 +64,21 @@ namespace CodeBase.Hero
                 DesktopRotate();
         }
 
+        protected override void LateRun()
+        {
+            if (_isMobile)
+                _camera.transform.localRotation =
+                    Quaternion.Euler(_verticalRotation * _mobileVerticalSensitivity, 0, 0);
+            else
+                _camera.transform.localRotation =
+                    Quaternion.Euler(_verticalRotation * _desktopVerticalSensitivity, 0, 0);
+        }
+
         private void DesktopRotate()
         {
             _verticalRotation -= _lookInput.y;
             ClampAngle();
             transform.Rotate(Vector3.up * _lookInput.x * _desktopHorizontalSensitivity * Time.deltaTime);
-            _camera.transform.localRotation = Quaternion.Euler(_verticalRotation * _desktopVerticalSensitivity, 0, 0);
         }
 
         private void MobileRotate()
@@ -88,7 +93,6 @@ namespace CodeBase.Hero
                 _verticalRotation -= _lookJoystick.Input.y;
 
             ClampAngle();
-            _camera.transform.localRotation = Quaternion.Euler(_verticalRotation * _mobileVerticalSensitivity, 0, 0);
         }
 
         private void ClampAngle()
@@ -105,8 +109,6 @@ namespace CodeBase.Hero
         {
             if (_lookJoystick.Input.sqrMagnitude > Constants.RotationEpsilon)
                 transform.Rotate(Vector3.up * _lookJoystick.Input.x * _mobileHorizontalSensitivity * Time.deltaTime);
-
-            // transform.Rotate(Vector3.up * Constants.Zero * _horizontalSensitivity * Time.deltaTime);
         }
 
         public void TurnOn() =>

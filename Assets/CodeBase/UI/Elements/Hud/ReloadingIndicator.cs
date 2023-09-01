@@ -2,12 +2,14 @@
 using CodeBase.Hero;
 using CodeBase.StaticData.Projectiles;
 using CodeBase.StaticData.Weapons;
+using NTC.Global.Cache;
+using NTC.Global.System;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace CodeBase.UI.Elements.Hud
 {
-    public class ReloadingIndicator : MonoBehaviour
+    public class ReloadingIndicator : MonoCache
     {
         [SerializeField] private Image _reloadingImage;
         [SerializeField] private Image _progressImage;
@@ -21,7 +23,7 @@ namespace CodeBase.UI.Elements.Hud
         private Vector3 _startEulerAngles;
 
         private void Awake() =>
-            _slider = GetComponent<Slider>();
+            _slider = Get<Slider>();
 
         public void Construct(HeroReloading heroReloading, HeroWeaponSelection heroWeaponSelection)
         {
@@ -37,10 +39,10 @@ namespace CodeBase.UI.Elements.Hud
         private void Reload(float value)
         {
             if (_reloadingImage.gameObject.activeSelf == false)
-                _reloadingImage.gameObject.SetActive(true);
+                _reloadingImage.gameObject.Enable();
 
             if (_progressImage.gameObject.activeSelf == false)
-                _progressImage.gameObject.SetActive(true);
+                _progressImage.gameObject.Enable();
 
             if (_rotationCoroutine == null)
                 _rotationCoroutine = StartCoroutine(CoroutineRotateImage());
@@ -51,8 +53,8 @@ namespace CodeBase.UI.Elements.Hud
         private void Stop()
         {
             _reloadingImage.transform.eulerAngles = _startEulerAngles;
-            _reloadingImage.gameObject.SetActive(false);
-            _progressImage.gameObject.SetActive(false);
+            _reloadingImage.gameObject.Disable();
+            _progressImage.gameObject.Disable();
         }
 
         private void Stop(GameObject o, HeroWeaponStaticData h, TrailStaticData t)
@@ -68,7 +70,7 @@ namespace CodeBase.UI.Elements.Hud
             while (true)
             {
                 Vector3 angles = _reloadingImage.transform.eulerAngles;
-                angles.z = angles.z - RotationSpeed * Time.deltaTime;
+                angles.z -= RotationSpeed * Time.deltaTime;
                 _reloadingImage.transform.eulerAngles = angles;
                 yield return null;
             }

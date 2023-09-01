@@ -1,9 +1,9 @@
 ﻿using CodeBase.StaticData.Enemies;
-using UnityEngine;
+using NTC.Global.Cache;
 
 namespace CodeBase.Logic.EnemySpawners
 {
-    public class SpawnMarker : MonoBehaviour
+    public class SpawnMarker : MonoCache
     {
         public EnemyTypeId enemyTypeId;
     }

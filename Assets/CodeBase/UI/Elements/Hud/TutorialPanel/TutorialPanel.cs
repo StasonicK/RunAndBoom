@@ -2,12 +2,13 @@
 using CodeBase.Services.Input;
 using CodeBase.UI.Elements.Hud.TutorialPanel.InnerPanels;
 using CodeBase.UI.Services;
+using NTC.Global.Cache;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace CodeBase.UI.Elements.Hud.TutorialPanel
 {
-    public class TutorialPanel : MonoBehaviour
+    public class TutorialPanel : MonoCache
     {
         [SerializeField] private Image _background;
         [SerializeField] private Settings _settings;
@@ -52,7 +53,7 @@ namespace CodeBase.UI.Elements.Hud.TutorialPanel
             _background.ChangeImageAlpha(_visibleTransparentValue);
         }
 
-        private void Update()
+        protected override void Run()
         {
             if (_hideAtStage)
                 return;

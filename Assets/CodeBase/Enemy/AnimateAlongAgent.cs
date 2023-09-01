@@ -1,3 +1,4 @@
+using NTC.Global.Cache;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -5,14 +6,14 @@ namespace CodeBase.Enemy
 {
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(EnemyAnimator))]
-    public class AnimateAlongAgent : MonoBehaviour
+    public class AnimateAlongAgent : MonoCache
     {
         [SerializeField] private NavMeshAgent _agent;
         [SerializeField] private EnemyAnimator _animator;
 
         private const float MinimalVelocity = 0.1f;
 
-        private void Update()
+        protected override void Run()
         {
             if (ShouldMove())
                 _animator.Move();

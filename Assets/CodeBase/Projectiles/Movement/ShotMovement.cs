@@ -7,7 +7,7 @@ namespace CodeBase.Projectiles.Movement
     {
         public override event Action Stoped;
 
-        private void Update()
+        protected override void Run()
         {
             if (IsMove)
                 transform.position += transform.forward * Speed * Time.deltaTime;

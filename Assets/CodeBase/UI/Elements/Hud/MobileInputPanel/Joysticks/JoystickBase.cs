@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using NTC.Global.Cache;
+using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 namespace CodeBase.UI.Elements.Hud.MobileInputPanel.Joysticks
 {
-    public abstract class JoystickBase : MonoBehaviour
+    public abstract class JoystickBase : MonoCache
     {
         [SerializeField] protected Vector2 JoystickSize = new Vector2(300, 300);
         [SerializeField] protected FloatingJoystick Joystick;
@@ -12,7 +13,7 @@ namespace CodeBase.UI.Elements.Hud.MobileInputPanel.Joysticks
         protected Finger MovementFinger;
         public Vector2 Input = Vector2.zero;
 
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             EnhancedTouchSupport.Enable();
             Touch.onFingerDown += HandleFingerDown;
@@ -20,7 +21,7 @@ namespace CodeBase.UI.Elements.Hud.MobileInputPanel.Joysticks
             Touch.onFingerMove += HandleFingerMove;
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             Touch.onFingerDown -= HandleFingerDown;
             Touch.onFingerUp -= HandleLoseFinger;

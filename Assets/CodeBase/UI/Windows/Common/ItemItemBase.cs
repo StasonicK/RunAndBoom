@@ -11,10 +11,10 @@ namespace CodeBase.UI.Windows.Common
         private ItemTypeId _typeId;
         protected HeroHealth Health;
 
-        private void OnEnable() =>
+        protected override void OnEnabled() =>
             Button?.onClick.AddListener(Clicked);
 
-        private void OnDisable() =>
+        protected override void OnDisabled() =>
             Button?.onClick.RemoveListener(Clicked);
 
         protected void Construct(ItemTypeId typeId, HeroHealth health, PlayerProgress progress)
@@ -39,7 +39,6 @@ namespace CodeBase.UI.Windows.Common
             if (CostText != null)
                 CostText.text = $"{_itemStaticData.Cost} $";
 
-            // CostText.color = Constants.ShopItemPerk;
             CountText.text = "";
             TitleText.text =
                 $"{LocalizationService.GetText(russian: _itemStaticData.RuTitle, turkish: _itemStaticData.TrTitle, english: _itemStaticData.EnTitle)}";

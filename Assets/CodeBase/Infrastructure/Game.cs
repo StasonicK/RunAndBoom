@@ -1,11 +1,11 @@
 using CodeBase.Data.Settings;
 using CodeBase.Infrastructure.States;
 using CodeBase.Services;
-using UnityEngine;
+using NTC.Global.Cache;
 
 namespace CodeBase.Infrastructure
 {
-    public class Game : MonoBehaviour
+    public class Game : MonoCache
     {
         public readonly GameStateMachine StateMachine;
 

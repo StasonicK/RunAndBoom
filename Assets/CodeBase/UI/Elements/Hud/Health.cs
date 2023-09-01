@@ -1,10 +1,11 @@
 ﻿using CodeBase.Data;
 using CodeBase.Logic;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.UI.Elements.Hud
 {
-    public class Health : MonoBehaviour
+    public class Health : MonoCache
     {
         [SerializeField] private HpBar _hpBar;
 

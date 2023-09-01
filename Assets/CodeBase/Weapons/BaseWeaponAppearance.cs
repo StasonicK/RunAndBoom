@@ -8,13 +8,15 @@ using CodeBase.Services.PersistentProgress;
 using CodeBase.Services.Pool;
 using CodeBase.StaticData.Projectiles;
 using CodeBase.StaticData.ShotVfxs;
+using NTC.Global.Cache;
+using NTC.Global.System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace CodeBase.Weapons
 {
     [RequireComponent(typeof(AudioSource))]
-    public abstract class BaseWeaponAppearance : MonoBehaviour, IProgressReader
+    public abstract class BaseWeaponAppearance : MonoCache, IProgressReader
     {
         [FormerlySerializedAs("_projectilesRespawns")] [SerializeField]
         public Transform[] ProjectilesRespawns;
@@ -39,17 +41,13 @@ namespace CodeBase.Weapons
         protected WaitForSeconds LaunchProjectileCooldown { get; private set; }
 
         private void Awake() =>
-            AudioSource = GetComponent<AudioSource>();
+            AudioSource = Get<AudioSource>();
 
-        private void OnEnable()
-        {
+        protected override void OnEnabled() =>
             Enable();
-        }
 
-        private void OnDisable()
-        {
+        protected override void OnDisabled() =>
             Disable();
-        }
 
         protected void Construct(IDeath death, float shotVfxLifeTime, float cooldown, ProjectileTypeId projectileTypeId,
             ShotVfxTypeId shotVfxTypeId)
@@ -109,7 +107,7 @@ namespace CodeBase.Weapons
         {
             projectile.GetComponentInChildren<MeshRenderer>().enabled = true;
             projectile.GetComponentInChildren<ProjectileBlast>()?.OnCollider();
-            projectile.SetActive(true);
+            projectile.Enable();
             projectileMovement.Launch();
             projectile.transform.SetParent(null);
             ShowTrail(projectile);

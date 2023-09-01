@@ -31,7 +31,7 @@ namespace CodeBase.Services.Constructor
             TrailStaticData trailStaticData = _staticDataService.ForTrail(projectileStaticData.TrailTypeId);
             projectile.GetComponent<Projectile>().Construct(projectileTypeId);
             projectile.GetComponent<ProjectileMovement>()
-                .Construct(projectileTypeId);
+                .Construct(projectileTypeId, heroWeaponTypeId);
             projectile.GetComponentInChildren<ProjectileBlast>()
                 .Construct(blastStaticData.Prefab, blastStaticData.Radius, blastStaticData.Damage, heroWeaponTypeId);
             projectile.GetComponent<ProjectileTrail>().Construct(trailStaticData);

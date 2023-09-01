@@ -18,7 +18,7 @@ namespace CodeBase.UI.Windows.Gifts
 
         private Scene _nextScene;
 
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             _addCoinsButton.enabled = Application.isEditor;
             _addCoinsButton.onClick.AddListener(ShowAds);
@@ -38,7 +38,7 @@ namespace CodeBase.UI.Windows.Gifts
             InitializeAdsSDK();
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             _addCoinsButton.onClick.RemoveListener(ShowAds);
 
@@ -77,7 +77,6 @@ namespace CodeBase.UI.Windows.Gifts
 
         private void ShowError(string message)
         {
-            Debug.Log($"OnErrorFullScreenAd: {message}");
             AdsService.OnShowVideoAdError -= ShowError;
             SoundInstance.StartRandomMusic();
         }
@@ -93,7 +92,6 @@ namespace CodeBase.UI.Windows.Gifts
             WindowService.HideAll();
             Close();
             GameStateMachine.Enter<LoadSceneState, Scene>(_nextScene);
-            Debug.Log($"{_nextScene}");
         }
 
         private void Close()

@@ -9,7 +9,7 @@ namespace CodeBase.Enemy.Attacks
         private Transform _hero;
 
         private void Awake() =>
-            _enemyWeaponAppearance = GetComponentInChildren<EnemyWeaponAppearance>();
+            _enemyWeaponAppearance = ChildrenGet<EnemyWeaponAppearance>();
 
         public new void Construct(Transform heroTransform, float attackCooldown)
         {

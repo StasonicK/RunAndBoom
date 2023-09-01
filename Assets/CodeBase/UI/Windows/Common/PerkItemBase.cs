@@ -10,13 +10,13 @@ namespace CodeBase.UI.Windows.Common
         private PerkItemData _perkItemData;
         protected PerkStaticData _perkStaticData;
 
-        private void OnEnable() =>
+        protected override void OnEnabled() =>
             Button?.onClick.AddListener(Clicked);
 
-        private void OnDisable() =>
+        protected override void OnDisabled() =>
             Button?.onClick.RemoveListener(Clicked);
 
-        public void Construct(PerkItemData perkItemData, PlayerProgress progress)
+        protected void Construct(PerkItemData perkItemData, PlayerProgress progress)
         {
             base.Construct(progress);
             _perkItemData = perkItemData;
@@ -44,7 +44,6 @@ namespace CodeBase.UI.Windows.Common
                 CostText.text = $"{_perkStaticData.Cost} $";
 
             CountText.text = "";
-            // CostText.color = Constants.ShopItemPerk;
             TitleText.text =
                 $"{LocalizationService.GetText(russian: _perkStaticData.RuTitle, turkish: _perkStaticData.TrTitle, english: _perkStaticData.EnTitle)}";
         }

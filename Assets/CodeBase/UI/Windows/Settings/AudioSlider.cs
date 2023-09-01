@@ -1,11 +1,12 @@
 ﻿using CodeBase.Data;
 using CodeBase.Services.PersistentProgress;
+using NTC.Global.Cache;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace CodeBase.UI.Windows.Settings
 {
-    public abstract class AudioSlider : MonoBehaviour, IProgressReader
+    public abstract class AudioSlider : MonoCache, IProgressReader
     {
         [SerializeField] protected Slider Slider;
 

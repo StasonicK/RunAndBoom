@@ -7,13 +7,15 @@ using CodeBase.Services.StaticData;
 using CodeBase.UI.Services;
 using CodeBase.UI.Windows.Gifts;
 using CodeBase.UI.Windows.Shop;
+using NTC.Global.Cache;
+using NTC.Global.System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace CodeBase.UI.Windows.Common
 {
-    public abstract class ItemBase : MonoBehaviour, IProgressReader
+    public abstract class ItemBase : MonoCache, IProgressReader
     {
         [SerializeField] protected Image BackgroundIcon;
         [SerializeField] protected Image MainIcon;
@@ -76,7 +78,7 @@ namespace CodeBase.UI.Windows.Common
                 TitleText.text = "";
 
             _shopItemHighlighter.enabled = false;
-            gameObject.SetActive(false);
+            gameObject.Disable();
         }
 
         public void ChangeClickability(bool isClickable) =>
@@ -94,14 +96,10 @@ namespace CodeBase.UI.Windows.Common
             SwitchChanged();
         }
 
-        private void VolumeChanged()
-        {
+        private void VolumeChanged() =>
             Volume = _progress.SettingsData.SoundVolume;
-        }
 
-        private void SwitchChanged()
-        {
+        private void SwitchChanged() =>
             Volume = _progress.SettingsData.SoundOn ? _progress.SettingsData.SoundVolume : Constants.Zero;
-        }
     }
 }

@@ -1,19 +1,21 @@
-﻿using UnityEngine;
+﻿using NTC.Global.Cache;
+using NTC.Global.System;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace CodeBase.UI.Windows.Shop
 {
-    public class ShopItemHighlighter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class ShopItemHighlighter : MonoCache, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] private GameObject _outline;
 
-        private void OnDisable() =>
-            _outline.SetActive(false);
+        protected override void OnDisabled() =>
+            _outline.Disable();
 
         public void OnPointerEnter(PointerEventData eventData) =>
-            _outline.SetActive(true);
+            _outline.Enable();
 
         public void OnPointerExit(PointerEventData eventData) =>
-            _outline.SetActive(false);
+            _outline.Disable();
     }
 }

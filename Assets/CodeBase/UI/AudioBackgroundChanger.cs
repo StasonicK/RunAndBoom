@@ -1,12 +1,12 @@
 ﻿using Agava.WebUtility;
 using CodeBase.Services;
 using CodeBase.Services.PersistentProgress;
+using NTC.Global.Cache;
 using Plugins.SoundInstance.Core.Static;
-using UnityEngine;
 
 namespace CodeBase.UI
 {
-    public class AudioBackgroundChanger : MonoBehaviour
+    public class AudioBackgroundChanger : MonoCache
     {
         private IPlayerProgressService _playerProgressService;
 
@@ -16,10 +16,10 @@ namespace CodeBase.UI
             DontDestroyOnLoad(this);
         }
 
-        private void OnEnable() =>
+        protected override void OnEnabled() =>
             WebApplication.InBackgroundChangeEvent += OnInBackgroundChange;
 
-        private void OnDisable() =>
+        protected override void OnDisabled() =>
             WebApplication.InBackgroundChangeEvent -= OnInBackgroundChange;
 
         private void OnInBackgroundChange(bool inBackground)

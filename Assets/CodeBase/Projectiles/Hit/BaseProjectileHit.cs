@@ -1,9 +1,10 @@
 ﻿using CodeBase.Projectiles.Movement;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Projectiles.Hit
 {
-    public abstract class BaseProjectileHit : MonoBehaviour
+    public abstract class BaseProjectileHit : MonoCache
     {
         [SerializeField] protected ProjectileTrail Trail;
         [SerializeField] protected ProjectileMovement Movement;

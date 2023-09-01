@@ -12,13 +12,13 @@ namespace CodeBase.Enemy
         private bool _move;
         private bool _isMovable;
 
-        private void OnEnable() =>
+        protected override void OnEnabled() =>
             _agent.enabled = true;
 
-        private void OnDisable() =>
+        protected override void OnDisabled() =>
             _agent.enabled = false;
 
-        private void Update() =>
+        protected override void Run() =>
             SetDestinationForAgent();
 
         public void Construct(Transform heroTransform, float speed, bool isMovable)

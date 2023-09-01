@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using CodeBase.StaticData.Projectiles;
+using NTC.Global.Cache;
+using NTC.Global.System;
 using UnityEngine;
 
 namespace CodeBase.Projectiles
 {
-    public class ProjectileTrail : MonoBehaviour
+    public class ProjectileTrail : MonoCache
     {
         [SerializeField] private Transform _trailPosition;
         [SerializeField] private GameObject _trailVfx;
@@ -13,7 +15,7 @@ namespace CodeBase.Projectiles
         private float _endDelay;
         private ParticleSystem _particleSystem;
 
-        private void OnEnable() =>
+        protected override void OnEnabled() =>
             Hide();
 
         public void Construct(TrailStaticData trailStaticData)
@@ -37,12 +39,8 @@ namespace CodeBase.Projectiles
         {
             if (_trailVfx != null)
             {
-                // if (_particleSystem == null) 
-                //     _particleSystem = _trailVfx.GetComponent<ParticleSystem>();
-
                 yield return new WaitForSeconds(_startDelay);
-                _trailVfx.SetActive(true);
-                // _particleSystem?.Play(true);
+                _trailVfx.Enable();
             }
         }
 
@@ -58,8 +56,7 @@ namespace CodeBase.Projectiles
         private void Hide()
         {
             if (_trailVfx != null)
-                _trailVfx.SetActive(false);
-            // _particleSystem?.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                _trailVfx.Disable();
         }
     }
 }

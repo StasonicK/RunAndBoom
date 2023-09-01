@@ -14,7 +14,7 @@ namespace CodeBase.UI.Windows.GameEnd
         [SerializeField] private Button _startNewStandardGameButton;
         [SerializeField] private Button _startNewHardGameButton;
 
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             _startNewStandardGameButton.onClick.AddListener(StartNewCommonGame);
             _startNewHardGameButton.onClick.AddListener(StartNewHardModeGame);
@@ -27,7 +27,7 @@ namespace CodeBase.UI.Windows.GameEnd
             InitializeLeaderBoard();
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             _startNewStandardGameButton.onClick.RemoveListener(StartNewCommonGame);
             _startNewHardGameButton.onClick.RemoveListener(StartNewHardModeGame);
@@ -67,12 +67,10 @@ namespace CodeBase.UI.Windows.GameEnd
 
         private void AddGameResult()
         {
-            int allLevelsScore = Progress.AllStats.GetAllLevelsStats();
-            Debug.Log($"AddGameResult {allLevelsScore}");
             LeaderBoardService.OnSetValueError += ShowSetValueError;
             LeaderBoardService.OnSetValueSuccess += SuccessSetValue;
             LeaderBoardService.SetValue(Scene.Initial.GetLeaderBoardName(Progress.IsHardMode),
-                allLevelsScore);
+                Progress.AllStats.GetAllLevelsStats());
         }
     }
 }

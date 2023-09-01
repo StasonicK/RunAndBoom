@@ -1,10 +1,11 @@
 ﻿using CodeBase.UI.Services;
+using NTC.Global.Cache;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace CodeBase.UI.Windows.Results
 {
-    public class Star : MonoBehaviour
+    public class Star : MonoCache
     {
         [SerializeField] private Image _reached;
         [SerializeField] private Image _unreached;

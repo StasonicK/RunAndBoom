@@ -8,6 +8,7 @@ using CodeBase.StaticData.Hits;
 using CodeBase.StaticData.Projectiles;
 using CodeBase.StaticData.ShotVfxs;
 using CodeBase.StaticData.Weapons;
+using NTC.Global.System;
 using UnityEngine;
 
 namespace CodeBase.Services.Pool
@@ -72,7 +73,7 @@ namespace CodeBase.Services.Pool
                 enemyStaticData = _staticDataService.ForEnemy(EnemyTypeId.WithPistol);
                 _constructorService.ConstructEnemyProjectile(projectile, enemyStaticData.Damage,
                     ProjectileTypeId.PistolBullet);
-                projectile.SetActive(false);
+                projectile.Disable();
                 gameObjects.Add(projectile);
             }
 
@@ -86,7 +87,7 @@ namespace CodeBase.Services.Pool
                 enemyStaticData = _staticDataService.ForEnemy(EnemyTypeId.WithShotgun);
                 _constructorService.ConstructEnemyProjectile(projectile, enemyStaticData.Damage,
                     ProjectileTypeId.Shot);
-                projectile.SetActive(false);
+                projectile.Disable();
                 gameObjects.Add(projectile);
             }
 
@@ -100,7 +101,7 @@ namespace CodeBase.Services.Pool
                 enemyStaticData = _staticDataService.ForEnemy(EnemyTypeId.WithSniperRifle);
                 _constructorService.ConstructEnemyProjectile(projectile, enemyStaticData.Damage,
                     ProjectileTypeId.RifleBullet);
-                projectile.SetActive(false);
+                projectile.Disable();
                 gameObjects.Add(projectile);
             }
 
@@ -114,7 +115,7 @@ namespace CodeBase.Services.Pool
                 enemyStaticData = _staticDataService.ForEnemy(EnemyTypeId.WithSMG);
                 _constructorService.ConstructEnemyProjectile(projectile, enemyStaticData.Damage,
                     ProjectileTypeId.PistolBullet);
-                projectile.SetActive(false);
+                projectile.Disable();
                 gameObjects.Add(projectile);
             }
 
@@ -128,7 +129,7 @@ namespace CodeBase.Services.Pool
                 enemyStaticData = _staticDataService.ForEnemy(EnemyTypeId.WithMG);
                 _constructorService.ConstructEnemyProjectile(projectile, enemyStaticData.Damage,
                     ProjectileTypeId.RifleBullet);
-                projectile.SetActive(false);
+                projectile.Disable();
                 gameObjects.Add(projectile);
             }
 
@@ -145,7 +146,7 @@ namespace CodeBase.Services.Pool
                 GameObject projectile = await _assets.Instantiate(AssetAddresses.Grenade, _heroProjectilesRoot);
                 _constructorService.ConstructHeroProjectile(projectile, ProjectileTypeId.Grenade, BlastTypeId.Grenade,
                     HeroWeaponTypeId.GrenadeLauncher);
-                projectile.SetActive(false);
+                projectile.Disable();
                 gameObjects.Add(projectile);
             }
 
@@ -158,7 +159,7 @@ namespace CodeBase.Services.Pool
                 GameObject projectile = await _assets.Instantiate(AssetAddresses.RpgRocket, _heroProjectilesRoot);
                 _constructorService.ConstructHeroProjectile(projectile, ProjectileTypeId.RpgRocket,
                     BlastTypeId.RpgRocket, HeroWeaponTypeId.RPG);
-                projectile.SetActive(false);
+                projectile.Disable();
                 gameObjects.Add(projectile);
             }
 
@@ -172,7 +173,7 @@ namespace CodeBase.Services.Pool
                     await _assets.Instantiate(AssetAddresses.RocketLauncherRocket, _heroProjectilesRoot);
                 _constructorService.ConstructHeroProjectile(projectile, ProjectileTypeId.RocketLauncherRocket,
                     BlastTypeId.RocketLauncherRocket, HeroWeaponTypeId.RocketLauncher);
-                projectile.SetActive(false);
+                projectile.Disable();
                 gameObjects.Add(projectile);
             }
 
@@ -184,7 +185,7 @@ namespace CodeBase.Services.Pool
                 GameObject projectile = await _assets.Instantiate(AssetAddresses.Bomb, _heroProjectilesRoot);
                 _constructorService.ConstructHeroProjectile(projectile, ProjectileTypeId.Bomb, BlastTypeId.Bomb,
                     HeroWeaponTypeId.Mortar);
-                projectile.SetActive(false);
+                projectile.Disable();
                 gameObjects.Add(projectile);
             }
 
@@ -199,7 +200,7 @@ namespace CodeBase.Services.Pool
             for (int i = 0; i < gameObjects.Capacity; i++)
             {
                 GameObject shotVfx = await _assets.Instantiate(AssetAddresses.GrenadeMuzzleFire, _shotVfxsRoot);
-                shotVfx.SetActive(false);
+                shotVfx.Disable();
                 gameObjects.Add(shotVfx);
             }
 
@@ -209,7 +210,7 @@ namespace CodeBase.Services.Pool
             for (int i = 0; i < gameObjects.Capacity; i++)
             {
                 GameObject shotVfx = await _assets.Instantiate(AssetAddresses.RpgMuzzleFire, _shotVfxsRoot);
-                shotVfx.SetActive(false);
+                shotVfx.Disable();
                 gameObjects.Add(shotVfx);
             }
 
@@ -219,7 +220,7 @@ namespace CodeBase.Services.Pool
             for (int i = 0; i < gameObjects.Capacity; i++)
             {
                 GameObject shotVfx = await _assets.Instantiate(AssetAddresses.RocketLauncherMuzzleBlue, _shotVfxsRoot);
-                shotVfx.SetActive(false);
+                shotVfx.Disable();
                 gameObjects.Add(shotVfx);
             }
 
@@ -229,7 +230,7 @@ namespace CodeBase.Services.Pool
             for (int i = 0; i < gameObjects.Capacity; i++)
             {
                 GameObject shotVfx = await _assets.Instantiate(AssetAddresses.BombMuzzle, _shotVfxsRoot);
-                shotVfx.SetActive(false);
+                shotVfx.Disable();
                 gameObjects.Add(shotVfx);
             }
 
@@ -239,7 +240,7 @@ namespace CodeBase.Services.Pool
             for (int i = 0; i < gameObjects.Capacity; i++)
             {
                 GameObject shotVfx = await _assets.Instantiate(AssetAddresses.BulletMuzzleFire, _shotVfxsRoot);
-                shotVfx.SetActive(false);
+                shotVfx.Disable();
                 gameObjects.Add(shotVfx);
             }
 
@@ -249,7 +250,7 @@ namespace CodeBase.Services.Pool
             for (int i = 0; i < gameObjects.Capacity; i++)
             {
                 GameObject shotVfx = await _assets.Instantiate(AssetAddresses.ShotMuzzleFire, _shotVfxsRoot);
-                shotVfx.SetActive(false);
+                shotVfx.Disable();
                 gameObjects.Add(shotVfx);
             }
 
@@ -348,7 +349,7 @@ namespace CodeBase.Services.Pool
                 if (pool != Pools.ShotVfxs)
                     _constructorService.ConstructProjectileLike(original, newGameObject);
 
-                newGameObject.SetActive(false);
+                newGameObject.Disable();
                 newList.Add(newGameObject);
             }
 

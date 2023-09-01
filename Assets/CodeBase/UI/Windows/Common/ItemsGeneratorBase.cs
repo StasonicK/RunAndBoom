@@ -19,11 +19,12 @@ using CodeBase.StaticData.Items.Shop.Weapons;
 using CodeBase.StaticData.Items.Shop.WeaponsUpgrades;
 using CodeBase.StaticData.Weapons;
 using CodeBase.UI.Windows.Shop;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.UI.Windows.Common
 {
-    public abstract class ItemsGeneratorBase : MonoBehaviour, IProgressReader
+    public abstract class ItemsGeneratorBase : MonoCache, IProgressReader
     {
         [SerializeField] protected GameObject[] GameObjectItems;
 
@@ -44,20 +45,18 @@ namespace CodeBase.UI.Windows.Common
         private List<HeroWeaponTypeId> _availableWeapons;
         private List<PerkItemData> _availablePerks;
         private List<MoneyTypeId> _moneyTypeIds;
-
-        private Coroutine _coroutineShopItemsGeneration;
-
         protected HeroHealth Health;
         protected int Money;
         protected PlayerProgress Progress;
-        protected GameObject Hero;
+        private GameObject _hero;
+        private Coroutine _coroutineShopItemsGeneration;
 
         public virtual event Action GenerationStarted;
         public virtual event Action GenerationEnded;
 
         protected void Construct(GameObject hero)
         {
-            Hero = hero;
+            _hero = hero;
             Health = hero.GetComponent<HeroHealth>();
             _inputService = AllServices.Container.Single<IInputService>();
             _staticDataService = AllServices.Container.Single<IStaticDataService>();
@@ -276,7 +275,7 @@ namespace CodeBase.UI.Windows.Common
                     GameObject view = GetRandomShopItem();
 
                     if (view != null)
-                        CreateItemItem(Hero, view, ItemTypeId.HealthRecover, true);
+                        CreateItemItem(_hero, view, ItemTypeId.HealthRecover, true);
                 }
             }
         }
@@ -288,7 +287,7 @@ namespace CodeBase.UI.Windows.Common
                 GameObject view = GetRandomShopItem();
 
                 if (view != null)
-                    CreateAmmoItem(Hero, view, _availableAmmunition, true);
+                    CreateAmmoItem(_hero, view, _availableAmmunition, true);
             }
         }
 
@@ -299,7 +298,7 @@ namespace CodeBase.UI.Windows.Common
                 GameObject view = GetRandomShopItem();
 
                 if (view != null)
-                    CreateUpgradeItem(Hero, view, _availableUpgrades, true);
+                    CreateUpgradeItem(_hero, view, _availableUpgrades, true);
             }
         }
 
@@ -310,7 +309,7 @@ namespace CodeBase.UI.Windows.Common
                 GameObject view = GetRandomShopItem();
 
                 if (view != null)
-                    CreateWeaponItem(Hero, view, _availableWeapons, true);
+                    CreateWeaponItem(_hero, view, _availableWeapons, true);
             }
         }
 
@@ -321,7 +320,7 @@ namespace CodeBase.UI.Windows.Common
                 GameObject view = GetRandomShopItem();
 
                 if (view != null)
-                    CreatePerkItem(Hero, view, _availablePerks, true);
+                    CreatePerkItem(_hero, view, _availablePerks, true);
             }
         }
 
@@ -332,7 +331,7 @@ namespace CodeBase.UI.Windows.Common
                 GameObject view = GetRandomShopItem();
 
                 if (view != null)
-                    CreateMoneyItem(Hero, view, _moneyTypeIds, true);
+                    CreateMoneyItem(_hero, view, _moneyTypeIds, true);
             }
         }
 

@@ -8,11 +8,12 @@ using CodeBase.Services.StaticData;
 using CodeBase.StaticData.Projectiles;
 using CodeBase.StaticData.Weapons;
 using CodeBase.Weapons;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Hero
 {
-    public class HeroWeaponSelection : MonoBehaviour, IProgressReader
+    public class HeroWeaponSelection : MonoCache, IProgressReader
     {
         [SerializeField] private GameObject[] _weapons;
 
@@ -33,7 +34,7 @@ namespace CodeBase.Hero
             _heroWeaponTypeIds = DataExtensions.GetValues<HeroWeaponTypeId>().ToList();
         }
 
-        private void Update()
+        protected override void Run()
         {
             if (_canSelect)
             {

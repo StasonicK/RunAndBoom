@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using CodeBase.Enemy;
 using CodeBase.Logic;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Projectiles.Hit
 {
-    public class DestroyWithBlast : MonoBehaviour
+    public class DestroyWithBlast : MonoCache
     {
         [SerializeField] private LayerMask _objectLayerMask;
 

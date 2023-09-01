@@ -3,11 +3,12 @@ using CodeBase.Services;
 using CodeBase.UI.Services.Windows;
 using CodeBase.UI.Windows.Common;
 using CodeBase.UI.Windows.Results;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Logic.Level
 {
-    public class Finish : MonoBehaviour
+    public class Finish : MonoCache
     {
         [SerializeField] private GameObject pickupEffect;
         [SerializeField] private int _maxPrice;
@@ -16,10 +17,8 @@ namespace CodeBase.Logic.Level
         private Scene _nextLevel;
         private Scene _currentLevel;
 
-        private void Awake()
-        {
+        private void Awake() =>
             _windowService = AllServices.Container.Single<IWindowService>();
-        }
 
         private void OnTriggerEnter(Collider other)
         {

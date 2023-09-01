@@ -3,11 +3,11 @@ using CodeBase.Logic;
 using CodeBase.Services;
 using CodeBase.UI.Services.Windows;
 using CodeBase.UI.Windows.Death;
-using UnityEngine;
+using NTC.Global.Cache;
 
 namespace CodeBase.Hero
 {
-    public class HeroDeath : MonoBehaviour, IDeath
+    public class HeroDeath : MonoCache, IDeath
     {
         private IWindowService _windowService;
         private IHealth _health;
@@ -17,13 +17,13 @@ namespace CodeBase.Hero
         private void Awake()
         {
             _windowService = AllServices.Container.Single<IWindowService>();
-            _health = GetComponent<IHealth>();
+            _health = Get<IHealth>();
         }
 
-        private void OnEnable() =>
+        protected override void OnEnabled() =>
             _health.HealthChanged += HealthChanged;
 
-        private void OnDisable() =>
+        protected override void OnDisabled() =>
             _health.HealthChanged -= HealthChanged;
 
         private void HealthChanged()

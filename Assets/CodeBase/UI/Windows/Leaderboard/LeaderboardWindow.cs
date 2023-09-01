@@ -4,6 +4,7 @@ using CodeBase.Data;
 using CodeBase.UI.Services.Windows;
 using CodeBase.UI.Windows.Common;
 using CodeBase.UI.Windows.GameEnd;
+using NTC.Global.System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -26,7 +27,7 @@ namespace CodeBase.UI.Windows.LeaderBoard
         private int _maxPrice;
         private bool _isCurrentScene = true;
 
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             ClearLeaderBoard();
             ClearPlayerData();
@@ -44,7 +45,7 @@ namespace CodeBase.UI.Windows.LeaderBoard
             InitializeLeaderBoard();
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             _closeButton.onClick.RemoveListener(Close);
             _toGameEndWindowButton.onClick.RemoveListener(ToGameEndWindow);
@@ -66,13 +67,13 @@ namespace CodeBase.UI.Windows.LeaderBoard
         {
             if (_isCurrentScene)
             {
-                _closeButton.gameObject.SetActive(true);
-                _toGameEndWindowButton.gameObject.SetActive(false);
+                _closeButton.gameObject.Enable();
+                _toGameEndWindowButton.gameObject.Disable();
             }
             else
             {
-                _closeButton.gameObject.SetActive(false);
-                _toGameEndWindowButton.gameObject.SetActive(true);
+                _closeButton.gameObject.Disable();
+                _toGameEndWindowButton.gameObject.Enable();
             }
         }
 
@@ -88,7 +89,7 @@ namespace CodeBase.UI.Windows.LeaderBoard
             _iconImage.texture = null;
             _nameText.text = "";
             _scoreText.text = "";
-            _playerDataContainer.SetActive(false);
+            _playerDataContainer.Disable();
         }
 
         private void AddTestData()
@@ -119,7 +120,7 @@ namespace CodeBase.UI.Windows.LeaderBoard
         private void ClearLeaderBoard()
         {
             foreach (GameObject player in _players)
-                player.SetActive(false);
+                player.Disable();
         }
 
         private void ShowGetEntriesError(string error)
@@ -136,11 +137,9 @@ namespace CodeBase.UI.Windows.LeaderBoard
 
         private void GetLeaderBoardData()
         {
-            // Debug.Log("RequestLeaderBoardData");
             LeaderBoardService.OnSuccessGetEntries += FillLeaderBoard;
             LeaderBoardService.OnSuccessGetEntry += FillPlayerInfo;
             Scene scene = Progress.AllStats.CurrentLevelStats.Scene;
-            // Debug.Log($"Scene {scene}");
             LeaderBoardService.OnGetEntriesError += ShowGetEntriesError;
             LeaderBoardService.OnGetEntryError += ShowGetEntryError;
 
@@ -161,7 +160,6 @@ namespace CodeBase.UI.Windows.LeaderBoard
         {
             // Debug.Log("FillLeaderBoard");
             LeaderboardEntryResponse[] leaderboardEntryResponses = leaderboardGetEntriesResponse.entries;
-            // Debug.Log($"leaderboardEntryResponses {leaderboardEntryResponses.Length}");
             LeaderboardEntryResponse response;
             PlayerItem playerItem;
 
@@ -179,7 +177,7 @@ namespace CodeBase.UI.Windows.LeaderBoard
 
                 playerItem.Name.text = response.player.publicName;
                 playerItem.Score.text = response.score.ToString();
-                playerItem.gameObject.SetActive(true);
+                playerItem.gameObject.Enable();
                 // Debug.Log($"i {i}");
                 // Debug.Log($"publicName {response.player.publicName}");
                 // Debug.Log($"score {response.score}");
@@ -204,7 +202,7 @@ namespace CodeBase.UI.Windows.LeaderBoard
                 LeaderBoardService.OnSuccessGetEntry -= FillPlayerInfo;
 
             if (!string.IsNullOrEmpty(response.player.publicName))
-                _playerDataContainer.SetActive(true);
+                _playerDataContainer.Enable();
             // Debug.Log($"publicName {response.player.publicName}");
             // Debug.Log($"score {response.score}");
             // Debug.Log($"rank {response.rank}");
@@ -212,8 +210,7 @@ namespace CodeBase.UI.Windows.LeaderBoard
 
         private IEnumerator LoadAvatar(string avatarUrl, RawImage image)
         {
-            // Debug.Log("LoadAvatar");
-            image.gameObject.SetActive(false);
+            image.gameObject.Disable();
             UnityWebRequest request = UnityWebRequestTexture.GetTexture(avatarUrl);
             yield return request.SendWebRequest();
 
@@ -224,7 +221,7 @@ namespace CodeBase.UI.Windows.LeaderBoard
             else
             {
                 image.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
-                image.gameObject.SetActive(true);
+                image.gameObject.Enable();
             }
         }
 

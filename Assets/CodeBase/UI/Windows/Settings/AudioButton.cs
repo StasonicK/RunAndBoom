@@ -1,13 +1,14 @@
 ﻿using CodeBase.Data;
 using CodeBase.Services.PersistentProgress;
 using CodeBase.UI.Services;
+using NTC.Global.Cache;
 using Plugins.SoundInstance.Core.Static;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace CodeBase.UI.Windows.Settings
 {
-    public abstract class AudioButton : MonoBehaviour, IProgressReader
+    public abstract class AudioButton : MonoCache, IProgressReader
     {
         [SerializeField] private Button _button;
         [SerializeField] protected Image ImageSelected;
@@ -19,12 +20,12 @@ namespace CodeBase.UI.Windows.Settings
         private AudioSource _audioSource;
 
         private void Awake() =>
-            _audioSource = GetComponent<AudioSource>();
+            _audioSource = Get<AudioSource>();
 
-        private void OnEnable() =>
+        protected override void OnEnabled() =>
             _button.onClick.AddListener(ButtonPressed);
 
-        private void OnDisable() =>
+        protected override void OnDisabled() =>
             _button.onClick.RemoveListener(ButtonPressed);
 
         private void ButtonPressed()

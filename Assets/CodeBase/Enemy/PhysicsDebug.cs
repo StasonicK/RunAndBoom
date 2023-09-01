@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using NTC.Global.Cache;
+using UnityEngine;
 
 namespace CodeBase.Enemy
 {
-    public class PhysicsDebug : MonoBehaviour
+    public class PhysicsDebug : MonoCache
     {
         public static void DrawDebug(Vector3 worldPos, float radius, float seconds)
         {

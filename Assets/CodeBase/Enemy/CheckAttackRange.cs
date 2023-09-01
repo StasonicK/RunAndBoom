@@ -1,23 +1,24 @@
 ﻿using CodeBase.Enemy.Attacks;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Enemy
 {
-    public class CheckAttackRange : MonoBehaviour
+    public class CheckAttackRange : MonoCache
     {
         [SerializeField] private TriggerObserver _triggerObserver;
         [SerializeField] private Follow _follow;
 
         private Attack _attack;
 
-        private void Awake() => _attack = GetComponent<Attack>();
+        private void Awake() =>
+            _attack = Get<Attack>();
 
         private void Start()
         {
             _triggerObserver.TriggerEnter += TriggerEnter;
             _triggerObserver.TriggerExit += TriggerExit;
 
-            // _attack.DisableAttack();
             _attack.enabled = false;
         }
 
@@ -28,7 +29,6 @@ namespace CodeBase.Enemy
         {
             if (_follow != null)
             {
-                // _attack.EnableAttack();
                 _attack.enabled = true;
                 _follow.Stop();
                 _follow.enabled = false;
@@ -39,7 +39,6 @@ namespace CodeBase.Enemy
         {
             if (_follow != null)
             {
-                // _attack.DisableAttack();
                 _attack.enabled = false;
                 _follow.Move();
                 _follow.enabled = true;

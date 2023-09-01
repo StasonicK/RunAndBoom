@@ -1,8 +1,8 @@
-using UnityEngine;
+using NTC.Global.Cache;
 
 namespace CodeBase.Infrastructure
 {
-    public class GameRunner : MonoBehaviour
+    public class GameRunner : MonoCache
     {
         public GameBootstrapper BootstrapperPrefab;
 
@@ -10,7 +10,8 @@ namespace CodeBase.Infrastructure
         {
             var bootstrapper = FindObjectOfType<GameBootstrapper>();
 
-            if (bootstrapper != null) return;
+            if (bootstrapper != null) 
+                return;
 
             Instantiate(BootstrapperPrefab);
         }

@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using NTC.Global.Cache;
+using UnityEngine;
 
 namespace CodeBase.UI.Windows.Results
 {
-    public class StarsPanel : MonoBehaviour
+    public class StarsPanel : MonoCache
     {
         [SerializeField] private Star _star1;
         [SerializeField] private Star _star2;

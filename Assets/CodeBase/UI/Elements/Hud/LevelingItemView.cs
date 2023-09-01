@@ -3,12 +3,12 @@ using CodeBase.Services;
 using CodeBase.Services.StaticData;
 using CodeBase.StaticData.Items;
 using CodeBase.UI.Services;
-using UnityEngine;
+using NTC.Global.Cache;
 using UnityEngine.UI;
 
 namespace CodeBase.UI.Elements.Hud
 {
-    public abstract class LevelingItemView : MonoBehaviour
+    public abstract class LevelingItemView : MonoCache
     {
         public Image MainTypeImage;
         public Image LevelTypeImage;

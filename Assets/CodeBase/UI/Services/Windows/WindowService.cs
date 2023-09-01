@@ -10,6 +10,7 @@ using CodeBase.UI.Windows.LeaderBoard;
 using CodeBase.UI.Windows.Results;
 using CodeBase.UI.Windows.Settings;
 using CodeBase.UI.Windows.Shop;
+using NTC.Global.System;
 using UnityEngine;
 
 namespace CodeBase.UI.Services.Windows
@@ -68,7 +69,7 @@ namespace CodeBase.UI.Services.Windows
             foreach (var vk in _windows)
             {
                 if (vk.Value.activeInHierarchy)
-                    vk.Value.SetActive(false);
+                    vk.Value.Disable();
             }
 
             _windows.Clear();
@@ -79,7 +80,7 @@ namespace CodeBase.UI.Services.Windows
             foreach (var vk in _windows)
             {
                 if (vk.Key != windowId && vk.Value.activeInHierarchy)
-                    vk.Value.SetActive(false);
+                    vk.Value.Disable();
             }
         }
 

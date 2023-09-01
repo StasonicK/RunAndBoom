@@ -8,11 +8,12 @@ using CodeBase.StaticData.Items;
 using CodeBase.StaticData.Items.Shop.WeaponsUpgrades;
 using CodeBase.StaticData.Projectiles;
 using CodeBase.StaticData.Weapons;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Hero
 {
-    public class HeroReloading : MonoBehaviour, IProgressReader
+    public class HeroReloading : MonoCache, IProgressReader
     {
         [SerializeField] private HeroWeaponSelection _heroWeaponSelection;
         [SerializeField] private HeroShooting _heroShooting;
@@ -30,10 +31,10 @@ namespace CodeBase.Hero
         private bool _startReloaded;
         private UpgradeItemData _reloadingItemData;
         private bool _canReload;
+        private bool _reloadingStoped;
 
         public Action<float> OnStartReloading;
         public Action OnStopReloading;
-        private bool _reloadingStoped;
 
         private void Awake()
         {
@@ -41,19 +42,19 @@ namespace CodeBase.Hero
             _heroShooting.Shot += StartCooldown;
         }
 
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             if (_reloadingItemData != null)
                 _reloadingItemData.LevelChanged += ChangeCooldown;
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             if (_reloadingItemData != null)
                 _reloadingItemData.LevelChanged -= ChangeCooldown;
         }
 
-        private void Update()
+        protected override void Run()
         {
             if (_canReload)
             {
@@ -62,10 +63,8 @@ namespace CodeBase.Hero
             }
         }
 
-        public void Construct(IStaticDataService staticDataService)
-        {
+        public void Construct(IStaticDataService staticDataService) =>
             _staticDataService = staticDataService;
-        }
 
         public void TurnOn() =>
             _canReload = true;

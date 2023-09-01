@@ -9,10 +9,10 @@ namespace CodeBase.UI.Windows.Common
         private MoneyTypeId _moneyTypeId;
         protected MoneyStaticData _moneyStaticData;
 
-        private void OnEnable() =>
+        protected override void OnEnabled() =>
             Button?.onClick.AddListener(Clicked);
 
-        private void OnDisable() =>
+        protected override void OnDisabled() =>
             Button?.onClick.RemoveListener(Clicked);
 
         protected void Construct(MoneyTypeId moneyTypeId, PlayerProgress progress)
@@ -36,9 +36,7 @@ namespace CodeBase.UI.Windows.Common
             if (CostText != null)
                 CostText.text = "";
 
-            // CostText.color = Constants.ShopItemPerk;
             CountText.text = "";
-            // CountText.color = Constants.ShopItemCountField;
             TitleText.text = $"+{_moneyStaticData.Value} $";
         }
     }

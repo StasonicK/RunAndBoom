@@ -6,11 +6,12 @@ using CodeBase.Services.PersistentProgress;
 using CodeBase.StaticData.Projectiles;
 using CodeBase.StaticData.Weapons;
 using CodeBase.Weapons;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Hero
 {
-    public class HeroShooting : MonoBehaviour
+    public class HeroShooting : MonoCache
     {
         [SerializeField] private HeroWeaponSelection _heroWeaponSelection;
         [SerializeField] private HeroReloading _heroReloading;
@@ -32,7 +33,7 @@ namespace CodeBase.Hero
             _heroReloading.OnStopReloading += TurnOn;
         }
 
-        private void Update() =>
+        protected override void Run() =>
             TryShoot();
 
         private void GetCurrentWeaponObject(GameObject weaponPrefab, HeroWeaponStaticData heroWeaponStaticData,

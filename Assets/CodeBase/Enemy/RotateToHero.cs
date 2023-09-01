@@ -1,15 +1,16 @@
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Enemy
 {
-    public class RotateToHero : MonoBehaviour
+    public class RotateToHero : MonoCache
     {
         [SerializeField] private float _speed;
 
         private Transform _heroTransform;
         private Vector3 _directionToLook;
 
-        private void Update()
+        protected override void Run()
         {
             if (_heroTransform)
                 RotateTowardsHero();

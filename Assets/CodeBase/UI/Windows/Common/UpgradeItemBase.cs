@@ -13,13 +13,13 @@ namespace CodeBase.UI.Windows.Common
         protected UpgradeLevelInfoStaticData _upgradeLevelInfoStaticData;
         private ShopUpgradeLevelStaticData _shopUpgradeLevelStaticData;
 
-        private void OnEnable() =>
+        protected override void OnEnabled() =>
             Button?.onClick.AddListener(Clicked);
 
-        private void OnDisable() =>
+        protected override void OnDisabled() =>
             Button?.onClick.RemoveListener(Clicked);
 
-        public void Construct(UpgradeItemData upgradeItemData, PlayerProgress progress)
+        protected void Construct(UpgradeItemData upgradeItemData, PlayerProgress progress)
         {
             base.Construct(progress);
             _upgradeItemData = upgradeItemData;
@@ -52,7 +52,6 @@ namespace CodeBase.UI.Windows.Common
             if (CostText != null)
                 CostText.text = $"{_upgradeLevelInfoStaticData.Cost} $";
 
-            // CostText.color = Constants.ShopItemPerk;
             CountText.text = "";
             TitleText.text =
                 $"{LocalizationService.GetText(russian: _upgradeStaticData.RuTitle, turkish: _upgradeStaticData.TrTitle, english: _upgradeStaticData.EnTitle)} {_shopUpgradeLevelStaticData.Level} {LocalizationService.GetText(russian: _upgradableWeaponStaticData.RuTitle, turkish: _upgradableWeaponStaticData.TrTitle, english: _upgradableWeaponStaticData.EnTitle)}";

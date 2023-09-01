@@ -11,13 +11,15 @@ using CodeBase.Services.PersistentProgress;
 using CodeBase.Services.SaveLoad;
 using CodeBase.Services.StaticData;
 using CodeBase.UI.Services.Windows;
+using NTC.Global.Cache;
+using NTC.Global.System;
 using Plugins.SoundInstance.Core.Static;
 using UnityEngine;
 
 namespace CodeBase.UI.Windows.Common
 {
     [RequireComponent(typeof(AudioSource))]
-    public abstract class WindowBase : MonoBehaviour, IProgressReader
+    public abstract class WindowBase : MonoCache, IProgressReader
     {
         protected IWindowService WindowService;
         protected ISaveLoadService SaveLoadService;
@@ -33,7 +35,7 @@ namespace CodeBase.UI.Windows.Common
         protected LevelStats LevelStats;
         protected Scene CurrentLevel;
 
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             if (WindowService == null)
                 WindowService = AllServices.Container.Single<IWindowService>();
@@ -73,7 +75,7 @@ namespace CodeBase.UI.Windows.Common
 
         protected void Hide()
         {
-            gameObject.SetActive(false);
+            gameObject.Disable();
             PlayCloseSound();
 
             if (!WindowService.IsAnotherActive(_windowId))
@@ -88,7 +90,7 @@ namespace CodeBase.UI.Windows.Common
 
         public void Show(bool showCursor = true)
         {
-            gameObject.SetActive(true);
+            gameObject.Enable();
             Hero.StopHero();
             Time.timeScale = Constants.TimeScaleStop;
 
@@ -141,7 +143,6 @@ namespace CodeBase.UI.Windows.Common
 
         protected void InitializeAdsSDK()
         {
-            Debug.Log("InitializeAdsSDK");
             if (AdsService.IsInitialized())
                 AdsServiceInitializedSuccess();
             else
@@ -175,18 +176,14 @@ namespace CodeBase.UI.Windows.Common
 
         protected void AddLevelResult()
         {
-            Debug.Log($"AddLevelResult {LevelStats.Scene} {LevelStats.Score}");
             LeaderBoardService.OnSetValueError += ShowSetValueError;
             SubscribeSetValueSuccess();
             LeaderBoardService.SetValue(CurrentLevel.GetLeaderBoardName(Progress.IsHardMode),
                 LevelStats.Score);
         }
 
-        protected void SuccessSetValue()
-        {
-            Debug.Log("SuccessSetValue");
+        protected void SuccessSetValue() =>
             LeaderBoardService.OnSetValueSuccess -= SuccessSetValue;
-        }
 
         protected virtual void SubscribeSetValueSuccess() =>
             LeaderBoardService.OnSetValueSuccess += SuccessSetValue;

@@ -40,8 +40,8 @@ namespace CodeBase.Projectiles.Hit
 
         private void Awake()
         {
-            _hitCollider = GetComponent<CapsuleCollider>();
-            _audioSource = GetComponent<AudioSource>();
+            _hitCollider = Get<CapsuleCollider>();
+            _audioSource = Get<AudioSource>();
             Tags = new[]
             {
                 Constants.EnemyTag, Constants.ObstacleTag, Constants.BarrierTag, Constants.DestructableTag,
@@ -49,13 +49,7 @@ namespace CodeBase.Projectiles.Hit
             };
         }
 
-        public void OffCollider() =>
-            _hitCollider.enabled = false;
-
-        public void OnCollider() =>
-            _hitCollider.enabled = transform;
-
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             HideBlast();
 
@@ -63,7 +57,7 @@ namespace CodeBase.Projectiles.Hit
                 _blastItemData.LevelChanged += ChangeBlastSize;
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             if (_blastItemData != null)
                 _blastItemData.LevelChanged -= ChangeBlastSize;
@@ -97,6 +91,22 @@ namespace CodeBase.Projectiles.Hit
             }
         }
 
+        public void Construct(GameObject prefab, float radius, float damage, HeroWeaponTypeId? heroWeaponTypeId = null)
+        {
+            _heroWeaponTypeId = heroWeaponTypeId;
+            _staticDataService = AllServices.Container.Single<IStaticDataService>();
+
+            _prefab = prefab;
+            _sphereRadius = radius;
+            _damage = damage;
+        }
+
+        public void OffCollider() =>
+            _hitCollider.enabled = false;
+
+        public void OnCollider() =>
+            _hitCollider.enabled = transform;
+
         private void PlaySound()
         {
             switch (_heroWeaponTypeId)
@@ -122,16 +132,6 @@ namespace CodeBase.Projectiles.Hit
                         position: transform.position, _volume, _audioSource);
                     break;
             }
-        }
-
-        public void Construct(GameObject prefab, float radius, float damage, HeroWeaponTypeId? heroWeaponTypeId = null)
-        {
-            _heroWeaponTypeId = heroWeaponTypeId;
-            _staticDataService = AllServices.Container.Single<IStaticDataService>();
-
-            _prefab = prefab;
-            _sphereRadius = radius;
-            _damage = damage;
         }
 
         private void SetBlastSize()

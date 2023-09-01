@@ -2,12 +2,14 @@ using System;
 using System.Collections;
 using CodeBase.Services;
 using CodeBase.Services.SaveLoad;
+using NTC.Global.Cache;
+using NTC.Global.System;
 using Plugins.SoundInstance.Core.Static;
 using UnityEngine;
 
 namespace CodeBase.Infrastructure
 {
-    public class LoadingCurtain : MonoBehaviour, ILoadingCurtain
+    public class LoadingCurtain : MonoCache, ILoadingCurtain
     {
         [SerializeField] private CanvasGroup _curtain;
 
@@ -24,7 +26,7 @@ namespace CodeBase.Infrastructure
 
         public void Show()
         {
-            gameObject.SetActive(true);
+            gameObject.Enable();
             _curtain.alpha = MaximumAlpha;
         }
 
@@ -47,7 +49,7 @@ namespace CodeBase.Infrastructure
 
             FadedOut?.Invoke();
             AllServices.Container.Single<ISaveLoadService>().SaveProgress();
-            gameObject.SetActive(false);
+            gameObject.Disable();
         }
     }
 }

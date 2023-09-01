@@ -4,13 +4,15 @@ using System.Collections.Generic;
 using CodeBase.Data;
 using CodeBase.Logic;
 using CodeBase.Services.PersistentProgress;
+using NTC.Global.Cache;
+using NTC.Global.System;
 using Plugins.SoundInstance.Core.Static;
 using UnityEngine;
 
 namespace CodeBase.DestructableObject
 {
     [RequireComponent(typeof(AudioSource))]
-    public class DestructableObjectDeath : MonoBehaviour, IDeath, IProgressReader
+    public class DestructableObjectDeath : MonoCache, IDeath, IProgressReader
     {
         [SerializeField] private GameObject _solid;
         [SerializeField] private GameObject _broken;
@@ -27,10 +29,10 @@ namespace CodeBase.DestructableObject
 
         private void Awake()
         {
-            _solid.SetActive(true);
-            _broken.SetActive(false);
+            _solid.Enable();
+            _broken.Disable();
             _parts = new List<Rigidbody>(_broken.transform.childCount);
-            _audioSource = GetComponent<AudioSource>();
+            _audioSource = Get<AudioSource>();
 
             for (int i = 0; i < _broken.transform.childCount; i++)
                 _parts.Add(_broken.transform.GetChild(i).GetComponent<Rigidbody>());
@@ -38,9 +40,9 @@ namespace CodeBase.DestructableObject
 
         public void Die()
         {
-            _solid.SetActive(false);
-            _broken.SetActive(true);
-            Destroy(GetComponent<BoxCollider>());
+            _solid.Enable();
+            _broken.Disable();
+            Destroy(Get<BoxCollider>());
             Destroy(_solid.GetComponentInChildren<BoxCollider>());
 
             if (_isBroken == false)

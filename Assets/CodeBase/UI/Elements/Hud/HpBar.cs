@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using NTC.Global.Cache;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace CodeBase.UI.Elements.Hud
 {
-    public class HpBar : MonoBehaviour
+    public class HpBar : MonoCache
     {
         [SerializeField] private Slider _slider;
 

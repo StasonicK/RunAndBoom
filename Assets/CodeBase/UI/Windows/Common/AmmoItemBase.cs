@@ -11,10 +11,10 @@ namespace CodeBase.UI.Windows.Common
         protected AmmoItem _ammoItem;
         protected ShopAmmoStaticData _shopAmmoStaticData;
 
-        private void OnEnable() =>
+        protected override void OnEnabled() =>
             Button?.onClick.AddListener(Clicked);
 
-        private void OnDisable() =>
+        protected override void OnDisabled() =>
             Button?.onClick.RemoveListener(Clicked);
 
         protected void Construct(AmmoItem ammoItem, PlayerProgress progress)

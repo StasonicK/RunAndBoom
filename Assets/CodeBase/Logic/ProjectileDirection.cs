@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+﻿using NTC.Global.Cache;
 
 namespace CodeBase.Logic
 {
-    public class ProjectileDirection : MonoBehaviour
+    public class ProjectileDirection : MonoCache
     {
     }
 }

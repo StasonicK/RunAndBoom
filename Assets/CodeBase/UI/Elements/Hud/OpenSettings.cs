@@ -2,12 +2,14 @@
 using CodeBase.Services.Input;
 using CodeBase.UI.Services.Windows;
 using CodeBase.UI.Windows.Settings;
+using NTC.Global.Cache;
+using NTC.Global.System;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace CodeBase.UI.Elements.Hud
 {
-    public class OpenSettings : MonoBehaviour
+    public class OpenSettings : MonoCache
     {
         [SerializeField] private Button _settingsButton;
 
@@ -19,16 +21,16 @@ namespace CodeBase.UI.Elements.Hud
 
             if (AllServices.Container.Single<IInputService>() is DesktopInputService)
             {
-                _settingsButton.gameObject.SetActive(false);
+                _settingsButton.gameObject.Disable();
             }
             else
             {
-                _settingsButton.gameObject.SetActive(true);
+                _settingsButton.gameObject.Enable();
                 _settingsButton.onClick.AddListener(ShowSettingsWindow);
             }
         }
 
-        private void Update()
+        protected override void Run()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
                 ShowSettingsWindow();

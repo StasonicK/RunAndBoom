@@ -1,11 +1,12 @@
 ﻿using CodeBase.Infrastructure.Factories;
 using CodeBase.Services;
 using CodeBase.StaticData.Enemies;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Logic.EnemySpawners
 {
-    public class SpawnPoint : MonoBehaviour
+    public class SpawnPoint : MonoCache
     {
         [SerializeField] private EnemyTypeId _enemyTypeId;
 

@@ -18,7 +18,7 @@ namespace CodeBase.UI.Windows.Authorization
         private Scene _nextScene;
         private int _maxPrice;
 
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             _applyButton.onClick.AddListener(Authorize);
             _denyButton.onClick.AddListener(Hide);
@@ -30,7 +30,7 @@ namespace CodeBase.UI.Windows.Authorization
                 _applyButton.onClick.AddListener(ToLeaderBoardWindow);
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             _applyButton.onClick.RemoveListener(Authorize);
             _denyButton.onClick.RemoveListener(Hide);
@@ -44,7 +44,6 @@ namespace CodeBase.UI.Windows.Authorization
 
         private void Authorize()
         {
-            Debug.Log("Authorize");
             _authorization.OnAuthorizeSuccessCallback += RequestPersonalProfileDataPermission;
             _authorization.OnAuthorizeErrorCallback += ShowAuthorizeError;
             _authorization.Authorize();
@@ -52,7 +51,6 @@ namespace CodeBase.UI.Windows.Authorization
 
         private void RequestPersonalProfileDataPermission()
         {
-            Debug.Log("RequestPersonalProfileDataPermission");
             _authorization.OnAuthorizeSuccessCallback -= RequestPersonalProfileDataPermission;
             _authorization.OnRequestPersonalProfileDataPermissionSuccessCallback += ToLeaderBoardWindow;
             _authorization.OnRequestErrorCallback += ShowRequestError;
@@ -73,7 +71,6 @@ namespace CodeBase.UI.Windows.Authorization
 
         private void ToLeaderBoardWindow()
         {
-            Debug.Log("ToLeaderBoard");
             WindowService.Show<LeaderBoardWindow>(WindowId.LeaderBoard, false);
             Hide();
         }

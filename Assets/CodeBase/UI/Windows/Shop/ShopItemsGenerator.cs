@@ -7,6 +7,7 @@ using CodeBase.StaticData.Items.Shop.Items;
 using CodeBase.StaticData.Weapons;
 using CodeBase.UI.Windows.Common;
 using CodeBase.UI.Windows.Shop.Items;
+using NTC.Global.System;
 using UnityEngine;
 
 namespace CodeBase.UI.Windows.Shop
@@ -16,10 +17,8 @@ namespace CodeBase.UI.Windows.Shop
         public override event Action GenerationStarted;
         public override event Action GenerationEnded;
 
-        public new void Construct(GameObject hero)
-        {
+        public new void Construct(GameObject hero) =>
             base.Construct(hero);
-        }
 
         public override void Generate()
         {
@@ -61,7 +60,7 @@ namespace CodeBase.UI.Windows.Shop
             AmmoShopItem view = parent.GetComponent<ShopCell>().GetView(typeof(AmmoShopItem)) as AmmoShopItem;
             view?.Construct(hero.transform, ammoItem, Progress);
             view?.ChangeClickability(isClickable);
-            parent.SetActive(true);
+            parent.Enable();
         }
 
         protected override void CreateItemItem(GameObject hero, GameObject parent, ItemTypeId itemTypeId,
@@ -71,7 +70,7 @@ namespace CodeBase.UI.Windows.Shop
                 parent.GetComponent<ShopCell>().GetView(typeof(ItemShopItem)) as ItemShopItem;
             view?.Construct(hero.transform, itemTypeId, Health, Progress);
             view?.ChangeClickability(isClickable);
-            parent.SetActive(true);
+            parent.Enable();
         }
 
         protected override void CreateUpgradeItem(GameObject hero, GameObject parent, List<UpgradeItemData> list,
@@ -81,7 +80,7 @@ namespace CodeBase.UI.Windows.Shop
             UpgradeShopItem view = parent.GetComponent<ShopCell>().GetView(typeof(UpgradeShopItem)) as UpgradeShopItem;
             view?.Construct(hero.transform, upgradeItemData, Progress);
             view?.ChangeClickability(isClickable);
-            parent.SetActive(true);
+            parent.Enable();
         }
 
         protected override void CreatePerkItem(GameObject hero, GameObject parent, List<PerkItemData> list,
@@ -91,7 +90,7 @@ namespace CodeBase.UI.Windows.Shop
             PerkShopItem view = parent.GetComponent<ShopCell>().GetView(typeof(PerkShopItem)) as PerkShopItem;
             view?.Construct(hero.transform, perkItemData, Progress);
             view?.ChangeClickability(isClickable);
-            parent.SetActive(true);
+            parent.Enable();
         }
 
         protected override void CreateWeaponItem(GameObject hero, GameObject parent, List<HeroWeaponTypeId> list,
@@ -101,7 +100,7 @@ namespace CodeBase.UI.Windows.Shop
             WeaponShopItem view = parent.GetComponent<ShopCell>().GetView(typeof(WeaponShopItem)) as WeaponShopItem;
             view?.Construct(hero.transform, weaponTypeId, Progress);
             view?.ChangeClickability(isClickable);
-            parent.SetActive(true);
+            parent.Enable();
         }
     }
 }

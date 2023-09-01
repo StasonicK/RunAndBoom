@@ -1,11 +1,13 @@
 ﻿using CodeBase.UI.Services;
+using NTC.Global.Cache;
+using NTC.Global.System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace CodeBase.UI.Elements.Hud.TutorialPanel
 {
-    public class Action : MonoBehaviour
+    public class Action : MonoCache
     {
         [SerializeField] public TextMeshProUGUI Text;
 
@@ -13,14 +15,14 @@ namespace CodeBase.UI.Elements.Hud.TutorialPanel
 
         private void Awake()
         {
-            _image = GetComponent<Image>();
+            _image = Get<Image>();
             _image.ChangeImageAlpha(Constants.HalfVisible);
         }
 
         public void Show() =>
-            gameObject.SetActive(true);
+            gameObject.Enable();
 
         public void Hide() =>
-            gameObject.SetActive(false);
+            gameObject.Disable();
     }
 }

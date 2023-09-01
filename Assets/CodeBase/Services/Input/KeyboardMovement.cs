@@ -14,7 +14,6 @@ namespace CodeBase.Services.Input
         {
             _playerInput = playerInput;
             Subscribe();
-            _playerInput.Enable();
         }
 
 

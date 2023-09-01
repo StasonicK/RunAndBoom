@@ -1,11 +1,12 @@
 ﻿using CodeBase.Data;
 using CodeBase.Services.PersistentProgress;
+using NTC.Global.Cache;
 using TMPro;
 using UnityEngine;
 
 namespace CodeBase.UI.Elements.Hud
 {
-    public class ScoreUI : MonoBehaviour, IProgressReader
+    public class ScoreUI : MonoCache, IProgressReader
     {
         [SerializeField] private TextMeshProUGUI _score;
 

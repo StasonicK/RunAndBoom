@@ -2,11 +2,12 @@
 using CodeBase.Services;
 using CodeBase.Services.Pool;
 using CodeBase.StaticData.ShotVfxs;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Weapons
 {
-    public class ShotVfxsContainer : MonoBehaviour
+    public class ShotVfxsContainer : MonoCache
     {
         [SerializeField] private GameObject _shotVfx;
 

@@ -1,4 +1,5 @@
 ﻿using CodeBase.Logic;
+using NTC.Global.Cache;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,15 +7,15 @@ namespace CodeBase.Enemy
 {
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(EnemyAnimator))]
-    public class StopMovingOnAttack : MonoBehaviour
+    public class StopMovingOnAttack : MonoCache
     {
         private EnemyAnimator _animator;
         private NavMeshAgent _agent;
 
         private void Awake()
         {
-            _agent = GetComponent<NavMeshAgent>();
-            _animator = GetComponent<EnemyAnimator>();
+            _agent = Get<NavMeshAgent>();
+            _animator = Get<EnemyAnimator>();
         }
 
         private void Start()

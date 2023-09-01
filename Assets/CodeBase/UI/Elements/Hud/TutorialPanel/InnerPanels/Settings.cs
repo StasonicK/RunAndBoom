@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using NTC.Global.System;
+using UnityEngine;
 
 namespace CodeBase.UI.Elements.Hud.TutorialPanel.InnerPanels
 {
@@ -7,10 +8,10 @@ namespace CodeBase.UI.Elements.Hud.TutorialPanel.InnerPanels
         [SerializeField] private Action _esc;
 
         public override void ShowForPc() =>
-            gameObject.SetActive(true);
+            gameObject.Enable();
 
         public override void ShowForMobile() =>
-            gameObject.SetActive(false);
+            gameObject.Disable();
 
         protected override void RuChosen()
         {

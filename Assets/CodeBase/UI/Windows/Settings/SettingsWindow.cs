@@ -10,19 +10,19 @@ namespace CodeBase.UI.Windows.Settings
         [SerializeField] private Button _restartButton;
         [SerializeField] private Button _closeButton;
 
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             _restartButton.onClick.AddListener(RestartLevel);
             _closeButton.onClick.AddListener(Close);
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             _restartButton.onClick.RemoveListener(RestartLevel);
             _closeButton.onClick.RemoveListener(Close);
         }
 
-        private void Update()
+        protected override void Run()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
                 Close();

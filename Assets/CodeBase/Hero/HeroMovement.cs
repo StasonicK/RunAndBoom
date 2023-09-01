@@ -6,11 +6,12 @@ using CodeBase.Services.PersistentProgress;
 using CodeBase.Services.StaticData;
 using CodeBase.StaticData.Items;
 using CodeBase.UI.Elements.Hud.MobileInputPanel.Joysticks;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.Hero
 {
-    public class HeroMovement : MonoBehaviour, IProgressReader
+    public class HeroMovement : MonoCache, IProgressReader
     {
         [SerializeField] private LayerMask _groundMask;
         [SerializeField] private float _groundYOffset = -0.1f;
@@ -40,9 +41,9 @@ namespace CodeBase.Hero
         private Coroutine _coroutineMove;
 
         private void Awake() =>
-            _characterController = GetComponent<CharacterController>();
+            _characterController = Get<CharacterController>();
 
-        private void Update()
+        protected override void Run()
         {
             if (_update == false)
                 return;
@@ -58,13 +59,13 @@ namespace CodeBase.Hero
             Gravity();
         }
 
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             if (_runningItemData != null)
                 _runningItemData.LevelChanged += ChangeSpeed;
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             if (_runningItemData != null)
                 _runningItemData.LevelChanged -= ChangeSpeed;

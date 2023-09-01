@@ -11,13 +11,13 @@ namespace CodeBase.UI.Elements.Hud.WeaponUpgrades
         private InventoryUpgradeLevelStaticData _levelStaticData;
         private HeroWeaponTypeId _weaponTypeId;
 
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             if (ItemData != null)
                 ItemData.LevelChanged += ChangeLevel;
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             if (ItemData != null)
                 ItemData.LevelChanged -= ChangeLevel;

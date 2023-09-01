@@ -9,10 +9,10 @@ namespace CodeBase.Services.Input
         private KeyboardMovement _keyboardMovement;
         private MouseLook _mouseLook;
 
-        public override bool IsAttackButtonUp() => _playerInput.Player.Shoot.IsPressed();
-
         public override event Action<Vector2> Moved;
         public override event Action<Vector2> Looked;
+
+        public override bool IsAttackButtonUp() => _playerInput.Player.Shoot.IsPressed();
 
         public DesktopInputService(PlayerInput playerInput)
         {

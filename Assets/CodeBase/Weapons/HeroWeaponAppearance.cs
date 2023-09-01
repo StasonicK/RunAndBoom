@@ -6,6 +6,7 @@ using CodeBase.Projectiles.Hit;
 using CodeBase.Projectiles.Movement;
 using CodeBase.StaticData.Projectiles;
 using CodeBase.StaticData.Weapons;
+using NTC.Global.System;
 using Plugins.SoundInstance.Core.Static;
 using UnityEngine;
 
@@ -53,7 +54,7 @@ namespace CodeBase.Weapons
                 foreach (Transform respawn in ProjectilesRespawns)
                 {
                     var projectile = SetNewProjectile(respawn);
-                    projectile.SetActive(true);
+                    projectile.Enable();
                     projectile.GetComponentInChildren<MeshRenderer>().enabled = _showProjectiles;
                     projectile.GetComponentInChildren<ProjectileBlast>()?.OffCollider();
                     _projectiles.Add(projectile);

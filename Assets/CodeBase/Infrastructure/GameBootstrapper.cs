@@ -2,12 +2,13 @@
 using CodeBase.Infrastructure.States;
 using CodeBase.Services.Localization;
 using CodeBase.UI;
+using NTC.Global.Cache;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace CodeBase.Infrastructure
 {
-    public class GameBootstrapper : MonoBehaviour, ICoroutineRunner
+    public class GameBootstrapper : MonoCache, ICoroutineRunner
     {
         [SerializeField] private LoadingCurtain _curtainPrefab;
         [SerializeField] private AdListener _adListenerPrefab;

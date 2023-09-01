@@ -1,8 +1,8 @@
-using UnityEngine;
+using NTC.Global.Cache;
 
 namespace CodeBase.Hero
 {
-    public class HeroRotatingMarker : MonoBehaviour
+    public class HeroRotatingMarker : MonoCache
     {
     }
 }

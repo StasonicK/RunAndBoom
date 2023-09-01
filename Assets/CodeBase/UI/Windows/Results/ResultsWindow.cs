@@ -24,7 +24,7 @@ namespace CodeBase.UI.Windows.Results
         private Scene _nextScene;
         private int _maxPrice;
 
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             _restartButton.onClick.AddListener(RestartLevel);
 
@@ -35,7 +35,7 @@ namespace CodeBase.UI.Windows.Results
             InitializeLeaderBoard();
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             _restartButton.onClick.RemoveListener(RestartLevel);
 
@@ -65,7 +65,6 @@ namespace CodeBase.UI.Windows.Results
             _killed.text = $"{LevelStats.KillsData.KilledEnemies}";
             _totalEnemies.text = $"{LevelStats.KillsData.TotalEnemies}";
             _restartsCount.text = $"{LevelStats.RestartsData.Count}";
-            Debug.Log($"ShowData {LevelStats.Scene} {LevelStats.Score}");
             _score.text = $"{LevelStats.Score}";
         }
 

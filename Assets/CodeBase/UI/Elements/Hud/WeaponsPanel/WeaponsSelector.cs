@@ -1,12 +1,13 @@
 ﻿using CodeBase.Hero;
 using CodeBase.StaticData.Projectiles;
 using CodeBase.StaticData.Weapons;
+using NTC.Global.Cache;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace CodeBase.UI.Elements.Hud.WeaponsPanel
 {
-    public class WeaponsSelector : MonoBehaviour
+    public class WeaponsSelector : MonoCache
     {
         [SerializeField] private GameObject _grenadeLauncher;
         [SerializeField] private GameObject _rpg;
@@ -37,7 +38,7 @@ namespace CodeBase.UI.Elements.Hud.WeaponsPanel
             _mortarButton = _mortar.GetComponent<Button>();
         }
 
-        private void OnEnable()
+        protected override void OnEnabled()
         {
             _grenadeLauncherButton.onClick.AddListener(SelectGrenadeLauncher);
             _rpgButton.onClick.AddListener(SelectRpg);
@@ -45,7 +46,7 @@ namespace CodeBase.UI.Elements.Hud.WeaponsPanel
             _mortarButton.onClick.AddListener(SelectMortar);
         }
 
-        private void OnDisable()
+        protected override void OnDisabled()
         {
             _grenadeLauncherButton.onClick.RemoveListener(SelectGrenadeLauncher);
             _rpgButton.onClick.RemoveListener(SelectRpg);

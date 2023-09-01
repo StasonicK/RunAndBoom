@@ -2,11 +2,12 @@
 using CodeBase.Data.Weapons;
 using CodeBase.Services.PersistentProgress;
 using CodeBase.StaticData.Weapons;
+using NTC.Global.Cache;
 using UnityEngine;
 
 namespace CodeBase.UI.Elements.Hud.WeaponsPanel
 {
-    public class WeaponsVisibility : MonoBehaviour, IProgressReader
+    public class WeaponsVisibility : MonoCache, IProgressReader
     {
         [SerializeField] private GameObject _grenadeLauncher;
         [SerializeField] private GameObject _rpg;
@@ -45,21 +46,6 @@ namespace CodeBase.UI.Elements.Hud.WeaponsPanel
                         _mortar.SetActive(isVisible);
                     break;
             }
-        }
-
-        public void ShowAll()
-        {
-            if (!_grenadeLauncher.activeInHierarchy)
-                _grenadeLauncher.SetActive(true);
-
-            if (!_rpg.activeInHierarchy)
-                _rpg.SetActive(true);
-
-            if (!_rocketLauncher.activeInHierarchy)
-                _rocketLauncher.SetActive(true);
-
-            if (!_mortar.activeInHierarchy)
-                _mortar.SetActive(true);
         }
 
         public void LoadProgress(PlayerProgress progress)

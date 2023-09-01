@@ -1,12 +1,13 @@
 ﻿using CodeBase.Data;
 using CodeBase.Services.PersistentProgress;
+using NTC.Global.Cache;
 using Plugins.SoundInstance.Core.Static;
 using UnityEngine;
 
 namespace CodeBase.Logic.Level
 {
     [RequireComponent(typeof(AudioSource))]
-    public class DoorMovement : MonoBehaviour, IProgressReader
+    public class DoorMovement : MonoCache, IProgressReader
     {
         [SerializeField] private GameObject _door;
         [SerializeField] private LevelSectorTrigger _trigger;
@@ -26,7 +27,7 @@ namespace CodeBase.Logic.Level
 
         private void Awake()
         {
-            _audioSource = GetComponent<AudioSource>();
+            _audioSource = Get<AudioSource>();
             _doorTransform = _door.GetComponent<Transform>();
             _positionY = _door.transform.position.y;
             _targetY = _positionY;
@@ -42,7 +43,7 @@ namespace CodeBase.Logic.Level
             _close = true;
         }
 
-        private void Update()
+        protected override void Run()
         {
             MoveDoor();
         }

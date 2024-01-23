@@ -62,7 +62,7 @@ namespace CodeBase.Infrastructure.States
             _services.RegisterSingle<IRandomService>(new RandomService());
             _services.RegisterSingle<IPlayerProgressService>(new PlayerProgressService());
             _services.RegisterSingle<IRegistratorService>(new RegistratorService(_services.Single<IAssets>()));
-            // _services.RegisterSingle<IVfxsPoolService>(new VfxsPoolService(_services.Single<IAssets>()));
+            _services.RegisterSingle<IVfxsPoolService>(new VfxsPoolService(_services.Single<IAssets>()));
             _services.RegisterSingle<IConstructorService>(new ConstructorService());
 
             _services.RegisterSingle<IUIFactory>(
@@ -71,27 +71,29 @@ namespace CodeBase.Infrastructure.States
 
             _services.RegisterSingle<IWindowService>(new WindowService());
 
-            // _services.RegisterSingle<IHeroProjectilesPoolService>(new HeroProjectilesPoolService(
-            //     _services.Single<IAssets>(),
-            //     _services.Single<IConstructorService>()));
-            // _services.RegisterSingle<IEnemyProjectilesPoolService>(new EnemyProjectilesPoolService(
-            //     _services.Single<IAssets>(),
-            //     _services.Single<IConstructorService>(),
-            //     _services.Single<IStaticDataService>()));
+            _services.RegisterSingle<IHeroProjectilesPoolService>(new HeroProjectilesPoolService(
+                _services.Single<IAssets>(),
+                _services.Single<IConstructorService>(),
+                _services.Single<IStaticDataService>()));
+            
+            _services.RegisterSingle<IEnemyProjectilesPoolService>(new EnemyProjectilesPoolService(
+                _services.Single<IAssets>(),
+                _services.Single<IConstructorService>(),
+                _services.Single<IStaticDataService>()));
 
-            _services.RegisterSingle<IObjectsPoolService>(new ObjectsPoolService(_services.Single<IAssets>(),
-                _services.Single<IConstructorService>(), _services.Single<IStaticDataService>()));
+            // _services.RegisterSingle<IObjectsPoolService>(new ObjectsPoolService(_services.Single<IAssets>(),
+            //     _services.Single<IConstructorService>(), _services.Single<IStaticDataService>()));
 
             _services.RegisterSingle<IGameFactory>(
-                // new GameFactory(
-                //     _services.Single<IAssets>(),
-                //     _services.Single<IHeroProjectilesPoolService>(),
-                //     _services.Single<IEnemyProjectilesPoolService>(),
-                //     _services.Single<IVfxsPoolService>(),
-                //     _services.Single<IRegistratorService>()
-                // )
-                new GameFactory(_services.Single<IAssets>(), _services.Single<IObjectsPoolService>(),
-                    _services.Single<IRegistratorService>())
+                new GameFactory(
+                    _services.Single<IAssets>(),
+                    _services.Single<IHeroProjectilesPoolService>(),
+                    _services.Single<IEnemyProjectilesPoolService>(),
+                    _services.Single<IVfxsPoolService>(),
+                    _services.Single<IRegistratorService>()
+                )
+                // new GameFactory(_services.Single<IAssets>(), _services.Single<IObjectsPoolService>(),
+                // _services.Single<IRegistratorService>())
             );
 
             _services.RegisterSingle<IEnemyFactory>(

@@ -70,8 +70,8 @@ namespace CodeBase.Weapons
         }
 
         protected override GameObject GetProjectile() =>
-            // EnemyProjectilesPoolService.GetFromPool(_enemyWeaponTypeId);
-            PoolService.GetEnemyProjectile(_enemyWeaponTypeId.ToString());
+            EnemyProjectilesPoolService.GetFromPool(_enemyWeaponTypeId);
+            // PoolService.GetEnemyProjectile(_enemyWeaponTypeId.ToString());
 
         protected override void PlayShootSound()
         {

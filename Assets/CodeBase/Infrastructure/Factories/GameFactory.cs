@@ -17,7 +17,7 @@ namespace CodeBase.Infrastructure.Factories
         private readonly IHeroProjectilesPoolService _heroProjectilesPoolService;
         private readonly IEnemyProjectilesPoolService _enemyProjectilesPoolService;
         private readonly IVfxsPoolService _vfxsPoolService;
-        private readonly IObjectsPoolService _objectsPoolService;
+        // private readonly IObjectsPoolService _objectsPoolService;
         private GameObject _heroGameObject;
 
         public List<IProgressReader> ProgressReaders { get; set; } = new List<IProgressReader>();
@@ -38,7 +38,7 @@ namespace CodeBase.Infrastructure.Factories
         public GameFactory(IAssets assets, IObjectsPoolService objectsPoolService,
             IRegistratorService registratorService)
         {
-            _objectsPoolService = objectsPoolService;
+            // _objectsPoolService = objectsPoolService;
             _assets = assets;
             _registratorService = registratorService;
             SetProgressReadersWriters(registratorService);
@@ -60,10 +60,10 @@ namespace CodeBase.Infrastructure.Factories
             // Debug.Log($"enemyProjectilesPoolService {_enemyProjectilesPoolService}");
             // Debug.Log($"vfxsPoolService {_vfxsPoolService}");
             _assets.Initialize();
-            _objectsPoolService.GenerateObjects();
-            // _heroProjectilesPoolService.GenerateObjects();
-            // _enemyProjectilesPoolService.GenerateObjects();
-            // _vfxsPoolService.GenerateObjects();
+            // _objectsPoolService.GenerateObjects();
+            _heroProjectilesPoolService.GenerateObjects();
+            _enemyProjectilesPoolService.GenerateObjects();
+            _vfxsPoolService.GenerateObjects();
         }
 
         public async Task<GameObject> CreateHero(Vector3 at)

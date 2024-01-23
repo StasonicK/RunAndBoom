@@ -10,9 +10,9 @@ namespace CodeBase.Weapons
     {
         [SerializeField] private GameObject _shotVfx;
 
-        private IObjectsPoolService _objectsPoolService;
+        // private IObjectsPoolService _objectsPoolService;
 
-        // private IVfxsPoolService _vfxsPoolService;
+        private IVfxsPoolService _vfxsPoolService;
         private float _shotVfxLifetime;
         private int _index;
         private Transform _root;
@@ -22,8 +22,8 @@ namespace CodeBase.Weapons
         public void Construct(float shotVfxLifetime, ShotVfxTypeId shotVfxTypeId, Transform root)
         {
             _shotVfxTypeId = shotVfxTypeId;
-            _objectsPoolService = AllServices.Container.Single<IObjectsPoolService>();
-            // _vfxsPoolService = AllServices.Container.Single<IVfxsPoolService>();
+            // _objectsPoolService = AllServices.Container.Single<IObjectsPoolService>();
+            _vfxsPoolService = AllServices.Container.Single<IVfxsPoolService>();
             _shotVfxLifetime = shotVfxLifetime;
             _root = root;
 
@@ -33,7 +33,8 @@ namespace CodeBase.Weapons
 
         public void ShowShotVfx(Transform muzzleTransform)
         {
-            _shotVfx = _objectsPoolService.GetShotVfx(_shotVfxTypeId);
+            _shotVfx = _vfxsPoolService.GetFromPool(_shotVfxTypeId);
+            // _shotVfx = _objectsPoolService.GetShotVfx(_shotVfxTypeId);
             _shotVfx.transform.SetParent(_root);
             SetShotVfx(_shotVfx, muzzleTransform);
             StartCoroutine(CoroutineLaunchShotVfx());
@@ -54,12 +55,12 @@ namespace CodeBase.Weapons
 
         public void ReturnShotVfx()
         {
-            // if (_vfxsPoolService == null || _shotVfx == null)
-            if (_objectsPoolService == null || _shotVfx == null)
+            if (_vfxsPoolService == null || _shotVfx == null)
+            // if (_objectsPoolService == null || _shotVfx == null)
                 return;
 
-            // _vfxsPoolService.Return(_shotVfx);
-            _objectsPoolService.ReturnShotVfx(_shotVfx);
+            _vfxsPoolService.Return(_shotVfx);
+            // _objectsPoolService.ReturnShotVfx(_shotVfx);
             _shotVfx = null;
         }
     }

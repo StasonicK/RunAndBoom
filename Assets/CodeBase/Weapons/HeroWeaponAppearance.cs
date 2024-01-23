@@ -112,12 +112,13 @@ namespace CodeBase.Weapons
             }
         }
 
-        protected override GameObject GetProjectile() =>
-            // {
-            //     Debug.Log($"GetProjectile {HeroProjectilesPoolService}");
-            //     return HeroProjectilesPoolService.GetFromPool(_heroWeaponTypeId);
-            // }
-            PoolService.GetHeroProjectile(_heroWeaponTypeId.ToString());
+        protected override GameObject GetProjectile() 
+            // =>
+            {
+                Debug.Log($"GetProjectile {HeroProjectilesPoolService}");
+                return HeroProjectilesPoolService.GetFromPool(_heroWeaponTypeId);
+            }
+            // PoolService.GetHeroProjectile(_heroWeaponTypeId.ToString());
 
         protected override void Launch()
         {

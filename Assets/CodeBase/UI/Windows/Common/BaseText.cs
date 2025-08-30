@@ -22,8 +22,8 @@ namespace CodeBase.UI.Windows.Common
             ChangeText();
 
         protected abstract void RuChosen();
-        protected abstract void TrChosen();
         protected abstract void EnChosen();
+        protected abstract void TrChosen();
 
         public void ChangeText()
         {

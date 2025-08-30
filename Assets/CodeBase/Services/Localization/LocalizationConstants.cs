@@ -30,6 +30,10 @@
         public static string RestartEn = "Restart";
         public static string RestartTr = "Yeniden başlat";
 
+        public static string StartNewGameRu = "Начать новую игру";
+        public static string StartNewGameEn = "Start new game";
+        public static string StartNewGameTr = "Yeni bir oyun başlatın";
+
         public static string ShopTitleRu = "Магазин";
         public static string ShopTitleEn = "Shop";
         public static string ShopTitleTr = "Dükkan";
@@ -164,20 +168,20 @@
         public static string LeaderBoardTitleEn = "Leader board";
         public static string LeaderBoardTitleTr = "Li̇der panosu";
 
-        public static string GameEndTitleRu = "Конец игры";
-        public static string GameEndTitleEn = "End of the game";
-        public static string GameEndTitleTr = "Oyun sonu";
+        public static string GameFinishedTitleRu = "Игра пройдена!";
+        public static string GameFinishedTitleEn = "End of the game";
+        public static string GameFinishedTitleTr = "Oyun sonu";
 
         public static string GameEndWriteReviewRu = "Пожалуйста, напишите отзыв :)";
         public static string GameEndWriteReviewEn = "Please write a review :)";
         public static string GameEndWriteReviewTr = "Lütfen bir yorum yazın :)";
 
-        public static string GameEndStartNewStardardGameRu = "Стандартная сложность (доступно всё оружие)";
-        public static string GameEndStartNewStardardGameEn = "Standard difficulty (all weapons available)";
-        public static string GameEndStartNewStardardGameTr = "Standart zorluk (tüm silahlar mevcut)";
+        public static string GameEndStartNewStardardGameRu = "Начать игру на Стандартной сложности (доступно всё оружие)";
+        public static string GameEndStartNewStardardGameEn = "Start the game on Standard difficulty (all weapons available)";
+        public static string GameEndStartNewStardardGameTr = "Oyuna Standart zorluk seviyesinde başlayın (tüm silahlar mevcut)";
 
-        public static string GameEndStartNewHardGameRu = "Азиатская сложность";
-        public static string GameEndStartNewHardGameEn = "Asian difficulty";
-        public static string GameEndStartNewHardGameTr = "Asya zorluğu";
+        public static string GameEndStartNewAsianGameRu = "Начать игру на Азиатской сложности (начало с гранатомётом)";
+        public static string GameEndStartNewAsianGameEn = "Start the game on Asian difficulty (start with a grenade launcher)";
+        public static string GameEndStartNewAsianGameTr = "Oyuna Asya zorluğunda başlayın (bir el bombası fırlatıcısıyla başlayın)";
     }
 }

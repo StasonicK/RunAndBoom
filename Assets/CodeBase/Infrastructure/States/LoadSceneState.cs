@@ -20,7 +20,7 @@ using CodeBase.UI.Services.Factory;
 using CodeBase.UI.Services.Windows;
 using CodeBase.UI.Windows.Authorization;
 using CodeBase.UI.Windows.Death;
-using CodeBase.UI.Windows.GameEnd;
+using CodeBase.UI.Windows.GameFinished;
 using CodeBase.UI.Windows.Gifts;
 using CodeBase.UI.Windows.LeaderBoard;
 using CodeBase.UI.Windows.Results;
@@ -267,7 +267,7 @@ namespace CodeBase.Infrastructure.States
             leaderBoardWindow.GetComponent<LeaderBoardWindow>()
                 ?.Construct(hero, _openSettings, _mobileInput);
             GameObject gameEndWindow = await _uiFactory.CreateGameEndWindow();
-            gameEndWindow.GetComponent<GameEndWindow>()
+            gameEndWindow.GetComponent<GameFinishedWindow>()
                 ?.Construct(hero, _openSettings, _mobileInput);
             GameObject startWindow = await _uiFactory.CreateStartWindow();
             startWindow.GetComponent<StartWindow>()

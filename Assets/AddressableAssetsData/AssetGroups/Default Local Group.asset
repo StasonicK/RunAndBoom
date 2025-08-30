@@ -21,182 +21,222 @@ MonoBehaviour:
     m_Address: SpawnPoint
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d9274ade267839a408f64aa881fb72dd
     m_Address: WithBat
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2771bd6ad4dc5634ca3983f149d5749f
     m_Address: WithPistol
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ca95cd5e32b87614e9c8f99b0c249712
     m_Address: WithShotgun
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 299368a217c781240b0845ff13c6e8cc
     m_Address: UIRoot
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0cc9c3825f5725c4cacaa0350aa89e2b
     m_Address: DeathWindow
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b809540d8aac0c242b28d2caa18989b0
     m_Address: ShopWindow
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 634daa66079d764409c77eb1303a5baf
     m_Address: ShotVfxsRoot
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 22782e28f1145994bb8f4fc507d424ff
     m_Address: EnemyProjectilesRoot
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b7acefeea40ede44ca0107385efd4208
     m_Address: HeroProjectilesRoot
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 67f88c56d63774a43b9436fccea31b7d
     m_Address: PistolBullet
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1b5d18772d9c1934d9296d7e57855197
     m_Address: Shot
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7ab22b4eaba591e488912a6b2405d8ac
     m_Address: Bomb
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 44f482836b5c3784cbfcb7b6b8660020
     m_Address: Grenade
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 14ae8d46d1f3a664089e56782efb7381
     m_Address: RocketLauncherRocket
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 61d238830b59a604b94797a6858e5203
     m_Address: RpgRocket
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7e257b8211d08b344aa2b46c61fd79e9
     m_Address: BulletMuzzleFire
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5abbc342485727d4c8b75c66da35da51
     m_Address: BombMuzzleBlue
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 009f9e61721d7e649ab0936e1987d943
     m_Address: GrenadeMuzzleFire
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 03b5266e6b05a334a996d475667697e3
     m_Address: RocketMuzzleBlue
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 727d4552e3558dd4e81aef11e4646b5c
     m_Address: RocketMuzzleFire
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 94358e0b929c8044fbd6cb680aff6357
     m_Address: SpawnersRoot
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 19d305a260f87b34687031293d871c06
     m_Address: SettingsWindow
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 11940e9ac2eec2b4699e79e8583fcb6a
     m_Address: ShopItemsRoot
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c8e71b1462e04ff4e97983073942dc05
     m_Address: Hero
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5669ba518e81037419f92e7d039e4b45
     m_Address: WithMG
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 57e20c99c1e93a745a428f6a158d23a3
     m_Address: WithSMG
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 044089875f72b2a408a6c7c45a63f9a7
     m_Address: WithSR
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa18f3a056ece684892e62906e87d02b
     m_Address: GiftsWindow
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 346f3bf3686d682498113714ee132099
     m_Address: GunFireYellow
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5c129ddc4d253164a8e65c5e372cf150
     m_Address: NukeMuzzleFire
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4c85e72c55e583044accbbfe17b51e88
     m_Address: ResultWindow
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 8406c05e3c3db124a8ea1d21131f5b29
-    m_Address: GameEndWindow
-    m_ReadOnly: 0
-    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8e6c88e97d682084a9f4d7bf69820025
     m_Address: LeaderBoardWindow
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4198acde34373b3409ac05fdf03c8a6f
     m_Address: AuthorizationWindow
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 197cd41d6d0f0c441a4962c1cc67806e
     m_Address: BombExplosion
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e6ea0c2b13012484ba2f5dc1054e6d75
     m_Address: ExplosionRoundFire
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d166c8ca466ba4a42a2c22afdee2d7e1
     m_Address: GrenadeLauncherExplosion
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 07bf9ced87963e24299c2c2a22bfeeb6
     m_Address: NukeExplosionFire
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9f03f372adf02874cb666857a9f97abd
     m_Address: NukeVerticalExplosionFire
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2963452af690ade448ed3146173416fa
     m_Address: RocketLauncherExplosion
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f21797a0db2754848a9bbc535e1a8666
     m_Address: RpgExplosion
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f8753c0f794615f4eb6f96367816ebc6
     m_Address: Hud
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 468ce0c9df3b523468ba1c4081fd9aab
     m_Address: StartWindow
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7dd7c402620daea4ebab2dbd9d1faec0
     m_Address: BlastsRoot
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 9cc2a55e604bc944590d8a935a0bb2a9, type: 2}
   m_SchemaSet:

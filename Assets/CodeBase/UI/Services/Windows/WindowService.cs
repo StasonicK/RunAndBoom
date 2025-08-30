@@ -4,7 +4,7 @@ using CodeBase.Data;
 using CodeBase.UI.Windows.Authorization;
 using CodeBase.UI.Windows.Common;
 using CodeBase.UI.Windows.Death;
-using CodeBase.UI.Windows.GameEnd;
+using CodeBase.UI.Windows.GameFinished;
 using CodeBase.UI.Windows.Gifts;
 using CodeBase.UI.Windows.LeaderBoard;
 using CodeBase.UI.Windows.Results;
@@ -74,7 +74,7 @@ namespace CodeBase.UI.Services.Windows
                     _window = ShowWindow<GiftsWindow>(WindowId.Gifts);
                     break;
                 case WindowId.GameEnd:
-                    _window = ShowWindow<GameEndWindow>(WindowId.GameEnd);
+                    _window = ShowWindow<GameFinishedWindow>(WindowId.GameEnd);
                     break;
                 case WindowId.Start:
                     _window = ShowWindow<StartWindow>(WindowId.Start);

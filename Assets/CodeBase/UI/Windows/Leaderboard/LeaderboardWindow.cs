@@ -7,7 +7,7 @@ using CodeBase.UI.Elements.Hud;
 using CodeBase.UI.Elements.Hud.MobileInputPanel;
 using CodeBase.UI.Services.Windows;
 using CodeBase.UI.Windows.Common;
-using CodeBase.UI.Windows.GameEnd;
+using CodeBase.UI.Windows.GameFinished;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -234,7 +234,7 @@ namespace CodeBase.UI.Windows.LeaderBoard
 
         private void ToGameEndWindow()
         {
-            _windowService.Show<GameEndWindow>(WindowId.GameEnd);
+            _windowService.Show<GameFinishedWindow>(WindowId.GameEnd);
             _audioService.LaunchGameEventSound(GameEventSoundId.GameWon, _hero.transform, _audioSource);
         }
     }

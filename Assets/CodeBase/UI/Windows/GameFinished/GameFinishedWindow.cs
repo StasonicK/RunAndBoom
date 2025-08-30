@@ -10,17 +10,17 @@ using Plugins.SoundInstance.Core.Static;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CodeBase.UI.Windows.GameEnd
+namespace CodeBase.UI.Windows.GameFinished
 {
-    public class GameEndWindow : WindowBase
+    public class GameFinishedWindow : WindowBase
     {
         [SerializeField] private Button _startNewStandardGameButton;
-        [SerializeField] private Button _startNewHardGameButton;
+        [SerializeField] private Button _startNewAsianGameButton;
 
         private void OnEnable()
         {
             _startNewStandardGameButton.onClick.AddListener(StartNewStandardDifficultyGame);
-            _startNewHardGameButton.onClick.AddListener(StartNewAsianDifficultyGame);
+            _startNewAsianGameButton.onClick.AddListener(StartNewAsianDifficultyGame);
 
             if (Application.isEditor || _leaderBoardService == null || ProgressData == null)
                 return;
@@ -33,7 +33,7 @@ namespace CodeBase.UI.Windows.GameEnd
         private void OnDisable()
         {
             _startNewStandardGameButton.onClick.RemoveListener(StartNewStandardDifficultyGame);
-            _startNewHardGameButton.onClick.RemoveListener(StartNewAsianDifficultyGame);
+            _startNewAsianGameButton.onClick.RemoveListener(StartNewAsianDifficultyGame);
             _leaderBoardService.OnInitializeSuccess -= RequestLeaderBoard;
         }
 

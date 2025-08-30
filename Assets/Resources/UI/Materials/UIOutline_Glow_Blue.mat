@@ -64,7 +64,7 @@ Material:
     - _AlphaBoost: 1.5
     - _BumpScale: 1
     - _ColorMask: 15
-    - _CurrentTime: 12.584598
+    - _CurrentTime: 22.60009
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -99,3 +99,4 @@ Material:
     - _TilingA: {r: 1, g: 0.5, b: 0, a: 0}
     - _TilingB: {r: 2, g: 0.4, b: 0, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1

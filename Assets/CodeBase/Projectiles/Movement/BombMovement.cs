@@ -29,7 +29,7 @@ namespace CodeBase.Projectiles.Movement
             float deltaY = (_targetPosition.y - transform.position.y) / time;
             Vector3 bombSpeed = aim.normalized * Speed;
             bombSpeed.y = antiGravity + deltaY;
-            Rigidbody.velocity = bombSpeed;
+            Rigidbody.linearVelocity = bombSpeed;
             transform.forward = _targetPosition;
         }
 

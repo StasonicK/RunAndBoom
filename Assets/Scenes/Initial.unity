@@ -394,6 +394,10 @@ PrefabInstance:
       value: 96bfc941-4dd6-4695-a1f6-d39aaa04d339
       objectReference: {fileID: 0}
     - target: {fileID: 11457290, guid: 1edb7f7d5ea68467097decc77664b28d, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11457290, guid: 1edb7f7d5ea68467097decc77664b28d, type: 3}
       propertyPath: LocationTracking
       value: 1
       objectReference: {fileID: 0}

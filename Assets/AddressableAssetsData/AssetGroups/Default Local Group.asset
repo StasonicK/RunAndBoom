@@ -13,122 +13,80 @@ MonoBehaviour:
   m_Name: Default Local Group
   m_EditorClassIdentifier: 
   m_GroupName: Default Local Group
-  m_Data:
-    m_SerializedData: []
   m_GUID: 85d7f74f538056e40a3a366af1474a0c
   m_SerializeEntries:
-  - m_GUID: 7111efd0fe461dc4a989f30c48c92001
-    m_Address: SpawnPoint
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d9274ade267839a408f64aa881fb72dd
-    m_Address: WithBat
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2771bd6ad4dc5634ca3983f149d5749f
-    m_Address: WithPistol
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ca95cd5e32b87614e9c8f99b0c249712
-    m_Address: WithShotgun
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 299368a217c781240b0845ff13c6e8cc
-    m_Address: UIRoot
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0cc9c3825f5725c4cacaa0350aa89e2b
-    m_Address: DeathWindow
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b809540d8aac0c242b28d2caa18989b0
-    m_Address: ShopWindow
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 634daa66079d764409c77eb1303a5baf
-    m_Address: ShotVfxsRoot
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 22782e28f1145994bb8f4fc507d424ff
-    m_Address: EnemyProjectilesRoot
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b7acefeea40ede44ca0107385efd4208
-    m_Address: HeroProjectilesRoot
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 67f88c56d63774a43b9436fccea31b7d
-    m_Address: PistolBullet
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1b5d18772d9c1934d9296d7e57855197
-    m_Address: Shot
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7ab22b4eaba591e488912a6b2405d8ac
-    m_Address: Bomb
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 44f482836b5c3784cbfcb7b6b8660020
-    m_Address: Grenade
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 14ae8d46d1f3a664089e56782efb7381
-    m_Address: RocketLauncherRocket
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 61d238830b59a604b94797a6858e5203
-    m_Address: RpgRocket
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7e257b8211d08b344aa2b46c61fd79e9
-    m_Address: BulletMuzzleFire
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5abbc342485727d4c8b75c66da35da51
-    m_Address: BombMuzzleBlue
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 009f9e61721d7e649ab0936e1987d943
     m_Address: GrenadeMuzzleFire
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Vfx
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 010f9563daf8b5845b60d031ac439858
+    m_Address: Assets/3dParty/3d/POLYGON weapons/Assets_official/FBXTexMat/POLYGON
+      weapons pack/equipment_mats/Scope_b/Materials/cam_4.mat
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 03b5266e6b05a334a996d475667697e3
     m_Address: RocketMuzzleBlue
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Vfx
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 727d4552e3558dd4e81aef11e4646b5c
-    m_Address: RocketMuzzleFire
+  - m_GUID: 044089875f72b2a408a6c7c45a63f9a7
+    m_Address: WithSR
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0452888144d3f344491c7dbb0bf66e34
+    m_Address: Assets/3dParty/3d/POLYGON weapons/Assets_official/FBXTexMat/POLYGON
+      weapons pack/equipment_mats/Scope_a/cam_3.renderTexture
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 94358e0b929c8044fbd6cb680aff6357
-    m_Address: SpawnersRoot
+  - m_GUID: 055a6c474938af3409aaaae47d7ae0b0
+    m_Address: Assets/3dParty/3d/POLYGON weapons/Assets_official/FBXTexMat/POLYGON
+      weapons pack/equipment_mats/red_dot_c/red_dot_c.mat
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 19d305a260f87b34687031293d871c06
-    m_Address: SettingsWindow
+  - m_GUID: 072ade2f5404113439ad723bd09909d2
+    m_Address: Assets/3dParty/Vfxs/Epic Toon FX/Materials/Basics/solid_AB.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 07bf9ced87963e24299c2c2a22bfeeb6
+    m_Address: NukeExplosionFire
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Vfx
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0852cc0e875e24c499b54a8010d7b3c4
+    m_Address: Assets/3dParty/3d/POLYGON weapons/Assets_official/FBXTexMat/POLYGON
+      weapons pack/equipment_mats/red_dot_e/red_dot_e.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 09488bbfd12db4f4bbcedba80bf43f6e
+    m_Address: Assets/3dParty/3d/POLYGON weapons/Assets_official/FBXTexMat/POLYGON
+      weapons pack/equipment_mats/Scope_b/scope_b_prefab.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0c526fcf08992a0468ec17df08f9c855
+    m_Address: Assets/3dParty/3d/PolygonGangWarfare/Models/Characters.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0cc9c3825f5725c4cacaa0350aa89e2b
+    m_Address: DeathWindow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 10d6182f000844d4083296b7f6fd0d25
+    m_Address: Assets/3dParty/3d/PolygonGangWarfare/Textures/PolygonGangWarfare_Texture_01_C.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -137,109 +95,328 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c8e71b1462e04ff4e97983073942dc05
-    m_Address: Hero
+  - m_GUID: 14ae8d46d1f3a664089e56782efb7381
+    m_Address: RocketLauncherRocket
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Projectile
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 150aee38b5d848b42b75593618992bb7
+    m_Address: Assets/3dParty/Vfxs/Epic Toon FX/Materials/Basics/circle_AB.mat
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5669ba518e81037419f92e7d039e4b45
-    m_Address: WithMG
+  - m_GUID: 155f67fd8750f8e4e83c8efb1731f3a0
+    m_Address: Assets/3dParty/Vfxs/Epic Toon FX/Textures/circle.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 57e20c99c1e93a745a428f6a158d23a3
-    m_Address: WithSMG
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 044089875f72b2a408a6c7c45a63f9a7
-    m_Address: WithSR
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fa18f3a056ece684892e62906e87d02b
-    m_Address: GiftsWindow
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 346f3bf3686d682498113714ee132099
-    m_Address: GunFireYellow
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5c129ddc4d253164a8e65c5e372cf150
-    m_Address: NukeMuzzleFire
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4c85e72c55e583044accbbfe17b51e88
-    m_Address: ResultWindow
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8e6c88e97d682084a9f4d7bf69820025
-    m_Address: LeaderBoardWindow
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4198acde34373b3409ac05fdf03c8a6f
-    m_Address: AuthorizationWindow
+  - m_GUID: 18da6e425a09bcf47b4cf83ec058b009
+    m_Address: Assets/3dParty/3d/POLYGON weapons/Assets_official/FBXTexMat/POLYGON
+      weapons pack/equipment_mats/red_dot_c/red_dot_c.fbx
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 197cd41d6d0f0c441a4962c1cc67806e
     m_Address: BombExplosion
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Vfx
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e6ea0c2b13012484ba2f5dc1054e6d75
-    m_Address: ExplosionRoundFire
+  - m_GUID: 19d305a260f87b34687031293d871c06
+    m_Address: SettingsWindow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1b5d18772d9c1934d9296d7e57855197
+    m_Address: Shot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Projectile
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 22782e28f1145994bb8f4fc507d424ff
+    m_Address: EnemyProjectilesRoot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Projectile
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2465f69206fc3dd47af31fe837918ed5
+    m_Address: Assets/3dParty/3d/POLYGON weapons/Assets_official/FBXTexMat/POLYGON
+      weapons pack/equipment_mats/glass 1.mat
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d166c8ca466ba4a42a2c22afdee2d7e1
-    m_Address: GrenadeLauncherExplosion
+  - m_GUID: 2771bd6ad4dc5634ca3983f149d5749f
+    m_Address: WithPistol
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Enemy
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 07bf9ced87963e24299c2c2a22bfeeb6
-    m_Address: NukeExplosionFire
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9f03f372adf02874cb666857a9f97abd
-    m_Address: NukeVerticalExplosionFire
+  - m_GUID: 27a42dd305fad5843b6fa14509aa5142
+    m_Address: Weapons/Hero/Textures/RocketLauncher
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2963452af690ade448ed3146173416fa
     m_Address: RocketLauncherExplosion
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Vfx
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f21797a0db2754848a9bbc535e1a8666
-    m_Address: RpgExplosion
+  - m_GUID: 299368a217c781240b0845ff13c6e8cc
+    m_Address: UIRoot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 346f3bf3686d682498113714ee132099
+    m_Address: GunFireYellow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Vfx
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4198acde34373b3409ac05fdf03c8a6f
+    m_Address: AuthorizationWindow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 44bbc8d1860f00f489666fc58e87696b
+    m_Address: Assets/3dParty/3d/POLYGON weapons/Assets_official/FBXTexMat/POLYGON
+      weapons pack/rocket_launcher/rocket_launcher.mat
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f8753c0f794615f4eb6f96367816ebc6
-    m_Address: Hud
+  - m_GUID: 44f482836b5c3784cbfcb7b6b8660020
+    m_Address: Grenade
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Projectile
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 468ce0c9df3b523468ba1c4081fd9aab
     m_Address: StartWindow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 475f6ff71f9b21a4bb2cb3bda7f812a7
+    m_Address: Assets/3dParty/Vfxs/Epic Toon FX/Textures/nova_6x3_spritesheet.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c85e72c55e583044accbbfe17b51e88
+    m_Address: ResultWindow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 512fe9f65b16e8949b17e85653f33daa
+    m_Address: Assets/3dParty/3d/POLYGON weapons/Assets_official/FBXTexMat/POLYGON
+      weapons pack/equipment_mats/glass.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5669ba518e81037419f92e7d039e4b45
+    m_Address: WithMG
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57e20c99c1e93a745a428f6a158d23a3
+    m_Address: WithSMG
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5abbc342485727d4c8b75c66da35da51
+    m_Address: BombMuzzleBlue
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Vfx
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5c129ddc4d253164a8e65c5e372cf150
+    m_Address: NukeMuzzleFire
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Vfx
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 61d238830b59a604b94797a6858e5203
+    m_Address: RpgRocket
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Projectile
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 634daa66079d764409c77eb1303a5baf
+    m_Address: ShotVfxsRoot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Vfx
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 67f88c56d63774a43b9436fccea31b7d
+    m_Address: PistolBullet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Projectile
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7111efd0fe461dc4a989f30c48c92001
+    m_Address: SpawnPoint
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 727d4552e3558dd4e81aef11e4646b5c
+    m_Address: RocketMuzzleFire
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Vfx
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7ab22b4eaba591e488912a6b2405d8ac
+    m_Address: Bomb
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Projectile
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7d90345e21edacd4d89a0e4565ca8d4b
+    m_Address: Weapons/Hero/Materials/RocketLauncher
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7dd7c402620daea4ebab2dbd9d1faec0
     m_Address: BlastsRoot
     m_ReadOnly: 0
+    m_SerializedLabels:
+    - Vfx
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e257b8211d08b344aa2b46c61fd79e9
+    m_Address: BulletMuzzleFire
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Vfx
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8bd6936f03e51b545b45d8443ee0f603
+    m_Address: GameEndWindow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e6c88e97d682084a9f4d7bf69820025
+    m_Address: LeaderBoardWindow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 94358e0b929c8044fbd6cb680aff6357
+    m_Address: SpawnersRoot
+    m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f03f372adf02874cb666857a9f97abd
+    m_Address: NukeVerticalExplosionFire
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Vfx
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: abc83c21d57d4a74cabe12065fa1a8b2
+    m_Address: Assets/3dParty/Shaders/Toony Colors Pro/Textures/Ramps/TCP2_Ramp_Unity.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af5e3983bffc63e4aaf5ed495653f8ad
+    m_Address: Weapons/Hero/Models/StartingMechanism1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b7acefeea40ede44ca0107385efd4208
+    m_Address: HeroProjectilesRoot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Projectile
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b809540d8aac0c242b28d2caa18989b0
+    m_Address: ShopWindow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c8e71b1462e04ff4e97983073942dc05
+    m_Address: Hero
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ca95cd5e32b87614e9c8f99b0c249712
+    m_Address: WithShotgun
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ccfc7d68845db8341944b3091b59be55
+    m_Address: Assets/3dParty/Shaders/Toony Colors Pro/Shaders/TCP2_Mobile.shader
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d166c8ca466ba4a42a2c22afdee2d7e1
+    m_Address: GrenadeLauncherExplosion
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Vfx
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9274ade267839a408f64aa881fb72dd
+    m_Address: WithBat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de34175c31b079745a408abf10791b78
+    m_Address: Assets/3dParty/3d/POLYGON weapons/Assets_official/FBXTexMat/POLYGON
+      weapons pack/rocket_launcher/rocket_launcher.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e6ea0c2b13012484ba2f5dc1054e6d75
+    m_Address: ExplosionRoundFire
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Vfx
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e898770e970113549b3f1bb7aa8205fc
+    m_Address: StartNewGameWindow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f21797a0db2754848a9bbc535e1a8666
+    m_Address: RpgExplosion
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Vfx
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f825b589726b2884aab7ef41c5257991
+    m_Address: Assets/3dParty/3d/POLYGON weapons/Assets_official/FBXTexMat/POLYGON
+      weapons pack/equipment_mats/Dot_red.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f8753c0f794615f4eb6f96367816ebc6
+    m_Address: Hud
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f8a1b22957e046340b3534c170f4f13b
+    m_Address: Assets/3dParty/3d/POLYGON weapons/Assets_official/FBXTexMat/POLYGON
+      weapons pack/bullet_shells_fbxTexMat/40mm_grenade.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa18f3a056ece684892e62906e87d02b
+    m_Address: GiftsWindow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 9cc2a55e604bc944590d8a935a0bb2a9, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 136804cd8e224c94c98d12975cda9c0e, type: 2}
     - {fileID: 11400000, guid: 0010a44d7e4fe7a45a735fc042fb46f2, type: 2}
+    - {fileID: 11400000, guid: 136804cd8e224c94c98d12975cda9c0e, type: 2}

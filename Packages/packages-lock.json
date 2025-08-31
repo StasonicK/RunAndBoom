@@ -1,18 +1,18 @@
 {
   "dependencies": {
-    "com.agava.webutility": {
-      "version": "https://github.com/forcepusher/com.agava.webutility.git#3.1.0",
+    "com.bananaparty.webutility": {
+      "version": "https://github.com/forcepusher/com.bananaparty.webutility.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "32d39130ea78dce0c3ea0ed83ec5f022efefde42"
+      "hash": "0bfb373a69e3ef753164da63e403874e597c7b41"
     },
-    "com.agava.yandexgames": {
-      "version": "https://github.com/forcepusher/com.agava.yandexgames.git#16.0.0",
+    "com.bananaparty.yandexgames": {
+      "version": "https://github.com/forcepusher/com.bananaparty.yandexgames.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "faf20595c0f18f4a471e6b27fbd5fbf5fd05d7a2"
+      "hash": "0c2a7c344e3d7786ef40484c66eb0656b40d0593"
     },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
@@ -259,16 +259,6 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
       }
-    },
-    "com.unity.visualscripting": {
-      "version": "1.9.7",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",

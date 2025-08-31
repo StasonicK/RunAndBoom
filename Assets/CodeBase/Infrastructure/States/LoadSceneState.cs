@@ -273,7 +273,7 @@ namespace CodeBase.Infrastructure.States
             GameObject startWindow = await _uiFactory.CreateStartWindow();
             startWindow.GetComponent<StartWindow>()
                 ?.Construct(hero, _openSettings, _progressService, _adsService, _mobileInput);
-            GameObject startNewGameWindow = await _uiFactory.CreateStartWindow();
+            GameObject startNewGameWindow = await _uiFactory.CreateStartNewGameWindow();
             startNewGameWindow.GetComponent<StartNewGameWindow>()
                 ?.Construct(hero, _openSettings, _mobileInput);
 

@@ -1,4 +1,4 @@
-﻿using Agava.WebUtility;
+﻿using BananaParty.WebUtility;
 using CodeBase.Services;
 using CodeBase.Services.PersistentProgress;
 using Plugins.SoundInstance.Core.Static;

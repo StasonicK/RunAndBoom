@@ -18,6 +18,7 @@ namespace CodeBase.Services.Registrator
         public GameObject InstantiateRegistered(GameObject prefab)
         {
             GameObject gameObject = Object.Instantiate(prefab);
+            Debug.Log("InstantiateRegistered " + gameObject.name);
             RegisterProgressWatchers(gameObject);
             return gameObject;
         }
@@ -25,6 +26,7 @@ namespace CodeBase.Services.Registrator
         public GameObject InstantiateRegistered(GameObject prefab, Vector3 at)
         {
             GameObject gameObject = Object.Instantiate(prefab, at, Quaternion.identity);
+            Debug.Log("InstantiateRegistered " + gameObject.name);
             RegisterProgressWatchers(gameObject);
             return gameObject;
         }
@@ -32,6 +34,7 @@ namespace CodeBase.Services.Registrator
         public async UniTask<GameObject> InstantiateRegisteredAsync(string prefabPath)
         {
             GameObject gameObject = await _assets.Instantiate(prefabPath);
+            Debug.Log("InstantiateRegisteredAsync " + gameObject.name);
             RegisterProgressWatchers(gameObject);
             return gameObject;
         }
@@ -39,6 +42,7 @@ namespace CodeBase.Services.Registrator
         public async UniTask<GameObject> InstantiateRegisteredAsync(string prefabPath, Vector3 at)
         {
             GameObject gameObject = await _assets.Instantiate(prefabPath, at: at);
+            Debug.Log("InstantiateRegisteredAsync " + gameObject.name);
             RegisterProgressWatchers(gameObject);
             return gameObject;
         }
@@ -46,6 +50,7 @@ namespace CodeBase.Services.Registrator
         public async UniTask<GameObject> InstantiateRegisteredAsync(string prefabPath, Transform parent)
         {
             GameObject gameObject = await _assets.Instantiate(prefabPath, parent: parent);
+            Debug.Log("InstantiateRegisteredAsync " + gameObject.name);
             RegisterProgressWatchers(gameObject);
             return gameObject;
         }

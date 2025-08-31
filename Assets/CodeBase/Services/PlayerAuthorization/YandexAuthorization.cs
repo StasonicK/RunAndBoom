@@ -1,5 +1,5 @@
 ﻿using System;
-using Agava.YandexGames;
+using BananaParty.YandexGames;
 
 namespace CodeBase.Services.PlayerAuthorization
 {

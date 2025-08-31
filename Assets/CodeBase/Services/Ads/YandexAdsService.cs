@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using Agava.YandexGames;
+using BananaParty.YandexGames;
 
 namespace CodeBase.Services.Ads
 {

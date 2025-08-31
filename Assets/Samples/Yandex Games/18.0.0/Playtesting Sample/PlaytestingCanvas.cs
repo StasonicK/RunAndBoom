@@ -1,13 +1,13 @@
 #pragma warning disable
 
 using System.Collections;
-using Agava.YandexGames;
-using Agava.YandexGames.Samples;
+using BananaParty.YandexGames;
+using BananaParty.YandexGames.Samples;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Agava.YandexGames.Samples
+namespace BananaParty.YandexGames.Samples
 {
     public class PlaytestingCanvas : MonoBehaviour
     {
@@ -16,6 +16,9 @@ namespace Agava.YandexGames.Samples
 
         [SerializeField]
         private Text _personalProfileDataPermissionStatusText;
+
+        [SerializeField]
+        private Text _isRunningOnYandexStatusText;
 
         [SerializeField]
         private InputField _cloudSaveDataInputField;
@@ -28,15 +31,22 @@ namespace Agava.YandexGames.Samples
 
         private IEnumerator Start()
         {
-#if !UNITY_WEBGL || UNITY_EDITOR
-            yield break;
-#endif
+            if (!YandexGamesSdk.IsRunningOnYandex)
+                yield break;
 
+            CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
+            canvasGroup.interactable = false;
             // Always wait for it if invoking something immediately in the first scene.
             yield return YandexGamesSdk.Initialize();
 
+            YandexGamesSdk.GameReady();
+
+            canvasGroup.interactable = true;
+
             if (PlayerAccount.IsAuthorized == false)
                 PlayerAccount.StartAuthorizationPolling(1500);
+
+            _isRunningOnYandexStatusText.color = YandexGamesSdk.IsRunningOnYandex ? Color.green : Color.red;
 
             while (true)
             {
@@ -141,6 +151,31 @@ namespace Agava.YandexGames.Samples
         public void OnGetEnvironmentButtonClick()
         {
             Debug.Log($"Environment = {JsonUtility.ToJson(YandexGamesSdk.Environment)}");
+        }
+
+        public void OnCallGameReadyButtonClick()
+        {
+            YandexGamesSdk.GameReady();
+        }
+
+        public void OnSuggestShortcutButtonClick()
+        {
+            Shortcut.Suggest();
+        }
+
+        public void OnRequestReviewButtonClick()
+        {
+            ReviewPopup.Open();
+        }
+
+        public void OnCanSuggestShortcutButtonClick()
+        {
+            Shortcut.CanSuggest(result => { });
+        }
+
+        public void OnCanRequestReviewButtonClick()
+        {
+            ReviewPopup.CanOpen((result, reason) => { });
         }
 
         private void OnAuthorizedInBackground()

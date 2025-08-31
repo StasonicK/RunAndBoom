@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using Agava.YandexGames;
+using BananaParty.YandexGames;
 using CodeBase.Data;
 using CodeBase.Data.Progress;
 using CodeBase.Services.Audio;

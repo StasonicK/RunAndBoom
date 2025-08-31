@@ -173,6 +173,11 @@ namespace ToonyColorsPro
 					return implementation.PrintVariableDeclare(indent);
 				}
 
+				public string PrintVariablesDeclareOutsideCBuffer(string indent)
+				{
+					return implementation.PrintVariableDeclareOutsideCBuffer(indent);
+				}
+
 				public string PrintVariableFragment()
 				{
 					// Only texture properties need sampling, others can use their variable name directly
@@ -182,6 +187,11 @@ namespace ToonyColorsPro
 					}
 
 					return PropertyName;
+				}
+
+				public string PrintVariableSurfaceOutput(VariableType variableType)
+				{
+					return string.Format("half{0} {1};", ShaderProperty.VariableTypeToChannelsCount(variableType), this.PrintVariableFragment());
 				}
 
 				public string PrintVariableVertex()
@@ -238,8 +248,11 @@ namespace ToonyColorsPro
 						var guiContent = new GUIContent(string.Format("{0} ({1})", Label, implementationTypeLabel));
 						rect.width -= buttonWidth*2;
 
+						// hover
+						TCP2_GUI.DrawHoverRect(rect);
+
 						EditorGUI.BeginChangeCheck();
-						expanded = EditorGUI.Foldout(rect, expanded, guiContent, true, TCP2_GUI.HeaderDropDown);
+						expanded = GUI.Toggle(rect, expanded, guiContent, TCP2_GUI.HeaderDropDown);
 						if (EditorGUI.EndChangeCheck())
 						{
 							if (Event.current.alt || Event.current.control)
@@ -252,6 +265,15 @@ namespace ToonyColorsPro
 							}
 						}
 
+						var labelWidth = TCP2_GUI.HeaderDropDown.CalcSize(guiContent).x;
+						var labelRect = GUILayoutUtility.GetLastRect();
+						labelRect.x += labelWidth;
+						labelRect.width -= labelWidth;
+						using (new EditorGUI.DisabledScope(true))
+						{
+							GUI.Label(labelRect, ": " + PropertyName, EditorStyles.miniLabel);
+						}
+						
 						rect.x += rect.width;
 						rect.width = buttonWidth;
 						rect.height = EditorGUIUtility.singleLineHeight;
@@ -264,13 +286,6 @@ namespace ToonyColorsPro
 						{
 							onRemove(index);
 						}
-
-						var labelWidth = TCP2_GUI.HeaderDropDown.CalcSize(guiContent).x;
-						rect = GUILayoutUtility.GetLastRect();
-						rect.y += 2;
-						rect.x += labelWidth;
-						rect.width -= labelWidth;
-						GUI.Label(rect, ": " + PropertyName, SGUILayout.Styles.GrayMiniLabel);
 					}
 
 					if (expanded)

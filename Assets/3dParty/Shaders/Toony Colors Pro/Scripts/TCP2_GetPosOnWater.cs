@@ -1,5 +1,5 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2023 Jean Moreno
 
 using UnityEngine;
 #if UNITY_EDITOR
@@ -33,10 +33,10 @@ namespace ToonyColorsPro
 			[Tooltip("Rotation of the object once it's been affected by the water normal")]
 			public Vector3 postRotation = new Vector3(0, 0, 0);
 
-			[SerializeField, HideInInspector]
-			bool isValid;
-			[SerializeField, HideInInspector]
-			int sineCount;
+#pragma warning disable 649
+			[SerializeField, HideInInspector] bool isValid;
+			[SerializeField, HideInInspector] int sineCount;
+#pragma warning restore 649
 
 			float[] sinePosOffsetsX = { 1.0f, 2.2f, 2.7f, 3.4f, 1.4f, 1.8f, 4.2f, 3.6f };
 			float[] sinePosOffsetsZ = { 0.6f, 1.3f, 3.1f, 2.4f, 1.1f, 2.8f, 1.7f, 4.3f };
@@ -109,11 +109,13 @@ namespace ToonyColorsPro
 			//Returns a world space position on a water plane, based on its material
 			public Vector3 GetPositionOnWater(Vector3 worldPosition)
 			{
+#if UNITY_EDITOR
 				if (!isValid)
 				{
 					Debug.LogWarning("Invalid Water Material, returning the same worldPosition");
 					return worldPosition;
 				}
+#endif
 
 				var freq = WaterMaterial.GetFloat("_WaveFrequency");
 				var height = WaterMaterial.GetFloat("_WaveHeight") * heightScale;
@@ -156,11 +158,13 @@ namespace ToonyColorsPro
 
 			public Vector3 GetNormalOnWater(Vector3 worldPosition)
 			{
+#if UNITY_EDITOR
 				if (!isValid)
 				{
 					Debug.LogWarning("Invalid Water Material, returning the Vector3.up as the normal");
 					return Vector3.up;
 				}
+#endif
 
 				var freq = WaterMaterial.GetFloat("_WaveFrequency");
 				var height = WaterMaterial.GetFloat("_WaveHeight") * heightScale;

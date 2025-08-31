@@ -1,5 +1,5 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2023 Jean Moreno
 
 // Shader Generator Module: VertExmotion Support
 
@@ -39,10 +39,10 @@ keyword_str		lbl="Include File"			kw=VERTEXMOTION_INCLUDE		indent		needs=VERTEXM
 
 //================================================================
 
-#VARIABLES
+#FUNCTIONS
 /// IF VERTEXMOTION
 	/// IF LWRP
-		#define VERTEXMOTION_ASE_HD_LW_RP
+		#define VERTEXMOTION_URP
 	///
 		#include "@%VERTEXMOTION_INCLUDE%@"
 ///
@@ -71,14 +71,11 @@ keyword_str		lbl="Include File"			kw=VERTEXMOTION_INCLUDE		indent		needs=VERTEXM
 /// IF VERTEXMOTION
 		//VertExmotion
 		float4 vxData = [[VALUE:VertExmotion Data]];
-		float4 worldPos = mul(unity_ObjectToWorld, vertex);
-		float w = 0;
 	/// IF VERTEXMOTION_SIMPLE
-		worldPos = VertExmotionBase(worldPos, vxData, w);
+		vertex.xyz = VertExmotionURP(vertex, vxData);
 	/// ELIF VERTEXMOTION_NORMAL
-		worldPos = VertExmotionWorldPosASE(worldPos, vxData, normal, tangent);
+		vertex.xyz = VertExmotionURP(vertex, vxData, normal, tangent);
 	///
-		vertex.xyz = mul(unity_WorldToObject, worldPos).xyz;
 ///
 #END
 

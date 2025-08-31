@@ -1,5 +1,5 @@
 ﻿// Toony Colors Pro+Mobile 2
-// (c) 2014-2019 Jean Moreno
+// (c) 2014-2023 Jean Moreno
 
 Shader "Toony Colors Pro 2/Examples/SG2/Vertex Color Albedo"
 {
@@ -13,7 +13,7 @@ Shader "Toony Colors Pro 2/Examples/SG2/Vertex Color Albedo"
 
 		[TCP2Header(Ramp Shading)]
 		_RampThreshold ("Threshold", Range(0.01,1)) = 0.5
-		_RampSmoothing ("Smoothing", Range(0.001,1)) = 0.1
+		_RampSmoothing ("Smoothing", Range(0.001,1)) = 0.5
 		[TCP2Separator]
 		
 		//Avoid compile error if the properties are ending with a drawer
@@ -27,22 +27,29 @@ Shader "Toony Colors Pro 2/Examples/SG2/Vertex Color Albedo"
 			"RenderType"="Opaque"
 		}
 
-		// Main Surface Shader
+		CGINCLUDE
 
-		CGPROGRAM
-
-		#pragma surface surf ToonyColorsCustom vertex:vertex_surface exclude_path:deferred exclude_path:prepass keepalpha nolightmap nofog
-		#pragma target 3.0
-
-		//================================================================
-		// VARIABLES
+		#include "UnityCG.cginc"
+		#include "UnityLightingCommon.cginc"	// needed for LightColor
 
 		// Shader Properties
 		fixed4 _Color;
 		float _RampThreshold;
 		float _RampSmoothing;
-		fixed3 _HColor;
-		fixed3 _SColor;
+		fixed4 _HColor;
+		fixed4 _SColor;
+
+		ENDCG
+
+		// Main Surface Shader
+
+		CGPROGRAM
+
+		#pragma surface surf ToonyColorsCustom vertex:vertex_surface exclude_path:deferred exclude_path:prepass keepalpha nolightmap nofog nolppv
+		#pragma target 3.0
+
+		//================================================================
+		// STRUCTS
 
 		//Vertex input
 		struct appdata_tcp2
@@ -80,12 +87,12 @@ Shader "Toony Colors Pro 2/Examples/SG2/Vertex Color Albedo"
 		struct SurfaceOutputCustom
 		{
 			half atten;
-			fixed3 Albedo;
+			half3 Albedo;
 			half3 Normal;
-			fixed3 Emission;
+			half3 Emission;
 			half Specular;
-			fixed Gloss;
-			fixed Alpha;
+			half Gloss;
+			half Alpha;
 
 			Input input;
 			
@@ -136,26 +143,27 @@ Shader "Toony Colors Pro 2/Examples/SG2/Vertex Color Albedo"
 			#endif
 
 			half3 normal = normalize(surface.Normal);
-			fixed ndl = dot(normal, lightDir);
-			fixed3 ramp;
+			half ndl = dot(normal, lightDir);
+			half3 ramp;
+			
 			#define		RAMP_THRESHOLD	surface.__rampThreshold
 			#define		RAMP_SMOOTH		surface.__rampSmoothing
 			ndl = saturate(ndl);
 			ramp = smoothstep(RAMP_THRESHOLD - RAMP_SMOOTH*0.5, RAMP_THRESHOLD + RAMP_SMOOTH*0.5, ndl);
-			fixed3 rampGrayscale = ramp;
+			half3 rampGrayscale = ramp;
 
 			//Apply attenuation (shadowmaps & point/spot lights attenuation)
 			ramp *= atten;
 
 			//Highlight/Shadow Colors
 			#if !defined(UNITY_PASS_FORWARDBASE)
-				ramp = lerp(fixed3(0,0,0), surface.__highlightColor, ramp);
+				ramp = lerp(half3(0,0,0), surface.__highlightColor, ramp);
 			#else
 				ramp = lerp(surface.__shadowColor, surface.__highlightColor, ramp);
 			#endif
 
 			//Output color
-			fixed4 color;
+			half4 color;
 			color.rgb = surface.Albedo * lightColor.rgb * ramp;
 			color.a = surface.Alpha;
 
@@ -180,6 +188,7 @@ Shader "Toony Colors Pro 2/Examples/SG2/Vertex Color Albedo"
 
 			surface.atten = data.atten; // transfer attenuation to lighting function
 			gi.light.color = _LightColor0.rgb; // remove attenuation
+
 		}
 
 		ENDCG
@@ -190,5 +199,5 @@ Shader "Toony Colors Pro 2/Examples/SG2/Vertex Color Albedo"
 	CustomEditor "ToonyColorsPro.ShaderGenerator.MaterialInspector_SG2"
 }
 
-/* TCP_DATA u config(ver:"2.4.0";tmplt:"SG2_Template_Default";features:list["UNITY_5_4","UNITY_5_5"];flags:list[];keywords:dict[RENDER_TYPE="Opaque",RampTextureDrawer="[TCP2Gradient]",RampTextureLabel="Ramp Texture",SHADER_TARGET="3.0"];shaderProperties:list[sp(name:"Albedo";imps:list[imp_vcolors(cc:4;chan:"RGBA";op:Multiply;lbl:"Albedo";gpu_inst:False;locked:False;impl_index:-1)])];customTextures:list[]) */
-/* TCP_HASH f616f6b9d2587cefe67326c2247e6d41 */
+/* TCP_DATA u config(unity:"2018.4.11f1";ver:"2.4.0";tmplt:"SG2_Template_Default";features:list["UNITY_5_4","UNITY_5_5","UNITY_5_6","UNITY_2017_1","UNITY_2018_1","UNITY_2018_2","UNITY_2018_3"];flags:list[];flags_extra:dict[];keywords:dict[RENDER_TYPE="Opaque",RampTextureDrawer="[TCP2Gradient]",RampTextureLabel="Ramp Texture",SHADER_TARGET="3.0"];shaderProperties:list[sp(name:"Albedo";imps:list[imp_vcolors(cc:4;chan:"RGBA";guid:"d424001e-155f-40b1-b614-3d07efafe963";op:Multiply;lbl:"Albedo";gpu_inst:False;locked:False;impl_index:-1)];layers:list[];unlocked:list[];clones:dict[];isClone:False)];customTextures:list[];codeInjection:codeInjection(injectedFiles:list[];mark:False);matLayers:list[]) */
+/* TCP_HASH 0d257bcb5f361c6aa1a43e31c6d4f13b */

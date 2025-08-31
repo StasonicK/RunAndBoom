@@ -146,6 +146,7 @@ public class ReorderableLayoutList
 
 					const float dragHeight = 6;
 					var count = Mathf.FloorToInt(drawRect.height / dragHeight);
+					count = Mathf.Max(1, count);
 					var margin = drawRect.height - count*dragHeight;
 					for (var j = 0; j < count; j++)
 					{

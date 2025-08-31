@@ -7,20 +7,30 @@
 	struct a2v
 	{
 		float4 vertex : POSITION;
+		
 		float3 normal : NORMAL;
-	#if TCP2_OUTLINE_TEXTURED
-		float3 texcoord : TEXCOORD0;
+	#if defined(TCP2_UV1_AS_NORMALS) || defined(TCP2_OUTLINE_TEXTURED)
+		float4 texcoord0 : TEXCOORD0;
 	#endif
-	#if TCP2_COLORS_AS_NORMALS
-		float4 color : COLOR;
-	#elif TCP2_TANGENT_AS_NORMALS
+	#if defined(TCP2_UV2_AS_NORMALS)
+		float4 texcoord1 : TEXCOORD1;
+	#endif
+	#if defined(TCP2_UV3_AS_NORMALS)
+		float4 texcoord2 : TEXCOORD2;
+	#endif
+	#if defined(TCP2_UV4_AS_NORMALS)
+		float4 texcoord3 : TEXCOORD3;
+	#endif
+	#if defined(TCP2_COLORS_AS_NORMALS)
+		float4 vertexColor : COLOR;
+	#endif
+	#if defined(TCP2_TANGENT_AS_NORMALS) || (defined(TCP2_OUTLINE_LIGHTING_ALL) && defined(_ADDITIONAL_LIGHTS_VERTEX))
 		float4 tangent : TANGENT;
-	#elif TCP2_UV2_AS_NORMALS
-		float2 uv2 : TEXCOORD1;
 	#endif
-#if UNITY_VERSION >= 550
-			UNITY_VERTEX_INPUT_INSTANCE_ID
-#endif
+
+	#if UNITY_VERSION >= 550
+		UNITY_VERTEX_INPUT_INSTANCE_ID
+	#endif
     }; 
 	
 	struct v2f
@@ -58,25 +68,49 @@ v2f TCP2_Outline_Vert(a2v v)
 	
 	#ifdef TCP2_COLORS_AS_NORMALS
 		//Vertex Color for Normals
-		float3 normal = mul( (float3x3)UNITY_MATRIX_IT_MV, (v.color.xyz*2) - 1 );
+		float3 normal = (v.vertexColor.xyz*2) - 1;
 	#elif TCP2_TANGENT_AS_NORMALS
 		//Tangent for Normals
-		float3 normal = mul( (float3x3)UNITY_MATRIX_IT_MV, v.tangent.xyz);
-	#elif TCP2_UV2_AS_NORMALS
-		//UV2 for Normals
-		float3 normal;
-		//unpack uv2
-		v.uv2.x = v.uv2.x * 255.0/16.0;
-		normal.x = floor(v.uv2.x) / 15.0;
-		normal.y = frac(v.uv2.x) * 16.0 / 15.0;
-		//get z
-		normal.z = v.uv2.y;
-		//transform
-		normal = mul( (float3x3)UNITY_MATRIX_IT_MV, normal*2-1);
+		float3 normal = v.tangent.xyz;
+	#elif TCP2_UV1_AS_NORMALS || TCP2_UV2_AS_NORMALS || TCP2_UV3_AS_NORMALS || TCP2_UV4_AS_NORMALS
+		#if TCP2_UV1_AS_NORMALS
+			#define uvChannel texcoord0
+		#elif TCP2_UV2_AS_NORMALS
+			#define uvChannel texcoord1
+		#elif TCP2_UV3_AS_NORMALS
+			#define uvChannel texcoord2
+		#elif TCP2_UV4_AS_NORMALS
+			#define uvChannel texcoord3
+		#endif
+
+		#if TCP2_UV_NORMALS_FULL
+		//UV for Normals, full
+		float3 normal = v.uvChannel.xyz;
+		#else
+		//UV for Normals, compressed
+		#if TCP2_UV_NORMALS_ZW
+			#define ch1 z
+			#define ch2 w
+		#else
+			#define ch1 x
+			#define ch2 y
+		#endif
+		float3 n;
+		//unpack uvs
+		v.uvChannel.ch1 = v.uvChannel.ch1 * 255.0/16.0;
+		n.x = floor(v.uvChannel.ch1) / 15.0;
+		n.y = frac(v.uvChannel.ch1) * 16.0 / 15.0;
+		//- get z
+		n.z = v.uvChannel.ch2;
+		//- transform
+		n = n*2 - 1;
+		float3 normal = n;
+		#endif
 	#else
-		float3 normal = mul( (float3x3)UNITY_MATRIX_IT_MV, v.normal);
+		float3 normal = v.normal;
 	#endif
 	
+	normal = mul((float3x3)UNITY_MATRIX_IT_MV, normal);
 	normal.z = -_ZSmooth;
 	
 	#ifdef TCP2_OUTLINE_CONST_SIZE
@@ -91,22 +125,44 @@ v2f TCP2_Outline_Vert(a2v v)
 
 	#ifdef TCP2_COLORS_AS_NORMALS
 		//Vertex Color for Normals
-		float3 normal = (v.color.xyz*2) - 1;
+		float3 normal = (v.vertexColor.xyz*2) - 1;
 	#elif TCP2_TANGENT_AS_NORMALS
 		//Tangent for Normals
 		float3 normal = v.tangent.xyz;
-	#elif TCP2_UV2_AS_NORMALS
-		//UV2 for Normals
+	#elif TCP2_UV1_AS_NORMALS || TCP2_UV2_AS_NORMALS || TCP2_UV3_AS_NORMALS || TCP2_UV4_AS_NORMALS
+		#if TCP2_UV1_AS_NORMALS
+			#define uvChannel texcoord0
+		#elif TCP2_UV2_AS_NORMALS
+			#define uvChannel texcoord1
+		#elif TCP2_UV3_AS_NORMALS
+			#define uvChannel texcoord2
+		#elif TCP2_UV4_AS_NORMALS
+			#define uvChannel texcoord3
+		#endif
+
+		#if TCP2_UV_NORMALS_FULL
+		//UV for Normals, full
+		float3 normal = v.uvChannel.xyz;
+		#else
+		//UV for Normals, compressed
+		#if TCP2_UV_NORMALS_ZW
+			#define ch1 z
+			#define ch2 w
+		#else
+			#define ch1 x
+			#define ch2 y
+		#endif
 		float3 n;
-		//unpack uv2
-		v.uv2.x = v.uv2.x * 255.0/16.0;
-		n.x = floor(v.uv2.x) / 15.0;
-		n.y = frac(v.uv2.x) * 16.0 / 15.0;
-		//get z
-		n.z = v.uv2.y;
-		//transform
+		//unpack uvs
+		v.uvChannel.ch1 = v.uvChannel.ch1 * 255.0/16.0;
+		n.x = floor(v.uvChannel.ch1) / 15.0;
+		n.y = frac(v.uvChannel.ch1) * 16.0 / 15.0;
+		//- get z
+		n.z = v.uvChannel.ch2;
+		//- transform
 		n = n*2 - 1;
 		float3 normal = n;
+		#endif
 	#else
 		float3 normal = v.normal;
 	#endif
@@ -123,14 +179,14 @@ v2f TCP2_Outline_Vert(a2v v)
 	o.pos = mul(UNITY_MATRIX_P, pos);
 	
 #if TCP2_OUTLINE_TEXTURED
-	half2 uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+	half2 uv = TRANSFORM_TEX(v.texcoord0, _MainTex);
 	o.texlod = tex2Dlod(_MainTex, float4(uv, 0, _TexLod)).rgb;
 #endif
 	
 	return o;
 }
 
-float4 TCP2_Outline_Frag (v2f IN) : COLOR
+float4 TCP2_Outline_Frag (v2f IN) : SV_Target
 {
 #if TCP2_OUTLINE_TEXTURED
 	return float4(IN.texlod, 1) * _OutlineColor;

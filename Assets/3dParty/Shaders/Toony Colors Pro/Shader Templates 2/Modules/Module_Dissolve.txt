@@ -1,13 +1,13 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2023 Jean Moreno
 
 // Shader Generator Module: Dissolve Effect
 
 #FEATURES
-sngl	lbl="Dissolve Map"				kw=DISSOLVE															tt="Adds a dissolve texture map with the corresponding slider"
-sngl	lbl="Alpha Testing"				kw=DISSOLVE_CLIP					needs=DISSOLVE		indent		tt="Performs alpha testing on the dissolved part"
-sngl	lbl="Gradient Ramp"				kw=DISSOLVE_GRADIENT				needs=DISSOLVE		indent		tt="Use a gradient texture to color the dissolving area"
-sngl	lbl="Make Optional"				kw=DISSOLVE_SHADER_FEATURE			needs=DISSOLVE		indent		tt="Will make the dissolve effect optional in the material inspector, using a shader keyword"
+sngl	lbl="Dissolve Map"			kw=DISSOLVE		help="featuresreference/specialeffects/dissolvemap"		tt="Adds a dissolve texture map with the corresponding slider"
+sngl	lbl="Alpha Testing"			kw=DISSOLVE_CLIP					needs=DISSOLVE		indent			tt="Performs alpha testing on the dissolved part"
+sngl	lbl="Gradient Ramp"			kw=DISSOLVE_GRADIENT				needs=DISSOLVE		indent			tt="Use a gradient texture to color the dissolving area"
+sngl	lbl="Make Optional"			kw=DISSOLVE_SHADER_FEATURE			needs=DISSOLVE		indent			tt="Will make the dissolve effect optional in the material inspector, using a shader keyword"
 #END
 
 //================================================================
@@ -37,7 +37,7 @@ sngl	lbl="Make Optional"				kw=DISSOLVE_SHADER_FEATURE			needs=DISSOLVE		indent	
 
 #SHADER_FEATURES_BLOCK
 /// IF DISSOLVE && DISSOLVE_SHADER_FEATURE
-	#pragma shader_feature TCP2_DISSOLVE
+	#pragma shader_feature_local_fragment TCP2_DISSOLVE
 ///
 #END
 
@@ -109,4 +109,4 @@ sngl	lbl="Make Optional"				kw=DISSOLVE_SHADER_FEATURE			needs=DISSOLVE		indent	
 			#endif
 	///
 ///
-#ENDD
+#END

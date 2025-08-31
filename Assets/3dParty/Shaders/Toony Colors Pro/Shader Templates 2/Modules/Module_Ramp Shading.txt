@@ -1,13 +1,15 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2023 Jean Moreno
 
 // Shader Generator Module: Ramp Shading
 
 #FEATURES
-mult	lbl="Ramp Style"				kw=Slider Ramp|,Texture Ramp|TEXTURE_RAMP,Crisp Ramp (Anti-aliased)|CRISP_RAMP,Crisp Ramp|CRISP_RAMP_NO_AA,RGB Slider Ramp|RGB_RAMP,No Ramp|NO_RAMP			tt="Defines the transitioning between dark and lit areas of the model"	help="featuresreference/lighting/rampstyle"
+mult	lbl="Ramp Style"				kw=Slider Ramp|,Texture Ramp|TEXTURE_RAMP,Crisp Ramp (Anti-aliased)|CRISP_RAMP,Crisp Ramp|CRISP_RAMP_NO_AA,Bands|RAMP_BANDS,Bands Crisp (Anti-aliased)|RAMP_BANDS_CRISP,Bands Crisp|RAMP_BANDS_CRISP_NO_AA,RGB Slider Ramp|RGB_RAMP,No Ramp|NO_RAMP,Unlit|NO_RAMP_UNLIT			tt="Defines the transitioning between dark and lit areas of the model"	help="featuresreference/lighting/rampstyle"
 sngl	lbl="Offset/Size"				kw=TEXTURE_RAMP_SLIDERS		needs=TEXTURE_RAMP																			indent			tt="Enable threshold/smoothing controls when using a texture ramp"
 sngl	lbl="2D Texture"				kw=TEXTURE_RAMP_2D			needs=TEXTURE_RAMP																			indent			tt="Use a 2D texture for the ramp shading, to interpolate between different types of ramp based on a property.  See the Properties to define how to control the texture vertical axis."
-mult	lbl="Ramp Control"			kw=Global|,Main + Other Lights|RAMP_MAIN_OTHER,Main + Light Type|RAMP_MAIN_LIGHTTYPE	excl=NO_RAMP	toggles=RAMP_SEPARATED	help=ramp_control_sg	tt="Defines how many ramp controls the material will have:\n\nGlobal: one control for all lights\n\nMain + Other Lights: one control for the main directional light and one for all other lights\n\nMain + Light Type: one control for the main directional light and one for each light type (directional, point, spot)"			help="featuresreference/lighting/rampcontrol"
+mult	lbl="Ramp Control"			kw=Global|,Main + Other Lights|RAMP_MAIN_OTHER,Main + Light Type|RAMP_MAIN_LIGHTTYPE	excl=NO_RAMP,NO_RAMP_UNLIT	toggles=RAMP_SEPARATED	tt="Defines how many ramp controls the material will have:\n\nGlobal: one control for all lights\n\nMain + Other Lights: one control for the main directional light and one for all other lights\n\nMain + Light Type: one control for the main directional light and one for each light type (directional, point, spot)"	help="featuresreference/lighting/rampcontrol"
+mult	lbl="Wrapped Lighting"		kw=Off|,Half|WRAPPED_LIGHTING_HALF,Custom|WRAPPED_LIGHTING_CUSTOM						help="featuresreference/lighting/wrappedlighting"	tt="Enable wrapped lighting"
+mult	lbl="Lights"				kw=All Lights|,Main Light|WRAPPED_LIGHTING_MAIN_LIGHT,Other Lights|WRAPPED_LIGHTING_OTHER_LIGHTS	indent	needsOr=WRAPPED_LIGHTING_HALF,WRAPPED_LIGHTING_CUSTOM		tt="Which lights does wrapped lighting applies to"
 #END
 
 //================================================================
@@ -42,6 +44,45 @@ mult	lbl="Ramp Control"			kw=Global|,Main + Other Lights|RAMP_MAIN_OTHER,Main + 
 		float	Ramp Threshold Spot					lighting, imp(range, label = "Threshold (Spot)", default = 0.5, min = 0.01, max = 1.0)
 		float	Ramp Threshold Directional			lighting, imp(range, label = "Threshold (Directional)", default = 0.5, min = 0.01, max = 1.0)
 	///
+/// ELIF RAMP_BANDS || RAMP_BANDS_CRISP || RAMP_BANDS_CRISP_NO_AA
+	/// IF RAMP_BANDS_CRISP
+		float	Bands Crisp Smoothing				lighting, imp(constant, label = "Bands Crisp Smoothing", default = 2.0)
+	///
+		float	Ramp Threshold						lighting, imp(range, label = "Threshold", default = 0.5, min = 0.01, max = 1.0)
+		float	Ramp Smoothing						lighting, imp(range, label = "Smoothing", default = 0.5, min = 0.001, max = 1.0)
+		float	Bands Count							lighting, imp(range, label = "Bands Count", default = 4, min = 1, max = 20, drawer = "[IntRange]")
+	/// IF !RAMP_BANDS_CRISP && !RAMP_BANDS_CRISP_NO_AA
+		float	Bands Smoothing						lighting, imp(range, label = "Bands Smoothing", default = 0.1, min = 0.001, max = 1.0)
+	///
+	/// IF RAMP_MAIN_OTHER
+		float	Ramp Threshold Other Lights			lighting, imp(range, label = "Threshold", default = 0.5, min = 0.0, max = 1.0)
+		float	Ramp Smoothing Other Lights			lighting, imp(range, label = "Smoothing", default = 0.5, min = 0.001, max = 1.0)
+		float	Bands Count Other Lights			lighting, imp(range, label = "Bands Count", default = 4, min = 1, max = 20, drawer = "[IntRange]")
+		/// IF !RAMP_BANDS_CRISP && !RAMP_BANDS_CRISP_NO_AA
+		float	Bands Smoothing Other Lights		lighting, imp(range, label = "Bands Smoothing", default = 0.1, min = 0.001, max = 1.0)
+		///
+	/// ELIF RAMP_MAIN_LIGHTTYPE
+		float	Ramp Threshold Point				lighting, imp(range, label = "Threshold (Point)", default = 0.5, min = 0.0, max = 1.0)
+		float	Ramp Smoothing Point				lighting, imp(range, label = "Smoothing (Point)", default = 0.5, min = 0.001, max = 1.0)
+		float	Bands Count Point					lighting, imp(range, label = "Bands Count", default = 4, min = 1, max = 20, drawer = "[IntRange]")
+		/// IF !RAMP_BANDS_CRISP && !RAMP_BANDS_CRISP_NO_AA
+		float	Bands Smoothing Point				lighting, imp(range, label = "Bands Smoothing", default = 0.1, min = 0.001, max = 1.0)
+		///
+
+		float	Ramp Threshold Spot					lighting, imp(range, label = "Threshold (Spot)", default = 0.5, min = 0.0, max = 1.0)
+		float	Ramp Smoothing Spot					lighting, imp(range, label = "Smoothing (Spot)", default = 0.5, min = 0.001, max = 1.0)
+		float	Bands Count Spot					lighting, imp(range, label = "Bands Count", default = 4, min = 1, max = 20, drawer = "[IntRange]")
+		/// IF !RAMP_BANDS_CRISP && !RAMP_BANDS_CRISP_NO_AA
+		float	Bands Smoothing Spot				lighting, imp(range, label = "Bands Smoothing", default = 0.1, min = 0.001, max = 1.0)
+		///
+
+		float	Ramp Threshold Directional			lighting, imp(range, label = "Threshold (Directional)", default = 0.5, min = 0.0, max = 1.0)
+		float	Ramp Smoothing Directional			lighting, imp(range, label = "Smoothing (Directional)", default = 0.5, min = 0.001, max = 1.0)
+		float	Bands Count Directional				lighting, imp(range, label = "Bands Count", default = 4, min = 1, max = 20, drawer = "[IntRange]")
+		/// IF !RAMP_BANDS_CRISP && !RAMP_BANDS_CRISP_NO_AA
+		float	Bands Smoothing Directional			lighting, imp(range, label = "Bands Smoothing", default = 0.1, min = 0.001, max = 1.0)
+		///
+	///
 /// ELIF TEXTURE_RAMP && TEXTURE_RAMP_SLIDERS
 		float	Ramp Offset							lighting, imp(range, label = "Ramp Offset", default = 0.5, min = 0.0, max = 1.0)
 		float	Ramp Size							lighting, imp(range, label = "Ramp Size", default = 1.0, min = 0.001, max = 1.0)
@@ -58,7 +99,7 @@ mult	lbl="Ramp Control"			kw=Global|,Main + Other Lights|RAMP_MAIN_OTHER,Main + 
 		float	Ramp Offset Directional				lighting, imp(range, label = "Ramp Offset (Directional)", default = 0.5, min = 0.0, max = 1.0)
 		float	Ramp Size Directional				lighting, imp(range, label = "Ramp Size (Directional)", default = 1.0, min = 0.001, max = 1.0)
 	///
-/// ELIF !TEXTURE_RAMP && !NO_RAMP
+/// ELIF !TEXTURE_RAMP && !NO_RAMP && !NO_RAMP_UNLIT
 		float	Ramp Threshold						lighting, imp(range, label = "Threshold", default = 0.5, min = 0.0, max = 1.0)
 		float	Ramp Smoothing						lighting, imp(range, label = "Smoothing", default = 0.1, min = 0.001, max = 1.0)
 	/// IF RAMP_MAIN_OTHER
@@ -78,6 +119,9 @@ mult	lbl="Ramp Control"			kw=Global|,Main + Other Lights|RAMP_MAIN_OTHER,Main + 
 /// IF TEXTURE_RAMP && TEXTURE_RAMP_2D
 		float	2D Ramp Lerp						lighting, imp(range, label = "2D Ramp Lerp", default = 0.0, min = 0.0, max = 1.0
 ///
+/// IF WRAPPED_LIGHTING_CUSTOM
+		float	Light Wrap Factor					lighting, imp(range, default = 0.5, min = 0.0, max = 2.0)
+///
 #END
 
 //================================================================
@@ -95,55 +139,55 @@ mult	lbl="Ramp Control"			kw=Global|,Main + Other Lights|RAMP_MAIN_OTHER,Main + 
 //================================================================
 
 #PROPERTIES_BLOCK
-/// IF !NO_RAMP
+/// IF !NO_RAMP && !NO_RAMP_UNLIT
 		[TCP2Header(Ramp Shading)]
 ///
 /// IF TEXTURE_RAMP
 	/// IF RAMP_SEPARATED
-		[Header(Main Directional Light)]
+		[TCP2HeaderHelp(Main Directional Light)]
 	///
-		@%RampTextureDrawer%@ _Ramp			("@%RampTextureLabel%@ (RGB)", 2D) = "gray" {}
+		@%RampTextureDrawer%@ _Ramp ("@%RampTextureLabel%@ (RGB)", 2D) = "gray" {}
 	/// IF TEXTURE_RAMP_SLIDERS
 		[[PROP:Ramp Offset]]
 		[[PROP:Ramp Size]]
 	///
 	/// IF RAMP_MAIN_OTHER
-		[Header(Other Lights)]
-		@%RampTextureDrawer%@ _RampOtherLights	("@%RampTextureLabel%@", 2D) = "gray" {}
+		[TCP2HeaderHelp(Other Lights)]
+		@%RampTextureDrawer%@ _RampOtherLights ("@%RampTextureLabel%@", 2D) = "gray" {}
 	  /// IF TEXTURE_RAMP_SLIDERS
 		[[PROP:Ramp Offset Other Lights]]
 		[[PROP:Ramp Size Other Lights]]
 	  ///
 		[Space]
 	/// ELIF RAMP_MAIN_LIGHTTYPE
-		[HideInInspector] __BeginGroup_OtherLights	("Other Lights", Float) = 0
+		[HideInInspector] __BeginGroup_OtherLights ("Other Lights", Float) = 0
 	  /// IF TEXTURE_RAMP_SLIDERS
-		@%RampTextureDrawer%@ _RampPoint	("@%RampTextureLabel%@ (Point)", 2D) = "gray" {}
+		@%RampTextureDrawer%@ _RampPoint ("@%RampTextureLabel%@ (Point)", 2D) = "gray" {}
 		[[PROP:Ramp Offset Point]]
 		[[PROP:Ramp Size Point]]
 		[Space]
-		@%RampTextureDrawer%@ _RampSpot		("@%RampTextureLabel%@ (Spot)", 2D) = "gray" {}
+		@%RampTextureDrawer%@ _RampSpot ("@%RampTextureLabel%@ (Spot)", 2D) = "gray" {}
 		[[PROP:Ramp Offset Spot]]
 		[[PROP:Ramp Size Spot]]
 		[Space]
-		@%RampTextureDrawer%@ _RampDir		("@%RampTextureLabel%@ (Directional)", 2D) = "gray" {}
+		@%RampTextureDrawer%@ _RampDir ("@%RampTextureLabel%@ (Directional)", 2D) = "gray" {}
 		[[PROP:Ramp Offset Directional]]
 		[[PROP:Ramp Size Directional]]
 	  /// ELSE
-		@%RampTextureDrawer%@ _RampPoint			("@%RampTextureLabel%@ (Point)", 2D) = "gray" {}
-		@%RampTextureDrawer%@ _RampSpot				("@%RampTextureLabel%@ (Spot)", 2D) = "gray" {}
-		@%RampTextureDrawer%@ _RampDir				("@%RampTextureLabel%@ (Directional)", 2D) = "gray" {}
+		@%RampTextureDrawer%@ _RampPoint ("@%RampTextureLabel%@ (Point)", 2D) = "gray" {}
+		@%RampTextureDrawer%@ _RampSpot ("@%RampTextureLabel%@ (Spot)", 2D) = "gray" {}
+		@%RampTextureDrawer%@ _RampDir ("@%RampTextureLabel%@ (Directional)", 2D) = "gray" {}
 	  ///
 		[HideInInspector] __EndGroup ("Other Lights", Float) = 0
 	///
 /// ELIF RGB_RAMP
 	/// IF RAMP_SEPARATED
-		[Header(Main Directional Light)]
+		[TCP2HeaderHelp(Main Directional Light)]
 	///
 		[[PROP:Ramp Threshold RGB]]
 		[[PROP:Ramp Smoothing RGB]]
 	/// IF RAMP_MAIN_OTHER
-		[Header(Other Lights)]
+		[TCP2HeaderHelp(Other Lights)]
 		[[PROP:Ramp Threshold RGB Other Lights]]
 		[[PROP:Ramp Smoothing RGB Other Lights]]
 		[Space]
@@ -161,14 +205,14 @@ mult	lbl="Ramp Control"			kw=Global|,Main + Other Lights|RAMP_MAIN_OTHER,Main + 
 	///
 /// ELIF CRISP_RAMP || CRISP_RAMP_NO_AA
 	/// IF RAMP_SEPARATED
-		[Header(Main Directional Light)]
+		[TCP2HeaderHelp(Main Directional Light)]
 	///
 	/// IF CRISP_RAMP
 		[[PROP:Ramp Crisp Smoothing]]
 	///
 		[[PROP:Ramp Threshold]]
 	/// IF RAMP_MAIN_OTHER
-		[Header(Other Lights)]
+		[TCP2HeaderHelp(Other Lights)]
 		[[PROP:Ramp Threshold Other Lights]]
 		[Space]
 	/// ELIF RAMP_MAIN_LIGHTTYPE
@@ -179,14 +223,61 @@ mult	lbl="Ramp Control"			kw=Global|,Main + Other Lights|RAMP_MAIN_OTHER,Main + 
 		[HideInInspector] __EndGroup ("Other Lights", Float) = 0
 		[Space]
 	///
-/// ELIF !TEXTURE_RAMP && !NO_RAMP
+/// ELIF RAMP_BANDS || RAMP_BANDS_CRISP || RAMP_BANDS_CRISP_NO_AA
 	/// IF RAMP_SEPARATED
-		[Header(Main Directional Light)]
+		[TCP2HeaderHelp(Main Directional Light)]
+	///
+	/// IF RAMP_BANDS_CRISP
+		[[PROP:Bands Crisp Smoothing]]
+	///
+		[[PROP:Ramp Threshold]]
+		[[PROP:Ramp Smoothing]]
+		[[PROP:Bands Count]]
+	/// IF !RAMP_BANDS_CRISP && !RAMP_BANDS_CRISP_NO_AA
+		[[PROP:Bands Smoothing]]
+	///
+	/// IF RAMP_MAIN_OTHER
+		[TCP2HeaderHelp(Other Lights)]
+		[[PROP:Ramp Threshold Other Lights]]
+		[[PROP:Ramp Smoothing Other Lights]]
+		[[PROP:Bands Count Other Lights]]
+		/// IF !RAMP_BANDS_CRISP && !RAMP_BANDS_CRISP_NO_AA
+		[[PROP:Bands Smoothing Other Lights]]
+		///
+		[Space]
+	/// ELIF RAMP_MAIN_LIGHTTYPE
+		[HideInInspector] __BeginGroup_OtherLights ("Other Lights", Float) = 0
+		[[PROP:Ramp Threshold Point]]
+		[[PROP:Ramp Smoothing Point]]
+		[[PROP:Bands Count Point]]
+		/// IF !RAMP_BANDS_CRISP && !RAMP_BANDS_CRISP_NO_AA
+		[[PROP:Bands Smoothing Point]]
+		///
+		[Space]
+		[[PROP:Ramp Threshold Spot]]
+		[[PROP:Ramp Smoothing Spot]]
+		[[PROP:Bands Count Spot]]
+		/// IF !RAMP_BANDS_CRISP && !RAMP_BANDS_CRISP_NO_AA
+		[[PROP:Bands Smoothing Spot]]
+		///
+		[Space]
+		[[PROP:Ramp Threshold Directional]]
+		[[PROP:Ramp Smoothing Directional]]
+		[[PROP:Bands Count Directional]]
+		/// IF !RAMP_BANDS_CRISP && !RAMP_BANDS_CRISP_NO_AA
+		[[PROP:Bands Smoothing Directional]]
+		///
+		[HideInInspector] __EndGroup ("Other Lights", Float) = 0
+		[Space]
+	///
+/// ELIF !TEXTURE_RAMP && !NO_RAMP && !NO_RAMP_UNLIT
+	/// IF RAMP_SEPARATED
+		[TCP2HeaderHelp(Main Directional Light)]
 	///
 		[[PROP:Ramp Threshold]]
 		[[PROP:Ramp Smoothing]]
 	/// IF RAMP_MAIN_OTHER
-		[Header(Other Lights)]
+		[TCP2HeaderHelp(Other Lights)]
 		[[PROP:Ramp Threshold Other Lights]]
 		[[PROP:Ramp Smoothing Other Lights]]
 		[Space]
@@ -207,14 +298,17 @@ mult	lbl="Ramp Control"			kw=Global|,Main + Other Lights|RAMP_MAIN_OTHER,Main + 
 /// IF TEXTURE_RAMP && TEXTURE_RAMP_2D
 		[[PROP:2D Ramp Lerp]]
 ///
-/// IF !NO_RAMP
+/// IF WRAPPED_LIGHTING_CUSTOM
+		[[PROP:Light Wrap Factor]]
+///
+/// IF !NO_RAMP && !NO_RAMP_UNLIT
 		[TCP2Separator]
 ///
 #END
 
 //================================================================
 
-#VARIABLES
+#VARIABLES_OUTSIDE_CBUFFER
 /// IF TEXTURE_RAMP
 		sampler2D _Ramp;
 	/// IF RAMP_MAIN_OTHER
@@ -240,12 +334,31 @@ mult	lbl="Ramp Control"			kw=Global|,Main + Other Lights|RAMP_MAIN_OTHER,Main + 
 //================================================================
 
 #LIGHTING(float3 ramp, float ndl)
+/// IF (WRAPPED_LIGHTING_HALF || WRAPPED_LIGHTING_CUSTOM) && WRAPPED_LIGHTING_MAIN_LIGHT
+			#if defined(UNITY_PASS_FORWARDBASE)
+/// ELIF (WRAPPED_LIGHTING_HALF || WRAPPED_LIGHTING_CUSTOM) && WRAPPED_LIGHTING_OTHER_LIGHTS
+			#if !defined(UNITY_PASS_FORWARDBASE)
+///
+/// IF WRAPPED_LIGHTING_HALF
+
+			// Wrapped Lighting
+			ndl = ndl * 0.5 + 0.5;
+/// ELIF WRAPPED_LIGHTING_CUSTOM
+
+			// Wrapped Lighting
+			half lightWrap = [[VALUE:Light Wrap Factor]];
+			ndl = (ndl + lightWrap) / (1 + lightWrap);
+///
+/// IF (WRAPPED_LIGHTING_HALF || WRAPPED_LIGHTING_CUSTOM) && (WRAPPED_LIGHTING_MAIN_LIGHT || WRAPPED_LIGHTING_OTHER_LIGHTS)
+			#endif
+///
+
 /// IF TEXTURE_RAMP
 
 			//Define ramp threshold and smoothstep depending on context
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # TEXTURE RAMP
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 	/// IF RAMP_MAIN_OTHER
 			#if defined(UNITY_PASS_FORWARDBASE)
 				#define		RAMP_TEXTURE	_Ramp
@@ -292,15 +405,15 @@ mult	lbl="Ramp Control"			kw=Global|,Main + Other Lights|RAMP_MAIN_OTHER,Main + 
 					#define		RAMP_SMOOTH		[[VALUE:Ramp Size Directional]]
 				#endif
 			#endif
-		/// ELIF !NO_RAMP
+		/// ELIF !NO_RAMP && !NO_RAMP_UNLIT
 			#define		RAMP_THRESHOLD	[[VALUE:Ramp Offset]]
 			#define		RAMP_SMOOTH		[[VALUE:Ramp Size]]
 		///
 	///
 /// ELIF RGB_RAMP
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # RGB RAMP
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 	/// IF RAMP_MAIN_OTHER
 			#if defined(UNITY_PASS_FORWARDBASE)
 				#define		RAMP_THRESHOLD	(1 - [[VALUE:Ramp Threshold RGB]])
@@ -330,9 +443,9 @@ mult	lbl="Ramp Control"			kw=Global|,Main + Other Lights|RAMP_MAIN_OTHER,Main + 
 			#define		RAMP_SMOOTH		[[VALUE:Ramp Smoothing RGB]]
 	///
 /// ELIF CRISP_RAMP || CRISP_RAMP_NO_AA
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # CRISP RAMP
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 	/// IF RAMP_MAIN_OTHER
 			#if defined(UNITY_PASS_FORWARDBASE)
 				#define		RAMP_THRESHOLD	[[VALUE:Ramp Threshold]]
@@ -354,10 +467,70 @@ mult	lbl="Ramp Control"			kw=Global|,Main + Other Lights|RAMP_MAIN_OTHER,Main + 
 	/// ELSE
 			#define		RAMP_THRESHOLD	[[VALUE:Ramp Threshold]]
 	///
-/// ELIF !TEXTURE_RAMP && !NO_RAMP
-#-------------------------------------------------------------------------------
+/// ELIF RAMP_BANDS || RAMP_BANDS_CRISP || RAMP_BANDS_CRISP_NO_AA
+# -------------------------------------------------------------------------------
+# BANDS RAMP
+# -------------------------------------------------------------------------------
+	/// IF RAMP_MAIN_OTHER
+			#if defined(UNITY_PASS_FORWARDBASE)
+				#define		RAMP_THRESHOLD		[[VALUE:Ramp Threshold]]
+				#define		RAMP_SMOOTH			[[VALUE:Ramp Smoothing]]
+				#define		RAMP_BANDS			[[VALUE:Bands Count]]
+		/// IF !RAMP_BANDS_CRISP && !RAMP_BANDS_CRISP_NO_AA
+				#define		RAMP_BANDS_SMOOTH	[[VALUE:Bands Smoothing]]
+		///
+			#else
+				#define		RAMP_THRESHOLD		[[VALUE:Ramp Threshold Other Lights]]
+				#define		RAMP_SMOOTH			[[VALUE:Ramp Smoothing Other Lights]]
+				#define		RAMP_BANDS			[[VALUE:Bands Count Other Lights]]
+		/// IF !RAMP_BANDS_CRISP && !RAMP_BANDS_CRISP_NO_AA
+				#define		RAMP_BANDS_SMOOTH	[[VALUE:Bands Smoothing Other Lights]]
+		///
+			#endif
+	/// ELIF RAMP_MAIN_LIGHTTYPE
+			#if defined(UNITY_PASS_FORWARDBASE)
+					#define		RAMP_THRESHOLD		[[VALUE:Ramp Threshold]]
+					#define		RAMP_SMOOTH			[[VALUE:Ramp Smoothing]]
+					#define		RAMP_BANDS			[[VALUE:Bands Count]]
+		/// IF !RAMP_BANDS_CRISP && !RAMP_BANDS_CRISP_NO_AA
+					#define		RAMP_BANDS_SMOOTH	[[VALUE:Bands Smoothing]]
+		///
+			#else
+				#if POINT
+					#define		RAMP_THRESHOLD		[[VALUE:Ramp Threshold Point]]
+					#define		RAMP_SMOOTH			[[VALUE:Ramp Smoothing Point]]
+					#define		RAMP_BANDS			[[VALUE:Bands Count Point]]
+		/// IF !RAMP_BANDS_CRISP && !RAMP_BANDS_CRISP_NO_AA
+					#define		RAMP_BANDS_SMOOTH	[[VALUE:Bands Smoothing Point]]
+		///
+				#elif SPOT
+					#define		RAMP_THRESHOLD		[[VALUE:Ramp Threshold Spot]]
+					#define		RAMP_SMOOTH			[[VALUE:Ramp Smoothing Spot]]
+					#define		RAMP_BANDS			[[VALUE:Bands Count Spot]]
+		/// IF !RAMP_BANDS_CRISP && !RAMP_BANDS_CRISP_NO_AA
+					#define		RAMP_BANDS_SMOOTH	[[VALUE:Bands Smoothing Spot]]
+		///
+				#else
+					#define		RAMP_THRESHOLD		[[VALUE:Ramp Threshold Directional]]
+					#define		RAMP_SMOOTH			[[VALUE:Ramp Smoothing Directional]]
+					#define		RAMP_BANDS			[[VALUE:Bands Count Directional]]
+		/// IF !RAMP_BANDS_CRISP && !RAMP_BANDS_CRISP_NO_AA
+					#define		RAMP_BANDS_SMOOTH	[[VALUE:Bands Smoothing Directional]]
+		///
+				#endif
+			#endif
+	/// ELSE
+			#define		RAMP_THRESHOLD		[[VALUE:Ramp Threshold]]
+			#define		RAMP_SMOOTH			[[VALUE:Ramp Smoothing]]
+			#define		RAMP_BANDS			[[VALUE:Bands Count]]
+		/// IF !RAMP_BANDS_CRISP && !RAMP_BANDS_CRISP_NO_AA
+			#define		RAMP_BANDS_SMOOTH	[[VALUE:Bands Smoothing]]
+		///
+	///
+/// ELIF !TEXTURE_RAMP && !NO_RAMP && !NO_RAMP_UNLIT
+# -------------------------------------------------------------------------------
 # SLIDER RAMP
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 	/// IF RAMP_MAIN_OTHER
 			#if defined(UNITY_PASS_FORWARDBASE)
 				#define		RAMP_THRESHOLD	[[VALUE:Ramp Threshold]]
@@ -382,7 +555,7 @@ mult	lbl="Ramp Control"			kw=Global|,Main + Other Lights|RAMP_MAIN_OTHER,Main + 
 					#define		RAMP_SMOOTH		[[VALUE:Ramp Smoothing Directional]]
 				#endif
 			#endif
-	/// ELIF !NO_RAMP
+	/// ELIF !NO_RAMP && !NO_RAMP_UNLIT
 			#define		RAMP_THRESHOLD	[[VALUE:Ramp Threshold]]
 			#define		RAMP_SMOOTH		[[VALUE:Ramp Smoothing]]
 	///
@@ -404,13 +577,27 @@ mult	lbl="Ramp Control"			kw=Global|,Main + Other Lights|RAMP_MAIN_OTHER,Main + 
 			ramp = tex2D(RAMP_TEXTURE, rampUv).rgb;
 	///
 /// ELIF CRISP_RAMP
-			float gradientLength = fwidth(ndl);
-			float thresholdWidth = [[VALUE:Ramp Crisp Smoothing]] * gradientLength;
+			half gradientLength = fwidth(ndl);
+			half thresholdWidth = [[VALUE:Ramp Crisp Smoothing]] * gradientLength;
 			ramp = smoothstep(RAMP_THRESHOLD - thresholdWidth, RAMP_THRESHOLD + thresholdWidth, ndl);
 /// ELIF CRISP_RAMP_NO_AA
 			ramp = step(RAMP_THRESHOLD, ndl);
+/// ELIF RAMP_BANDS || RAMP_BANDS_CRISP
+			half bandsNdl = smoothstep(RAMP_THRESHOLD - RAMP_SMOOTH*0.5, RAMP_THRESHOLD + RAMP_SMOOTH*0.5, ndl);
+		/// IF RAMP_BANDS_CRISP
+			half gradientLength = fwidth(ndl);
+			half bandsSmooth = gradientLength * ([[VALUE:Bands Crisp Smoothing]] + RAMP_BANDS);
+		/// ELSE
+			half bandsSmooth = RAMP_BANDS_SMOOTH * 0.5;
+		///
+			ramp = saturate((smoothstep(0.5 - bandsSmooth, 0.5 + bandsSmooth, frac(bandsNdl * RAMP_BANDS)) + floor(bandsNdl * RAMP_BANDS)) / RAMP_BANDS).xxx;
+/// ELIF RAMP_BANDS_CRISP_NO_AA
+			ramp = smoothstep(RAMP_THRESHOLD - RAMP_SMOOTH*0.5, RAMP_THRESHOLD + RAMP_SMOOTH*0.5, ndl);
+			ramp = (round(ramp * RAMP_BANDS) / RAMP_BANDS) * step(ndl, 1);
 /// ELIF NO_RAMP
 			ramp = ndl.xxx;
+/// ELIF NO_RAMP_UNLIT
+			ramp = float3(1, 1, 1);
 /// ELSE
 			ramp = smoothstep(RAMP_THRESHOLD - RAMP_SMOOTH*0.5, RAMP_THRESHOLD + RAMP_SMOOTH*0.5, ndl);
 ///

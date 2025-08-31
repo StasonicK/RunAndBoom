@@ -1,5 +1,5 @@
 ﻿// Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2023 Jean Moreno
 
 using UnityEngine;
 
@@ -13,6 +13,7 @@ namespace ToonyColorsPro
 			// PUBLIC INSPECTOR PROPERTIES
 
 			public Transform Pivot;
+			public Vector3 pivotOffset;
 			[Header("Orbit")]
 			public float OrbitStrg = 3f;
 			public float OrbitClamp = 50f;
@@ -27,6 +28,7 @@ namespace ToonyColorsPro
 			[Header("Misc")]
 			public float Decceleration = 8f;
 			public RectTransform ignoreMouseRect;
+			Rect ignoreMouseActualRect;
 
 			//--------------------------------------------------------------------------------------------------
 			// PRIVATE PROPERTIES
@@ -60,6 +62,13 @@ namespace ToonyColorsPro
 			void OnEnable()
 			{
 				mouseDelta = Input.mousePosition;
+
+				Vector2 size = Vector2.Scale(ignoreMouseRect.rect.size, ignoreMouseRect.lossyScale);
+				Rect rect = new Rect(ignoreMouseRect.position.x, ignoreMouseRect.position.y, size.x, size.y);
+				rect.x -= (ignoreMouseRect.pivot.x * size.x);
+				rect.y -= ((-ignoreMouseRect.pivot.y) * size.y);
+
+				ignoreMouseActualRect = rect;
 			}
 
 			void Update()
@@ -68,7 +77,7 @@ namespace ToonyColorsPro
 				mouseDelta.x = Mathf.Clamp(mouseDelta.x, -150f, 150f);
 				mouseDelta.y = Mathf.Clamp(mouseDelta.y, -150f, 150f);
 
-				var ignoreMouse = ignoreMouseRect.rect.Contains(Input.mousePosition);
+				var ignoreMouse = ignoreMouseRect != null ? ignoreMouseActualRect.Contains(Input.mousePosition) : false;
 
 				if (Input.GetMouseButtonDown(0))
 					leftMouseHeld = !ignoreMouse;
@@ -113,19 +122,22 @@ namespace ToonyColorsPro
 				if (angle.x < 180 && angle.x >= XMax && orbitAcceleration.y > 0) orbitAcceleration.y = 0;
 				if (angle.x > 180 && angle.x <= XMin && orbitAcceleration.y < 0) orbitAcceleration.y = 0;
 
+				Vector3 pivotPlusOffset = Pivot.position + pivotOffset;
+
 				//Rotate
-				transform.RotateAround(Pivot.position, transform.right, orbitAcceleration.y * Time.deltaTime);
-				transform.RotateAround(Pivot.position, Vector3.up, orbitAcceleration.x * Time.deltaTime);
+				transform.RotateAround(pivotPlusOffset, transform.right, orbitAcceleration.y * Time.deltaTime);
+				transform.RotateAround(pivotPlusOffset, Vector3.up, orbitAcceleration.x * Time.deltaTime);
 
 				//Pan
-				Pivot.Translate(panAcceleration * Time.deltaTime, transform);
+				pivotOffset += transform.TransformDirection(panAcceleration) * Time.deltaTime;
+				//Pivot.Translate(panAcceleration * Time.deltaTime, transform);
 				transform.Translate(panAcceleration * Time.deltaTime, transform);
 
 				//Zoom
 				var scrollWheel = Input.GetAxis("Mouse ScrollWheel");
 				zoomAcceleration += scrollWheel * ZoomStrg;
 				zoomAcceleration = Mathf.Clamp(zoomAcceleration, -ZoomClamp, ZoomClamp);
-				zoomDistance = Vector3.Distance(transform.position, Pivot.position);
+				zoomDistance = Vector3.Distance(transform.position, pivotPlusOffset);
 				if ((zoomDistance >= ZoomDistMin && zoomAcceleration > 0) || (zoomDistance <= ZoomDistMax && zoomAcceleration < 0))
 				{
 					transform.Translate(Vector3.forward * zoomAcceleration * Time.deltaTime, Space.Self);
@@ -145,12 +157,14 @@ namespace ToonyColorsPro
 				moveAcceleration = Vector3.zero;
 				orbitAcceleration = Vector3.zero;
 				panAcceleration = Vector3.zero;
+				pivotOffset = Vector3.zero;
 				zoomAcceleration = 0f;
 
 				transform.position = mResetCamPos;
 				transform.eulerAngles = mResetCamRot;
 				Pivot.position = mResetPivotPos;
 				Pivot.eulerAngles = mResetPivotRot;
+
 			}
 		}
 	}

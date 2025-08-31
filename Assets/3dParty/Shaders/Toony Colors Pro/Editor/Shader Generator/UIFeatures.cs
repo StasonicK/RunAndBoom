@@ -1,5 +1,5 @@
 // Toony Colors Pro 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2023 Jean Moreno
 
 using System;
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ namespace ToonyColorsPro
 
 		internal class UIFeature
 		{
-			protected const float LABEL_WIDTH = 210f;
+			const float LABEL_WIDTH = 240f;
 			static Rect LastPositionInline;
 			static float LastLowerBoundY;
 			static float LastIndentY;
@@ -40,6 +40,7 @@ namespace ToonyColorsPro
 			protected string[] requiresOr;  //features required for this feature to be enabled (OR)
 			protected string[] excludes;   //features required to be OFF for this feature to be enabled
 			protected string[] excludesAll;   //features required to be OFF for this feature to be enabled
+			protected string[] visibleIf;   //features required to be ON for this feature to be visible
 			protected bool showHelp = false;
 			protected int indentLevel;
 			protected string helpTopic;
@@ -98,6 +99,7 @@ namespace ToonyColorsPro
 						case "needsOr": requiresOr = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries); break;
 						case "excl": excludes = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries); break;
 						case "exclAll": excludesAll = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries); break;
+						case "visibleIf": visibleIf = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries); break;
 						case "inline": inline = bool.Parse(value); break;
 						case "half": halfWidth = bool.Parse(value); break;
 					}
@@ -139,7 +141,14 @@ namespace ToonyColorsPro
 				// else, show only if parent is enabled & highlighted
 				else if (indentLevel > 0 && parent != null)
 				{
-					visible = parent.enabled && parent.highlighted;
+					if (visibleIf != null && visibleIf.Length > 0)
+					{
+						visible = config.HasFeaturesAll(visibleIf);
+					}
+					else
+					{
+						visible = parent.enabled && parent.highlighted;
+					}
 				}
 
 				if(inline)
@@ -153,7 +162,7 @@ namespace ToonyColorsPro
 				{
 					if(visible || ignoreVisibility)
 					{
-						DrawGUI(new Rect(0, 0, EditorGUIUtility.currentViewWidth, 0), config);
+						DrawGUI(new Rect(0, 0, EditorGUIUtility.currentViewWidth, 0), config, false);
 						return;
 					}
 				}
@@ -234,7 +243,12 @@ namespace ToonyColorsPro
 					TCP2_GUI.SubHeader(labelPosition, guiContent, this.highlighted && this.enabled);
 
 					//Actual property
-					DrawGUI(position, config);
+					bool labelClicked = Event.current.type == EventType.MouseUp && Event.current.button == 0 && labelPosition.Contains(Event.current.mousePosition);
+					if (labelClicked)
+					{
+						Event.current.Use();
+					}
+					DrawGUI(position, config, labelClicked);
 
 					LastVisible = visible;
 				}
@@ -243,7 +257,7 @@ namespace ToonyColorsPro
 			}
 
 			//Internal DrawGUI: actually draws the feature
-			protected virtual void DrawGUI(Rect position, Config config)
+			protected virtual void DrawGUI(Rect position, Config config, bool labelClicked)
 			{
 				GUI.Label(position, "Unknown feature type for: " + label);
 			}
@@ -341,11 +355,15 @@ namespace ToonyColorsPro
 						case "flag": feature = new UIFeature_Flag(kvpList, false); break;
 						case "nflag": feature = new UIFeature_Flag(kvpList, true); break;
 						case "float": feature = new UIFeature_Float(kvpList); break;
+						case "int": feature = new UIFeature_Int(kvpList); break;
 						case "subh": feature = new UIFeature_SubHeader(kvpList); break;
 						case "header": feature = new UIFeature_Header(kvpList); break;
 						case "warning": feature = new UIFeature_Warning(kvpList); break;
-						case "sngl": feature = new UIFeature_Single(kvpList); break;
+						case "sngl": feature = new UIFeature_Single(kvpList, false); break;
+						case "nsngl": feature = new UIFeature_Single(kvpList, true); break;
+						case "gpu_inst_opt": feature = new UIFeature_Single(kvpList, false); break;
 						case "mult": feature = new UIFeature_Multiple(kvpList); break;
+						case "mult_flags": feature = new UIFeature_MultFlags(kvpList); break;
 						case "keyword": feature = new UIFeature_Keyword(kvpList); break;
 						case "keyword_str": feature = new UIFeature_KeywordString(kvpList); break;
 						case "dd_start": feature = new UIFeature_DropDownStart(kvpList); break;
@@ -386,10 +404,14 @@ namespace ToonyColorsPro
 
 		internal class UIFeature_Single : UIFeature
 		{
+			readonly bool negative;
 			string keyword;
 			string[] toggles;    //features forced to be toggled when this feature is enabled
 
-			internal UIFeature_Single(List<KeyValuePair<string, string>> list) : base(list) { }
+			internal UIFeature_Single(List<KeyValuePair<string, string>> list, bool negative) : base(list)
+			{
+				this.negative = negative;
+			}
 
 			protected override void ProcessProperty(string key, string value)
 			{
@@ -401,19 +423,37 @@ namespace ToonyColorsPro
 					base.ProcessProperty(key, value);
 			}
 
-			protected override void DrawGUI(Rect position, Config config)
+			protected override void DrawGUI(Rect position, Config config, bool labelClicked)
 			{
 				var feature = Highlighted(config);
 				EditorGUI.BeginChangeCheck();
-				feature = EditorGUI.Toggle(position, feature);
+				if (negative)
+				{
+					bool check = EditorGUI.Toggle(position, !feature);
+					if (GUI.changed)
+					{
+						feature = !check;
+					}
+				}
+				else
+				{
+					feature = EditorGUI.Toggle(position, feature);
+				}
+				if (labelClicked)
+				{
+					feature = !feature;
+					GUI.changed = true;
+				}
 				if(EditorGUI.EndChangeCheck())
 				{
 					config.ToggleFeature(keyword, feature);
 
 					if(toggles != null)
 					{
-						foreach(var t in toggles)
+						foreach (var t in toggles)
+						{
 							config.ToggleFeature(t, feature);
+						}
 					}
 				}
 			}
@@ -462,7 +502,7 @@ namespace ToonyColorsPro
 					base.ProcessProperty(key, value);
 			}
 
-			protected override void DrawGUI(Rect position, Config config)
+			protected override void DrawGUI(Rect position, Config config, bool labelClicked)
 			{
 				var feature = GetSelectedFeature(config);
 				if(feature < 0) feature = 0;
@@ -521,6 +561,156 @@ namespace ToonyColorsPro
 		}
 
 		//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+		// MULT FLAGS: enum flags-like interface to select multiple flags
+
+		internal class UIFeature_MultFlags : UIFeature
+		{
+			string keyword;
+			string[] labels;
+			string[] values;
+			string cachedKeywordValue;
+			List<string> flagsList = new List<string>();
+			int cachedFlagListCount;
+
+			string popupLabel = "None";
+
+			Rect flagsMenuPosition;
+			bool reopenFlagsMenu = false;
+
+			internal UIFeature_MultFlags(List<KeyValuePair<string, string>> list) : base(list) { }
+
+			protected override void ProcessProperty(string key, string value)
+			{
+				if (key == "kw")
+				{
+					keyword = value;
+				}
+				else if (key == "default")
+				{
+					flagsList.Add(value);
+				}
+				else if(key == "values")
+				{
+					Debug.Log("process values: " + value);
+					var data = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+					labels = new string[data.Length];
+					this.values = new string[data.Length];
+
+					for(var i = 0; i < data.Length; i++)
+					{
+						var lbl_feat = data[i].Split('|');
+						if(lbl_feat.Length != 2)
+						{
+							Debug.LogWarning("[UIFeature_MultFlags] Invalid data:" + data[i]);
+							continue;
+						}
+
+						labels[i] = lbl_feat[0];
+						this.values[i] = lbl_feat[1];
+					}
+				}
+				else
+					base.ProcessProperty(key, value);
+			}
+
+			protected override void DrawGUI(Rect position, Config config, bool labelClicked)
+			{
+				// update from flag lists
+				if (cachedFlagListCount != flagsList.Count)
+				{
+					cachedFlagListCount = flagsList.Count;
+					string newKeywordValue = string.Join(" ", flagsList.ToArray());
+					config.SetKeyword(keyword, newKeywordValue);
+					cachedKeywordValue = newKeywordValue;
+					UpdateButtonLabel();
+				}
+
+				// update from config
+				string configKeywordValue = config.GetKeyword(keyword);
+				if (cachedKeywordValue != configKeywordValue)
+				{
+					cachedKeywordValue = configKeywordValue;
+					flagsList.Clear();
+					if (configKeywordValue != null)
+					{
+						var data = configKeywordValue.Split(' ');
+						flagsList.AddRange(data);
+					}
+				}
+
+				if (GUI.Button(position, TCP2_GUI.TempContent(popupLabel), EditorStyles.popup) || reopenFlagsMenu)
+				{
+					GetFlagsMenu(config, reopenFlagsMenu);
+					reopenFlagsMenu = false;
+				}
+			}
+
+			void GetFlagsMenu(Config config, bool reusePosition = false)
+			{
+				var flagsMenu = new GenericMenu();
+				for (int i = 0; i < labels.Length; i++)
+				{
+					flagsMenu.AddItem(new GUIContent(labels[i]), flagsList.Contains(values[i]), OnSelectFlag, new object[] { config, values[i] });
+				}
+
+				if (!reusePosition)
+				{
+					flagsMenuPosition = new Rect(Event.current.mousePosition, Vector2.zero);
+				}
+				flagsMenu.DropDown(flagsMenuPosition);
+			}
+
+			void UpdateButtonLabel()
+			{
+				if (flagsList.Count == 0)
+				{
+					popupLabel = "None";
+				}
+				else if (flagsList.Count == 1)
+				{
+					int index = Array.IndexOf(values, flagsList[0]);
+					popupLabel = labels[index];
+				}
+				else
+				{
+					popupLabel = "Multiple values...";
+				}
+			}
+
+			void OnSelectFlag(object data)
+			{
+				int previousCount = flagsList.Count;
+
+				Config config = (Config)((object[])data)[0];
+				string value = (string)((object[])data)[1];
+
+				if (flagsList.Contains(value))
+				{
+					flagsList.Remove(value);
+				}
+				else
+				{
+					flagsList.Add(value);
+				}
+
+				UpdateButtonLabel();
+				config.SetKeyword(keyword, string.Join(" ", flagsList.ToArray()));
+
+				reopenFlagsMenu = true;
+				EditorApplication.delayCall += () =>
+				{
+					// will force the menu to reopen next frame
+					ShaderGenerator2.RepaintWindow();
+				};
+			}
+
+			internal override bool Highlighted(Config config)
+			{
+				return flagsList.Count > 0;
+			}
+		}
+
+		//----------------------------------------------------------------------------------------------------------------------------------------------------------------
 		// FEATURES COMBOBOX for FIXED FUNCTION STATES
 		// Embeds some UI from the corresponding Shader Property to easily change the states in the Features tab
 
@@ -569,7 +759,7 @@ namespace ToonyColorsPro
 				}
 			}
 
-			protected override void DrawGUI(Rect position, Config config)
+			protected override void DrawGUI(Rect position, Config config, bool labelClicked)
 			{
 				// Fetch embedded Shader Property
 				bool highlighted = Highlighted(config);
@@ -708,7 +898,7 @@ namespace ToonyColorsPro
 				}
 			}
 
-			protected override void DrawGUI(Rect position, Config config)
+			protected override void DrawGUI(Rect position, Config config, bool labelClicked)
 			{
 				var selectedValue = GetSelectedValue(config);
 				if(selectedValue < 0)
@@ -780,7 +970,7 @@ namespace ToonyColorsPro
 				}
 			}
 
-			protected override void DrawGUI(Rect position, Config config)
+			protected override void DrawGUI(Rect position, Config config, bool labelClicked)
 			{
 				EditorGUI.BeginChangeCheck();
 				string value = config.GetKeyword(keyword);
@@ -806,12 +996,13 @@ namespace ToonyColorsPro
 		}
 
 		//----------------------------------------------------------------------------------------------------------------------------------------------------------------
-		// SURFACE SHADER FLAG
+		// SURFACE SHADER / GENERIC FLAG
 
 		internal class UIFeature_Flag : UIFeature
 		{
-			bool negative;
+			readonly bool negative;
 			string keyword;
+			string block = "pragma_surface_shader";
 			string[] toggles;    //features forced to be toggled when this flag is enabled
 
 			internal UIFeature_Flag(List<KeyValuePair<string, string>> list, bool negative) : base(list)
@@ -824,17 +1015,24 @@ namespace ToonyColorsPro
 			{
 				if(key == "kw")
 					keyword = value;
+				else if(key == "block")
+					block = value.Trim('"');
 				else if(key == "toggles")
 					toggles = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 				else
 					base.ProcessProperty(key, value);
 			}
 
-			protected override void DrawGUI(Rect position, Config config)
+			protected override void DrawGUI(Rect position, Config config, bool labelClicked)
 			{
 				var flag = Highlighted(config);
 				EditorGUI.BeginChangeCheck();
 				flag = EditorGUI.Toggle(position, flag);
+				if (labelClicked)
+				{
+					flag = !flag;
+					GUI.changed = true;
+				}
 
 				if(EditorGUI.EndChangeCheck())
 				{
@@ -844,13 +1042,13 @@ namespace ToonyColorsPro
 
 			internal override bool Highlighted(Config config)
 			{
-				bool hasFlag = config.HasFlag(keyword);
+				bool hasFlag = config.HasFlag(block, keyword);
 				return negative ? !hasFlag : hasFlag;
 			}
 
 			void UpdateConfig(Config config, bool flag)
 			{
-				config.ToggleFlag(keyword, negative ? !flag : flag);
+				config.ToggleFlag(block, keyword, negative ? !flag : flag);
 
 				if (toggles != null)
 				{
@@ -888,7 +1086,7 @@ namespace ToonyColorsPro
 					base.ProcessProperty(key, value);
 			}
 
-			protected override void DrawGUI(Rect position, Config config)
+			protected override void DrawGUI(Rect position, Config config, bool labelClicked)
 			{
 				var currentValueStr = config.GetKeyword(keyword);
 				var currentValue = defaultValue;
@@ -897,8 +1095,10 @@ namespace ToonyColorsPro
 					currentValue = defaultValue;
 
 					//Only enforce keyword if feature is enabled
-					if(Enabled(config))
+					if (Enabled(config))
+					{
 						config.SetKeyword(keyword, currentValue.ToString("0.0###############", CultureInfo.InvariantCulture));
+					}
 				}
 
 				EditorGUI.BeginChangeCheck();
@@ -915,6 +1115,60 @@ namespace ToonyColorsPro
 		}
 
 		//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+		// FIXED INTEGER
+
+		internal class UIFeature_Int : UIFeature
+		{
+			string keyword;
+			int defaultValue;
+			int min = int.MinValue;
+			int max = int.MaxValue;
+
+			internal UIFeature_Int(List<KeyValuePair<string, string>> list) : base(list) { }
+
+			protected override void ProcessProperty(string key, string value)
+			{
+				if(key == "kw")
+					keyword = value;
+				else if(key == "default")
+					defaultValue = int.Parse(value, CultureInfo.InvariantCulture);
+				else if(key == "min")
+					min = int.Parse(value, CultureInfo.InvariantCulture);
+				else if(key == "max")
+					max = int.Parse(value, CultureInfo.InvariantCulture);
+				else
+					base.ProcessProperty(key, value);
+			}
+
+			protected override void DrawGUI(Rect position, Config config, bool labelClicked)
+			{
+				var currentValueStr = config.GetKeyword(keyword);
+				var currentValue = defaultValue;
+				if(!int.TryParse(currentValueStr, NumberStyles.Integer, CultureInfo.InvariantCulture, out currentValue))
+				{
+					currentValue = defaultValue;
+
+					//Only enforce keyword if feature is enabled
+					if (Enabled(config))
+					{
+						config.SetKeyword(keyword, currentValue.ToString(CultureInfo.InvariantCulture));
+					}
+				}
+
+				EditorGUI.BeginChangeCheck();
+				var newValue = currentValue;
+				newValue = Mathf.Clamp(EditorGUI.IntField(position, currentValue), min, max);
+				if(EditorGUI.EndChangeCheck())
+				{
+					if(newValue != currentValue)
+					{
+						config.SetKeyword(keyword, newValue.ToString(CultureInfo.InvariantCulture));
+					}
+				}
+			}
+		}
+
+		//----------------------------------------------------------------------------------------------------------------------------------------------------------------
 		// DECORATORS
 
 		internal class UIFeature_Separator : UIFeature
@@ -924,7 +1178,7 @@ namespace ToonyColorsPro
 				customGUI = true;
 			}
 
-			protected override void DrawGUI(Rect position, Config config)
+			protected override void DrawGUI(Rect position, Config config, bool labelClicked)
 			{
 				TCP2_GUI.SeparatorSimple();
 			}
@@ -947,7 +1201,7 @@ namespace ToonyColorsPro
 					base.ProcessProperty(key, value);
 			}
 
-			protected override void DrawGUI(Rect position, Config config)
+			protected override void DrawGUI(Rect position, Config config, bool labelClicked)
 			{
 				if(Enabled(config))
 					GUILayout.Space(space);
@@ -961,7 +1215,7 @@ namespace ToonyColorsPro
 				customGUI = true;
 			}
 
-			protected override void DrawGUI(Rect position, Config config)
+			protected override void DrawGUI(Rect position, Config config, bool labelClicked)
 			{
 				if (this.helpTopic != null)
 				{
@@ -986,7 +1240,7 @@ namespace ToonyColorsPro
 				customGUI = true;
 			}
 
-			protected override void DrawGUI(Rect position, Config config)
+			protected override void DrawGUI(Rect position, Config config, bool labelClicked)
 			{
 				TCP2_GUI.Header(label);
 			}
@@ -1009,7 +1263,7 @@ namespace ToonyColorsPro
 					base.ProcessProperty(key, value);
 			}
 
-			protected override void DrawGUI(Rect position, Config config)
+			protected override void DrawGUI(Rect position, Config config, bool labelClicked)
 			{
 				if(Enabled(config))
 				{
@@ -1051,7 +1305,7 @@ namespace ToonyColorsPro
 				AllDropDowns.Add(this);
 			}
 
-			protected override void DrawGUI(Rect position, Config config)
+			protected override void DrawGUI(Rect position, Config config, bool labelClicked)
 			{
 				//Check if any feature within that Foldout are enabled, and show different color if so
 				var hasToggledFeatures = false;
@@ -1115,7 +1369,7 @@ namespace ToonyColorsPro
 				ignoreVisibility = true;
 			}
 
-			protected override void DrawGUI(Rect position, Config config)
+			protected override void DrawGUI(Rect position, Config config, bool labelClicked)
 			{
 				FoldoutStack.Pop();
 

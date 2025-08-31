@@ -1,32 +1,14 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2023 Jean Moreno
 
 // Shader Generator Module: Hash functions
 // Should be the same on all GPUs, and doesn't rely on trigonometry functions
 // (c) 2014 Dave Hoskins, CC BY-SA 4.0 License
 // https://www.shadertoy.com/view/4djSRW
 
-#FEATURES
-#END
-
 //================================================================
 
-#PROPERTIES_NEW
-#END
-
-//================================================================
-
-#KEYWORDS
-#END
-
-//================================================================
-
-#PROPERTIES_BLOCK
-#END
-
-//================================================================
-
-#VARIABLES
+#FUNCTIONS
 /// IF HASH_22
 
 	// Hash without sin and uniform across platforms
@@ -42,16 +24,3 @@
 #END
 
 //================================================================
-
-#INPUT
-#END
-
-//================================================================
-
-#VERTEX
-#END
-
-//================================================================
-
-#FRAGMENT
-#END

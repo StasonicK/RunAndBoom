@@ -1,5 +1,5 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2023 Jean Moreno
 
 using System.Collections.Generic;
 using System.IO;
@@ -20,7 +20,7 @@ namespace ToonyColorsPro
 		const float WINDOW_HEIGHT = 200f;
 		//const float WINDOW_HEIGHT = 256f;
 
-		[MenuItem(Menu.MENU_PATH + "Ramp Generator", false, 500)]
+		[MenuItem(Menu.MENU_PATH + "Ramp Generator", false, 600)]
 		static void OpenTool()
 		{
 			GetWindowTCP2();
@@ -170,9 +170,13 @@ namespace ToonyColorsPro
 
 		void OnGUI()
 		{
+			TCP2_GUI.UseNewHelpIcon = true;
+
 			EditorGUILayout.BeginHorizontal();
-			TCP2_GUI.HeaderBig(editMode ? "TCP 2 - RAMP EDITOR" : "TCP 2 - RAMP GENERATOR");
-			TCP2_GUI.HelpButton("Ramp Generator");
+			{
+				TCP2_GUI.HeaderBig(editMode ? "TCP 2 - RAMP EDITOR" : "TCP 2 - RAMP GENERATOR");
+				TCP2_GUI.HelpButton("Ramp Generator");
+			}
 			EditorGUILayout.EndHorizontal();
 			TCP2_GUI.Separator();
 
@@ -354,6 +358,8 @@ namespace ToonyColorsPro
 				}
 				EditorGUILayout.EndHorizontal();
 			}
+
+			TCP2_GUI.UseNewHelpIcon = false;
 		}
 
 		//--------------------------------------------------------------------------------------------------

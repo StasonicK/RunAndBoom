@@ -1,16 +1,17 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2023 Jean Moreno
 
 // Shader Generator Module: Textured Threshold
 
 #FEATURES
-sngl	lbl="Shadow Line"		kw=SHADOW_LINE			help="featuresreference/lighting/shadowline"	tt="Generates a line at the intersection of highlighted and shadowed parts, to simulate a comic-book effect for example."
-mult	lbl="Screen space"		kw=Disabled|,Crisp Line (Anti-aliased)|SHADOW_LINE_CRISP_AA,Crisp Line (No anti-aliasing)|SHADOW_LINE_CRISP_NO_AA	indent	tt="The line will be generated in screen-space and have a consistent width."
+sngl	lbl="Shadow Line"			kw=SHADOW_LINE				help="featuresreference/stylization/shadowline"		tt="Generates a line at the intersection of highlighted and shadowed parts, to simulate a comic-book effect for example."
+#TODO mult	lbl="Lights"				kw=Main Directional Light|,All Lights|SHADOW_LINE_ALL_LIGHTS				tt="Which lights should shadow line be applied to"
+sngl	lbl="Screen Space"			kw=SHADOW_LINE_CRISP_AA		indent												tt="The line will be generated in screen-space using derivatives and have a consistent width."
 
-sngl	lbl="Stylized Threshold"	kw=TEXTURED_THRESHOLD											tt="Applies a textured offset to the lighting terminator, to give a stylistic look to the shading"
+sngl	lbl="Stylized Threshold"	kw=TEXTURED_THRESHOLD	help="featuresreference/stylization/stylizedthreshold"	tt="Applies a textured offset to the lighting terminator, to give a stylistic look to the shading"
 sngl	lbl="Make Optional"			kw=TT_SHADER_FEATURE	needs=TEXTURED_THRESHOLD	indent		tt="Will make textured threshold optional in the material inspector, using a shader keyword"
-sngl	lbl="Diffuse Tint"			kw=DIFFUSE_TINT													tt="Adds a diffuse tint color, to add some subtle coloring to the diffuse lighting"
-sngl	lbl="Mask"					kw=DIFFUSE_TINT_MASK	indent	needs=DIFFUSE_TINT				tt="Use a mask to selectively apply the diffuse tinting"
+sngl	lbl="Diffuse Tint"			kw=DIFFUSE_TINT			help="featuresreference/stylization/diffusetint"		tt="Adds a diffuse tint color, to add some subtle coloring to the diffuse lighting"
+sngl	lbl="Mask"					kw=DIFFUSE_TINT_MASK	indent	needs=DIFFUSE_TINT								tt="Use a mask to selectively apply the diffuse tinting"
 #END
 
 //================================================================
@@ -19,9 +20,8 @@ sngl	lbl="Mask"					kw=DIFFUSE_TINT_MASK	indent	needs=DIFFUSE_TINT				tt="Use a 
 /// IF SHADOW_LINE
 		header		Shadow Line
 		float		Shadow Line Threshold			lighting, imp(range, label = "Threshold", default = 0.5, min = 0, max = 1)
-	/// IF !SHADOW_LINE_CRISP_NO_AA
 		float		Shadow Line Smoothing			lighting, imp(range, label = "Smoothing", default = 0.015, min = 0.001, max = 0.1)
-	///
+		float		Shadow Line Strength			lighting, imp(float, label = "Strength", default = 1.0)
 		color_rgba	Shadow Line Color				lighting, imp(color, label = "Color (RGB) Opacity (A)", default = (0,0,0,1))
 ///
 
@@ -49,7 +49,7 @@ sngl	lbl="Mask"					kw=DIFFUSE_TINT_MASK	indent	needs=DIFFUSE_TINT				tt="Use a 
 
 #SHADER_FEATURES_BLOCK
 /// IF TEXTURED_THRESHOLD && TT_SHADER_FEATURE
-	#pragma shader_feature TCP2_TEXTURED_THRESHOLD
+	#pragma shader_feature_local_fragment TCP2_TEXTURED_THRESHOLD
 ///
 #END
 
@@ -62,6 +62,7 @@ sngl	lbl="Mask"					kw=DIFFUSE_TINT_MASK	indent	needs=DIFFUSE_TINT				tt="Use a 
 	#start_not_empty_block
 		[[PROP:Shadow Line Threshold]]
 		[[PROP:Shadow Line Smoothing]]
+		[[PROP:Shadow Line Strength]]
 		[[PROP:Shadow Line Color]]
 	#end_not_empty_block
 		[HideInInspector] __EndGroup ("Shadow Line", Float) = 0
@@ -97,7 +98,7 @@ sngl	lbl="Mask"					kw=DIFFUSE_TINT_MASK	indent	needs=DIFFUSE_TINT				tt="Use a 
 
 //================================================================
 
-#VARIABLES
+#FUNCTIONS
 /// IF SHADOW_LINE
 
 	// Cubic pulse function
@@ -159,18 +160,15 @@ sngl	lbl="Mask"					kw=DIFFUSE_TINT_MASK	indent	needs=DIFFUSE_TINT				tt="Use a 
 
 			//Shadow Line
 			float ndlAtten = ndl * atten;
-	/// IF SHADOW_LINE_CRISP_NO_AA
-			float shadowLine = step(ndlAtten, shadowLineThreshold);
-	/// ELSE
+			float shadowLineThreshold = [[VALUE:Shadow Line Threshold]];
+			float shadowLineStrength = [[VALUE:Shadow Line Strength]];
 		/// IF SHADOW_LINE_CRISP_AA
 			float shadowLineFw = fwidth(ndlAtten);
 			float shadowLineSmoothing = [[VALUE:Shadow Line Smoothing]] * shadowLineFw * 10;
 		/// ELSE
 			float shadowLineSmoothing = [[VALUE:Shadow Line Smoothing]];
 		///
-			float shadowLineThreshold = [[VALUE:Shadow Line Threshold]];
-			float shadowLine = linearPulse(ndlAtten, shadowLineSmoothing, shadowLineThreshold);
-	///
+			float shadowLine = min(linearPulse(ndlAtten, shadowLineSmoothing, shadowLineThreshold) * shadowLineStrength, 1.0);
 			half4 shadowLineColor = [[VALUE:Shadow Line Color]];
 			ramp = lerp(ramp.rgb, shadowLineColor.rgb, shadowLine * shadowLineColor.a);
 ///

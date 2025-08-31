@@ -1,5 +1,5 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2023 Jean Moreno
 
 // Shader Generator Module: Aura 2 Support
 
@@ -27,7 +27,7 @@ keyword_str		lbl="Include File"			kw=AURA2_INCLUDE	indent		needs=AURA2		forceKey
 
 #SHADER_FEATURES_BLOCK
 /// IF AURA2
-	#pragma shader_feature _ AURA
+	#pragma shader_feature_local _ AURA
 ///
 #END
 
@@ -36,7 +36,7 @@ keyword_str		lbl="Include File"			kw=AURA2_INCLUDE	indent		needs=AURA2		forceKey
 #PROPERTIES_BLOCK
 /// IF AURA2 && AURA2_LIGHT
 	#if_not_empty
-		[Header(Aura 2)]
+		[TCP2HeaderHelp(Aura 2)]
 	#start_not_empty_block
 		[[PROP:Aura2 Lighting Factor]]
 	#end_not_empty_block
@@ -47,7 +47,7 @@ keyword_str		lbl="Include File"			kw=AURA2_INCLUDE	indent		needs=AURA2		forceKey
 
 //================================================================
 
-#VARIABLES
+#FUNCTIONS
 /// IF AURA2
 	#include "@%AURA2_INCLUDE%@"
 ///

@@ -54,7 +54,8 @@ Shader "Hidden/Toony Colors Pro 2/Outline Only Behind"
 			
 			#pragma multi_compile _ TCP2_ZSMOOTH_ON
 			#pragma multi_compile _ TCP2_OUTLINE_CONST_SIZE
-			#pragma multi_compile _ TCP2_COLORS_AS_NORMALS TCP2_TANGENT_AS_NORMALS TCP2_UV2_AS_NORMALS
+			#pragma multi_compile _ TCP2_COLORS_AS_NORMALS TCP2_TANGENT_AS_NORMALS TCP2_UV1_AS_NORMALS TCP2_UV2_AS_NORMALS TCP2_UV3_AS_NORMALS TCP2_UV4_AS_NORMALS
+			#pragma multi_compile _ TCP2_UV_NORMALS_FULL TCP2_UV_NORMALS_ZW
 			#pragma multi_compile _ TCP2_OUTLINE_TEXTURED
 			#pragma multi_compile_instancing
 			
@@ -83,7 +84,8 @@ Shader "Hidden/Toony Colors Pro 2/Outline Only Behind"
 			
 			#pragma multi_compile _ TCP2_ZSMOOTH_ON
 			#pragma multi_compile _ TCP2_OUTLINE_CONST_SIZE
-			#pragma multi_compile _ TCP2_COLORS_AS_NORMALS TCP2_TANGENT_AS_NORMALS TCP2_UV2_AS_NORMALS
+			#pragma multi_compile _ TCP2_COLORS_AS_NORMALS TCP2_TANGENT_AS_NORMALS TCP2_UV1_AS_NORMALS TCP2_UV2_AS_NORMALS TCP2_UV3_AS_NORMALS TCP2_UV4_AS_NORMALS
+			#pragma multi_compile _ TCP2_UV_NORMALS_FULL TCP2_UV_NORMALS_ZW
 			#pragma multi_compile _ TCP2_OUTLINE_TEXTURED
 			#pragma multi_compile_instancing
 			

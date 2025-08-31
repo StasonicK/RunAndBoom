@@ -1,5 +1,5 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2023 Jean Moreno
 
 using System;
 using System.Collections.Generic;
@@ -7,6 +7,7 @@ using System.IO;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 // General helper functions for TCP2
 
@@ -54,11 +55,21 @@ namespace ToonyColorsPro
 #if UNITY_5_4_OR_NEWER
 			public static float ScreenWidthRetina { get { return Screen.width/EditorGUIUtility.pixelsPerPoint; } }
 #else
-	static public float ScreenWidthRetina { get { return Screen.width; } }
+			static public float ScreenWidthRetina { get { return Screen.width; } }
 #endif
 
 			//--------------------------------------------------------------------------------------------------------------------------------
 			// CUSTOM INSPECTOR UTILS
+
+			internal static bool IsUsingURP()
+			{
+#if UNITY_2019_3_OR_NEWER
+				var renderPipeline = GraphicsSettings.currentRenderPipeline;
+#else
+				var renderPipeline = GraphicsSettings.renderPipelineAsset;
+#endif
+				return renderPipeline != null && renderPipeline.GetType().Name.Contains("Universal");
+			}
 
 			public static bool HasKeywords(List<string> list, params string[] keywords)
 			{
@@ -291,7 +302,7 @@ namespace ToonyColorsPro
 #if UNITY_EDITOR_WIN
 					return readmePathFull.Replace(ToSystemSlashPath(Application.dataPath), "Assets").Replace(@"\", "/");
 #else
-			return readmePathFull.Replace(ToSystemSlashPath(Application.dataPath), "Assets");
+					return readmePathFull.Replace(ToSystemSlashPath(Application.dataPath), "Assets");
 #endif
 				}
 				return readmePathFull;
@@ -347,7 +358,24 @@ namespace ToonyColorsPro
 
 			//--------------------------------------------------------------------------------------------------------------------------------
 
-			public static Mesh CreateSmoothedMesh(Mesh originalMesh, string format, bool vcolors, bool vtangents, bool uv2, bool overwriteMesh)
+			public enum SmoothedNormalsChannel
+			{
+				VertexColors,
+				Tangents,
+				UV1,
+				UV2,
+				UV3,
+				UV4
+			}
+
+			public enum SmoothedNormalsUVType
+			{
+				FullXYZ,
+				CompressedXY,
+				CompressedZW
+			}
+
+			public static Mesh CreateSmoothedMesh(Mesh originalMesh, string format, SmoothedNormalsChannel smoothedNormalsChannel, SmoothedNormalsUVType uvType, bool overwriteMesh)
 			{
 				if (originalMesh == null)
 				{
@@ -359,7 +387,21 @@ namespace ToonyColorsPro
 				var newMesh = overwriteMesh ? originalMesh : new Mesh();
 				if (!overwriteMesh)
 				{
-					//			EditorUtility.CopySerialized(originalMesh, newMesh);
+					var originalAssetPath = AssetDatabase.GetAssetPath(originalMesh);
+					ModelImporter originalImporter = null;
+					bool restoreOptimizeGameObjects = false;
+					if (!string.IsNullOrEmpty(originalAssetPath))
+					{
+						originalImporter = AssetImporter.GetAtPath(originalAssetPath) as ModelImporter;
+
+						if (originalImporter != null && originalImporter.optimizeGameObjects)
+						{
+							originalImporter.optimizeGameObjects = false;
+							AssetDatabase.ImportAsset(originalAssetPath, ImportAssetOptions.ForceSynchronousImport);
+							restoreOptimizeGameObjects = true;
+						}
+					}
+
 					newMesh.vertices = originalMesh.vertices;
 					newMesh.normals = originalMesh.normals;
 					newMesh.tangents = originalMesh.tangents;
@@ -372,14 +414,25 @@ namespace ToonyColorsPro
 					newMesh.bindposes = originalMesh.bindposes;
 					newMesh.boneWeights = originalMesh.boneWeights;
 
-					//Only available from Unity 5.3 onward
 					if (originalMesh.blendShapeCount > 0)
+					{
 						CopyBlendShapes(originalMesh, newMesh);
+					}
 
 					newMesh.subMeshCount = originalMesh.subMeshCount;
 					if (newMesh.subMeshCount > 1)
+					{
 						for (var i = 0; i < newMesh.subMeshCount; i++)
+						{
 							newMesh.SetTriangles(originalMesh.GetTriangles(i), i);
+						}
+					}
+
+					if (restoreOptimizeGameObjects)
+					{
+						originalImporter.optimizeGameObjects = true;
+						AssetDatabase.ImportAsset(originalAssetPath, ImportAssetOptions.ForceSynchronousImport);
+					}
 				}
 
 				//--------------------------------
@@ -429,17 +482,17 @@ namespace ToonyColorsPro
 				}
 
 #if DONT_ALTER_NORMALS
-		//Debug: don't alter normals to see if converting into colors/tangents/uv2 works correctly
-		for(int i = 0; i < newMesh.vertexCount; i++)
-		{
-			averageNormals[i] = newMesh.normals[i];
-		}
+				//Debug: don't alter normals to see if converting into colors/tangents/uv2 works correctly
+				for(int i = 0; i < newMesh.vertexCount; i++)
+				{
+					averageNormals[i] = newMesh.normals[i];
+				}
 #endif
 
 				//--------------------------------
 				// Store in Vertex Colors
 
-				if (vcolors)
+				if (smoothedNormalsChannel == SmoothedNormalsChannel.VertexColors)
 				{
 					//Assign averaged normals to colors
 					var colors = new Color32[newMesh.vertexCount];
@@ -457,7 +510,7 @@ namespace ToonyColorsPro
 				//--------------------------------
 				// Store in Tangents
 
-				if (vtangents)
+				if (smoothedNormalsChannel == SmoothedNormalsChannel.Tangents)
 				{
 					//Assign averaged normals to tangent
 					var tangents = new Vector4[newMesh.vertexCount];
@@ -469,31 +522,81 @@ namespace ToonyColorsPro
 				}
 
 				//--------------------------------
-				// Store in UV2
+				// Store in UVs
 
-				if (uv2)
+				if (smoothedNormalsChannel == SmoothedNormalsChannel.UV1 || smoothedNormalsChannel == SmoothedNormalsChannel.UV2 || smoothedNormalsChannel == SmoothedNormalsChannel.UV3 || smoothedNormalsChannel == SmoothedNormalsChannel.UV4)
 				{
-					//Assign averaged normals to UV2 (x,y to uv2.x and z to uv2.y)
-					var uvs2 = new Vector2[newMesh.vertexCount];
-					for (var i = 0; i < newMesh.vertexCount; i++)
+					int uvIndex = -1;
+
+					switch (smoothedNormalsChannel)
 					{
-						var x = averageNormals[i].x * 0.5f + 0.5f;
-						var y = averageNormals[i].y * 0.5f + 0.5f;
-						var z = averageNormals[i].z * 0.5f + 0.5f;
-
-						//pack x,y to uv2.x
-						x = Mathf.Round(x*15);
-						y = Mathf.Round(y*15);
-						var packed = Vector2.Dot(new Vector2(x, y), new Vector2((float)(1.0/(255.0/16.0)), (float)(1.0/255.0)));
-
-						//store to UV2
-						uvs2[i].x = packed;
-						uvs2[i].y = z;
+						case SmoothedNormalsChannel.UV1: uvIndex = 0; break;
+						case SmoothedNormalsChannel.UV2: uvIndex = 1; break;
+						case SmoothedNormalsChannel.UV3: uvIndex = 2; break;
+						case SmoothedNormalsChannel.UV4: uvIndex = 3; break;
+						default: Debug.LogError("Invalid smoothed normals UV channel: " + smoothedNormalsChannel); break;
 					}
-					newMesh.uv2 = uvs2;
+
+					if (uvType == SmoothedNormalsUVType.FullXYZ)
+					{
+						//Assign averaged normals directly to UV fully (xyz)
+						newMesh.SetUVs(uvIndex, new List<Vector3>(averageNormals));
+					}
+					else
+					{
+						if (uvType == SmoothedNormalsUVType.CompressedXY)
+						{
+							//Assign averaged normals to UV compressed (x,y to uv.x and z to uv.y)
+							var uvs = new List<Vector2>(newMesh.vertexCount);
+							for (var i = 0; i < newMesh.vertexCount; i++)
+							{
+								float x, y;
+								GetCompressedSmoothedNormals(averageNormals[i], out x, out y);
+								var v2 = new Vector2(x, y);
+								uvs.Add(v2);
+							}
+							newMesh.SetUVs(uvIndex, uvs);
+						}
+						else if (uvType == SmoothedNormalsUVType.CompressedZW)
+						{
+							//Assign averaged normals to UV compressed (x,y to uv.z and z to uv.w)
+							List<Vector4> existingUvs = new List<Vector4>();
+							newMesh.GetUVs(uvIndex, existingUvs);
+							if (existingUvs.Count == 0)
+							{
+								existingUvs.AddRange(new Vector4[newMesh.vertexCount]);
+							}
+							var uvs = new List<Vector4>(newMesh.vertexCount);
+							for (var i = 0; i < newMesh.vertexCount; i++)
+							{
+								float x, y;
+								GetCompressedSmoothedNormals(averageNormals[i], out x, out y);
+								var v4 = existingUvs[i];
+								v4.z = x;
+								v4.w = y;
+								uvs.Add(v4);
+							}
+							newMesh.SetUVs(uvIndex, uvs);
+						}
+					}
 				}
 
 				return newMesh;
+			}
+
+			static void GetCompressedSmoothedNormals(Vector3 smoothedNormal, out float x, out float y)
+			{
+				var _x = smoothedNormal.x * 0.5f + 0.5f;
+				var _y = smoothedNormal.y * 0.5f + 0.5f;
+				var _z = smoothedNormal.z * 0.5f + 0.5f;
+
+				//pack x,y to uv2.x
+				_x = Mathf.Round(_x*15);
+				_y = Mathf.Round(_y*15);
+				var packed = Vector2.Dot(new Vector2(_x, _y), new Vector2((float)(1.0/(255.0/16.0)), (float)(1.0/255.0)));
+
+				x = packed;
+				y = _z;
 			}
 
 			//Only available from Unity 5.3 onward
@@ -516,173 +619,6 @@ namespace ToonyColorsPro
 				}
 			}
 
-			//--------------------------------------------------------------------------------------------------------------------------------
-			// SHADER PACKING/UNPACKING
-
-			public class PackedFile
-			{
-				public PackedFile(string _path, string _content)
-				{
-					mPath = _path;
-					content = _content;
-				}
-
-				private string mPath;
-				public string path
-				{
-					get
-					{
-#if UNITY_EDITOR_WIN
-						return mPath;
-#else
-				return this.mPath.Replace(@"\","/");
-#endif
-					}
-				}
-				public string content { get; private set; }
-			}
-
-			//Get a PackedFile from a system file path
-			public static PackedFile PackFile(string windowsPath)
-			{
-				if (!File.Exists(windowsPath))
-				{
-					EditorApplication.Beep();
-					Debug.LogError("[TCP2 PackFile] File doesn't exist:" + windowsPath);
-					return null;
-				}
-
-				//Get properties
-				// Content
-				var content = File.ReadAllText(windowsPath, Encoding.UTF8);
-				content = content.Replace("\r\n", "\n");
-				// File relative path
-				var tcpRoot = FindReadmePath();
-				if (tcpRoot == null)
-				{
-					EditorApplication.Beep();
-					Debug.LogError("[TCP2 PackFile] Can't find TCP2 Readme file!\nCan't determine root folder to pack/unpack files.");
-					return null;
-				}
-				tcpRoot = ToSystemSlashPath(tcpRoot);
-				var relativePath = windowsPath.Replace(tcpRoot, "");
-
-				var pf = new PackedFile(relativePath, content);
-				return pf;
-			}
-
-			//Create an archive of PackedFile
-			public static void CreateArchive(PackedFile[] packedFiles, string outputFile)
-			{
-				if (packedFiles == null || packedFiles.Length == 0)
-				{
-					EditorApplication.Beep();
-					Debug.LogError("[TCP2 PackFile] No file to pack!");
-					return;
-				}
-
-				var sbIndex = new StringBuilder();
-				var sbContent = new StringBuilder();
-
-				sbIndex.AppendLine("# TCP2 PACKED SHADERS");
-				var lineCursor = 0;
-				foreach (var pf in packedFiles)
-				{
-					sbContent.Append(pf.content);
-					sbIndex.AppendLine(pf.path + ";" + lineCursor + ";" + pf.content.Length);   // PATH ; START ; LENGTH
-					lineCursor += pf.content.Length;
-				}
-
-				var archiveContent = sbIndex.ToString().Replace("\r\n", "\n") + "###\n" + sbContent.ToString().Replace("\r\n", "\n");
-
-				var fullPath = Application.dataPath + "/" + outputFile;
-				var directory = Path.GetDirectoryName(fullPath);
-				if (!Directory.Exists(directory))
-				{
-					Directory.CreateDirectory(directory);
-				}
-				File.WriteAllText(fullPath, archiveContent);
-				AssetDatabase.Refresh();
-				Debug.Log("[TCP2 CreateArchive] Created archive:\n" + fullPath);
-			}
-
-			//Extract an archive into an array of PackedFile
-			public static PackedFile[] ExtractArchive(string archivePath, string filter = null)
-			{
-				var archive = File.ReadAllText(archivePath);
-				archive = archive.Replace("\r\n", "\n");
-				var archiveLines = File.ReadAllLines(archivePath);
-
-				if (archiveLines[0] != "# TCP2 PACKED SHADERS")
-				{
-					EditorApplication.Beep();
-					Debug.LogError("[TCP2 ExtractArchive] Invalid TCP2 archive:\n" + archivePath);
-					return null;
-				}
-
-				//Find offset
-				var offset = archive.IndexOf("###") + 4;
-				if (offset < 20)
-				{
-					Debug.LogError("[TCP2 ExtractArchive] Invalid TCP2 archive:\n" + archivePath);
-					return null;
-				}
-
-				var tcpRoot = FindReadmePath();
-				var packedFilesList = new List<PackedFile>();
-				for (var line = 1; line < archiveLines.Length; line++)
-				{
-					//Index end, start content parsing
-					if (archiveLines[line].StartsWith("#"))
-					{
-						break;
-					}
-
-					var shaderIndex = archiveLines[line].Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-					if (shaderIndex.Length != 3)
-					{
-						EditorApplication.Beep();
-						Debug.LogError("[TCP2 ExtractArchive] Invalid format in TCP2 archive, at line " + line + ":\n" + archivePath);
-						return null;
-					}
-
-					//Get data
-					var relativePath = shaderIndex[0];
-					var start = int.Parse(shaderIndex[1]);
-					var length = int.Parse(shaderIndex[2]);
-					//Get content
-					var content = archive.Substring(offset + start, length);
-
-					//Skip if file already extracted
-					if (File.Exists(tcpRoot + relativePath))
-					{
-						continue;
-					}
-
-					//Filter?
-					if (!string.IsNullOrEmpty(filter))
-					{
-						var filters = filter.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-						var skip = false;
-						foreach (var f in filters)
-						{
-							if (!relativePath.ToLower().Contains(f.ToLower()))
-							{
-								skip = true;
-								break;
-							}
-						}
-						if (skip)
-							continue;
-					}
-
-					//Add File
-					packedFilesList.Add(new PackedFile(relativePath, content));
-				}
-
-				return packedFilesList.ToArray();
-			}
-
 			public static string UnityRelativeToSystemPath(string path)
 			{
 				var sysPath = path;
@@ -699,7 +635,7 @@ namespace ToonyColorsPro
 #if UNITY_EDITOR_WIN
 				return path.Replace("/", @"\");
 #else
-		return path;
+				return path;
 #endif
 			}
 

@@ -1,5 +1,5 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2023 Jean Moreno
 # TCP2_ShaderTemplate_SurfacePBS (Unity 5.5)
 #NAME=Surface Standard PBS
 #CONFIG=PBS
@@ -28,6 +28,7 @@ dd_start	lbl=LIGHTING
 ---
 mult	lbl=Ramp Style						kw=Slider Ramp|,Texture Ramp|TEXTURE_RAMP											tt=Defines the transitioning between dark and lit areas of the model
 sngl	lbl=Colors Multipliers				kw=COLOR_MULTIPLIERS											nohelp				tt=Adds multiplier values for highlight and shadow colors to enhance contrast or colors
+mult	lbl=Shadow Color Texture			kw=Disabled|,Multiply|SHADOW_COLOR_TEX_MULT,Replace Color|SHADOW_COLOR_TEX_LERP	toggles=SHADOW_COLOR_TEX	nohelp	tt=Use a texture as the color source for shadows
 sngl	lbl=Diffuse Tint					kw=DIFFUSE_TINT																		tt=Adds a diffuse tint color, to add some subtle coloring to the diffuse lighting
 mult	lbl=Wrapped Lighting				kw=Off|,Half|WRAPPED_DIFFUSE,Custom|WRAP_CUSTOM										tt=Enable wrapped lighting, with different levels of control
 ---
@@ -145,6 +146,10 @@ flag	lbl=One Directional Light		kw=noforwardadd													tt=Use additive ligh
 flag	lbl=Vertex View Dir				kw=interpolateview												tt=Calculate view direction per-vertex instead of per-pixel.\nRecommended for old mobile devices
 flag	lbl=Half as View				kw=halfasview													tt=Pass half-direction vector into the lighting function instead of view-direction.\nFaster but inaccurate.
 dd_end
+dd_start	lbl=THIRD PARTY PLUGINS
+---
+mult	lbl=VertExmotion Support			kw=Off|,Position|VERTEXMOTION_SIMPLE,Position+Normal|VERTEXMOTION_NORMAL	toggles=VERTEXMOTION	nohelp		tt=Adds support for VertExmotion
+dd_end
 #END
 
 #KEYWORDS
@@ -162,7 +167,7 @@ disable_kw	TEXTURED_THRESHOLD
 ///
 
 #Vertex Color
-/// IF VCOLORS_MASK || VCOLORS || TEXBLEND_VCOLORS
+/// IF VCOLORS_MASK || VCOLORS || TEXBLEND_VCOLORS || VERTEXMOTION
 enable_kw	USE_VERTEX_COLORS
 ///
 
@@ -203,7 +208,7 @@ enable_flag	tessellate:tessEdge
 ///
 
 #Vertex function
-/// IF VERTEX_FUNC || USE_SCREENSPACE_COORDS_VERTEX
+/// IF VERTEX_FUNC || USE_SCREENSPACE_COORDS_VERTEX || VERTEXMOTION
 enable_kw		VERTEX_FUNC
 enable_flag		vertex:vert
 ///
@@ -383,6 +388,9 @@ Shader "@%SHADER_NAME%@"
 		//TOONY COLORS PRO 2 ----------------------------------------------------------------
 		_HColor("Highlight Color", Color) = (0.785,0.785,0.785,1.0)
 		_SColor("Shadow Color", Color) = (0.195,0.195,0.195,1.0)
+/// IF SHADOW_COLOR_TEX
+		[NoScaleOffset] _STexture ("Shadow Color Texture", 2D) = "white" {}
+///
 /// IF COLOR_MULTIPLIERS
 		_HighlightMultiplier ("Highlight Multiplier", Range(0,4)) = 1
 		_ShadowMultiplier ("Shadow Multiplier", Range(0,4)) = 1
@@ -551,6 +559,13 @@ Shader "@%SHADER_NAME%@"
 		Tags { "DisableBatching" = "True" }
 
 ///
+/// IF VERTEXMOTION
+		//VertExmotion include file
+		CGINCLUDE
+		#include "Assets/VertExmotion/Shaders/VertExmotion.cginc"
+		ENDCG
+
+///
 /// IF PASS_SILHOUETTE
 		//Make sure that the objects are rendered later to avoid sorting issues with the transparent silhouette
 		Tags { "Queue"="Geometry+10" }
@@ -585,6 +600,13 @@ Shader "@%SHADER_NAME%@"
 				struct appdata_sil
 				{
 					float4 vertex : POSITION;
+	/// IF VERTEXMOTION
+					float4 color : COLOR;
+		/// IF VERTEXMOTION_NORMAL
+					float3 normal : NORMAL;
+					float4 tangent : TANGENT;
+		///
+	///
 					UNITY_VERTEX_INPUT_INSTANCE_ID
 				};
 
@@ -599,6 +621,16 @@ Shader "@%SHADER_NAME%@"
 					v2f_sil o;
 					UNITY_SETUP_INSTANCE_ID(v);
 					UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+	/// IF VERTEXMOTION
+
+					//VertExmotion
+		/// IF VERTEXMOTION_SIMPLE
+					v.vertex = VertExmotion(v.vertex, v.color);
+		/// ELIF VERTEXMOTION_NORMAL
+					v.vertex = VertExmotion(v.vertex, v.color, v.normal, v.tangent);
+		///
+
+	///
 					o.vertex = UnityObjectToClipPos(v.vertex);
 					return o;
 				}
@@ -632,19 +664,23 @@ Shader "@%SHADER_NAME%@"
 	#if TCP2_OUTLINE_TEXTURED
 			float3 texcoord : TEXCOORD0;
 	#endif
-	/// IF !OUTLINE_VCOLOR_WIDTH
+	/// IF !OUTLINE_VCOLOR_WIDTH && !VERTEXMOTION
 		#if TCP2_COLORS_AS_NORMALS
 	///
 			float4 color : COLOR;
-	/// IF !OUTLINE_VCOLOR_WIDTH
+	/// IF !OUTLINE_VCOLOR_WIDTH && !VERTEXMOTION
 		#endif
 	///
 	#if TCP2_UV2_AS_NORMALS
 			float2 uv2 : TEXCOORD1;
 	#endif
+	/// IF !VERTEXMOTION_NORMAL
 	#if TCP2_TANGENT_AS_NORMALS
+	///
 			float4 tangent : TANGENT;
+	/// IF !VERTEXMOTION_NORMAL
 	#endif
+	///
 	#if UNITY_VERSION >= 550
 			UNITY_VERTEX_INPUT_INSTANCE_ID
 	#endif
@@ -659,6 +695,7 @@ Shader "@%SHADER_NAME%@"
 	/// IF OUTLINE_FAKE_RIM_DIRLIGHT && OFRD_LIGHTING
 			float ndl : TEXCOORD2;
 	///
+			UNITY_VERTEX_OUTPUT_STEREO
 		};
 
 		float _Outline;
@@ -691,11 +728,18 @@ Shader "@%SHADER_NAME%@"
 		v2f TCP2_Outline_Vert(a2v v)
 		{
 			v2f o;
-
-	#if UNITY_VERSION >= 550
-			//GPU instancing support
 			UNITY_SETUP_INSTANCE_ID(v);
-	#endif
+			UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+
+	/// IF VERTEXMOTION
+
+			//VertExmotion
+		/// IF VERTEXMOTION_SIMPLE
+			v.vertex = VertExmotion(v.vertex, v.color);
+		/// ELIF VERTEXMOTION_NORMAL
+			v.vertex = VertExmotion(v.vertex, v.color, v.normal, v.tangent);
+		///
+	///
 
 	/// IF OUTLINE_FAKE_RIM_DIRLIGHT
 
@@ -964,13 +1008,16 @@ Shader "@%SHADER_NAME%@"
 			float4 texcoord : TEXCOORD0;
 			float4 texcoord1 : TEXCOORD1;
 			float4 texcoord2 : TEXCOORD2;
-#	/// IF BUMP || PARALLAX || SPECULAR_ANISOTROPIC || (SNOW_ACCU && SNOW_ACCU_DISP && SNOW_ACCU_NRM_TANGENTS)
+#	/// IF BUMP || PARALLAX || SPECULAR_ANISOTROPIC || (SNOW_ACCU && SNOW_ACCU_DISP && SNOW_ACCU_NRM_TANGENTS) || VERTEXMOTION_NORMAL
 			float4 tangent : TANGENT;
 #	/// ELSE IF !NO_LIGHTMAP
 		#if defined(LIGHTMAP_ON) && defined(DIRLIGHTMAP_COMBINED)
 			float4 tangent : TANGENT;
 		#endif
 #	///
+	/// IF USE_VERTEX_COLORS || (SNOW_ACCU && SNOW_ACCU_DISP && SNOW_ACCU_NRM_COLOR)
+			fixed4 color : COLOR;
+	///
 			UNITY_VERTEX_INPUT_INSTANCE_ID
 		};
 	/// IF TESSELLATION_PHONG
@@ -1021,6 +1068,15 @@ Shader "@%SHADER_NAME%@"
 		void vert (inout appdata_tcp2 v, out Input o)
 		{
 			UNITY_INITIALIZE_OUTPUT(Input, o);
+	/// IF VERTEXMOTION
+
+			//VertExmotion
+		/// IF VERTEXMOTION_SIMPLE
+			v.vertex = VertExmotion(v.vertex, v.color);
+		/// ELIF VERTEXMOTION_NORMAL
+			v.vertex = VertExmotion(v.vertex, v.color, v.normal, v.tangent);
+		///
+	///
 	/// IF USE_SCREENSPACE_COORDS_VERTEX
 			
 			float4 pos = mul(UNITY_MATRIX_MVP, v.vertex);
@@ -1504,6 +1560,12 @@ Shader "@%SHADER_NAME%@"
 
 			o.texThresholdTexcoords = IN.uv_TexturedThreshold;
 ///
+/// IF SHADOW_COLOR_TEX
+
+			//Shadow Color Texture
+			fixed4 shadowTex = tex2D(_STexture, IN.uv_MainTex);
+			o.ShadowColorTex = shadowTex.rgb;
+///
 /// IF VCOLORS
 
 			//Vertex Colors
@@ -1804,19 +1866,28 @@ Shader "@%SHADER_NAME%@"
 				float3 normal	: NORMAL;
 				float2 uv0		: TEXCOORD0;
 	/// IF (OUTLINE || OUTLINE_BLENDING) && OUTLINE_SHADOWCASTER
-		/// IF !OUTLINE_VCOLOR_WIDTH
+		/// IF !OUTLINE_VCOLOR_WIDTH && !VERTEXMOTION
 			#if TCP2_COLORS_AS_NORMALS
 		///
 				float4 color : COLOR;
-		/// IF !OUTLINE_VCOLOR_WIDTH
+		/// IF !OUTLINE_VCOLOR_WIDTH && !VERTEXMOTION
 			#endif
 		///
 		#if TCP2_UV2_AS_NORMALS
 				float2 uv2 : TEXCOORD1;
 		#endif
+		/// IF !VERTEXMOTION_NORMAL
 		#if TCP2_TANGENT_AS_NORMALS
+		///
 				float4 tangent : TANGENT;
+		/// IF !VERTEXMOTION_NORMAL
 		#endif
+		///
+	/// ELIF VERTEXMOTION
+				float4 color : COLOR;
+		/// IF VERTEXMOTION_NORMAL
+				float4 tangent : TANGENT;
+		///
 	///
 		#if UNITY_VERSION >= 550
 				UNITY_VERTEX_INPUT_INSTANCE_ID
@@ -1833,6 +1904,15 @@ Shader "@%SHADER_NAME%@"
 
 			void vertShadowCaster(VertexInput v, out VertexOutputShadowCaster o, out float4 opos : SV_POSITION)
 			{
+	/// IF VERTEXMOTION
+				//VertExmotion
+		/// IF VERTEXMOTION_SIMPLE
+				v.vertex = VertExmotion(v.vertex, v.color);
+		/// ELIF VERTEXMOTION_NORMAL
+				v.vertex = VertExmotion(v.vertex, v.color, v.normal, v.tangent);
+		///
+
+	///
 	/// IF (OUTLINE || OUTLINE_BLENDING) && OUTLINE_SHADOWCASTER
 				//Outline: make sure that the mesh shadow/depth texture includes the extruded vertices
 		#if UNITY_VERSION >= 550
@@ -1959,6 +2039,9 @@ Shader "@%SHADER_NAME%@"
 			fixed Alpha;        // alpha for transparencies
 
 			fixed atten;
+/// IF SHADOW_COLOR_TEX
+			fixed3 ShadowColorTex;
+///
 /// IF TEXTURED_THRESHOLD
 			float2 texThresholdTexcoords;
 ///
@@ -2075,6 +2158,9 @@ Shader "@%SHADER_NAME%@"
 /// IF COLOR_MULTIPLIERS
 		fixed _HighlightMultiplier;
 		fixed _ShadowMultiplier;
+///
+/// IF SHADOW_COLOR_TEX
+		sampler2D _STexture;
 ///
 /// IF COLORMASK
 		fixed4 _MaskedColor;
@@ -2465,6 +2551,14 @@ Shader "@%SHADER_NAME%@"
 			_HColor.rgb *= _HighlightMultiplier;
 /// ELSE
 			_SColor = lerp(_HColor, _SColor, _SColor.a);	//Shadows intensity through alpha
+///
+/// IF SHADOW_COLOR_TEX
+			//Shadow Color Texture
+	/// IF SHADOW_COLOR_TEX_MULT
+			diffColor.rgb *= lerp(s.ShadowColorTex.rgb, float3(1,1,1), diffuseTerm);
+	/// ELIF SHADOW_COLOR_TEX_LERP
+			diffColor.rgb = lerp(s.ShadowColorTex.rgb, diffColor.rgb, diffuseTerm);
+	///
 ///
 
 	//light attenuation already included in light.color for point lights

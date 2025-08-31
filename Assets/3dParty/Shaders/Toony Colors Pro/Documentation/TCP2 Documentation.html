@@ -17,6 +17,22 @@
 		.tg .tg-7u1r{font-weight:bold;font-size:16px;background-color:#efefef;color:#656565;text-align:center;vertical-align:top}
 		.tg .tg-yw4l{vertical-align:top; width:25%;}
 		.tg .tg-b7b8{background-color:#fbfbfb;vertical-align:top;  width:25%;}
+		
+		#old_doc
+		{
+			border: solid 1px #FF8000;
+			padding: 12px;
+			font-size: 16px;
+			font-weight: bold;
+			text-align: center;
+			background-color: rgb(255, 255, 220);
+			border-radius: 8px;
+			border-bottom-width: 3px;
+			margin-top: 10px;
+			width: 90%;
+			margin-left: auto;
+			margin-right: auto;
+		}
 		</style>
 	</head>
 	<body>
@@ -25,15 +41,20 @@
 		<div class="otherassets">Other JMO assets for Unity:</div>
 		<table class="amenu bottom" cellspacing="0" cellpadding="0" border="0">
 		  <tr>
-			<td><a href="http://www.jeanmoreno.com/cartoonfx/">Cartoon FX 1</a></td>
-			<td><a href="http://www.jeanmoreno.com/cartoonfx2/">Cartoon FX 2</a></td>
-			<td><a href="http://www.jeanmoreno.com/cartoonfx3/">Cartoon FX 3</a></td>
-			<td><a href="http://www.jeanmoreno.com/cartoonfx4/">Cartoon FX 4</a></td>
-			<td><a href="http://www.jeanmoreno.com/shapefx/">Shape FX</a></td>
-			<td><a href="http://www.jeanmoreno.com/warfx/">War FX</a></td>
-			<td style="border-right:none;"><a href="http://www.jeanmoreno.com/matcap/">MatCap Shaders <span class="free">(Free)</span></a></td>
+			<td><a href="https://www.jeanmoreno.com/cartoonfx/">Cartoon FX 1</a></td>
+			<td><a href="https://www.jeanmoreno.com/cartoonfx2/">Cartoon FX 2</a></td>
+			<td><a href="https://www.jeanmoreno.com/cartoonfx3/">Cartoon FX 3</a></td>
+			<td><a href="https://www.jeanmoreno.com/cartoonfx4/">Cartoon FX 4</a></td>
+			<td><a href="https://www.jeanmoreno.com/shapefx/">Shape FX</a></td>
+			<td><a href="https://www.jeanmoreno.com/warfx/">War FX</a></td>
+			<td style="border-right:none;"><a href="https://www.jeanmoreno.com/matcap/">MatCap Shaders <span class="free">(Free)</span></a></td>
 		  </tr>
 		</table>
+
+		<div id="old_doc">
+		Note: this is the old documentation of Toony Colors Pro 2.
+		Please go here for the new one:<br><a href="https://www.jeanmoreno.com/unity/toonycolorspro/doc/">https://www.jeanmoreno.com/unity/toonycolorspro/doc/</a>
+		</div>
 
 <!-- ################################################################################################################################ -->
 		<!-- HEADER -->
@@ -41,8 +62,8 @@
 		<h1>Toony Colors Pro+Mobile 2</h1>
 		<h2>Documentation</h2>
 		</div>
-		<div class="footer">v2.4.1 - 08 october 2019 (<a href="/unity/toonycolorspro/doc/changelog">changelog</a>)<br />
-		© 2014-2019 - <a href="http://www.jeanmoreno.com/" target="_blank">Jean Moreno (JMO)</a></div>
+		<div class="footer">v2.5.0 - august 2020 (<a href="/unity/toonycolorspro/doc/changelog">changelog</a>)<br />
+		© 2014-2020 - <a href="https://www.jeanmoreno.com/" target="_blank">Jean Moreno (JMO)</a></div>
 
 		<div class="toplink"><a href="#top">back to top</a></div>
 
@@ -50,9 +71,7 @@
 		<div class="box"><p>Thank you for your interest in <strong>Toony Colors Pro+Mobile 2</strong>!<br />This document will explain and provide examples for each feature of Toony Colors Pro 2.<br /><br />
 		Note that topics of this documentation can be accessed directly from Unity by clicking on the <span class="icon icon_help">&nbsp;</span> icons.</p>
 		<br />
-		<p style="color: #3266a7;">• If you are looking for the documentation about the <b>Shader Generator 2</b>, go here: <a href="https://jeanmoreno.com/unity/toonycolorspro/shader_generator_2_beta/documentation">Shader Generator 2 Beta Documentation</a></p>
-		</div>
-
+		
 		<br />
 
 		<!-- INDEX -->
@@ -81,7 +100,7 @@
 					<li><h5>Misc</h5>
 					<li><a href="#curvedworld">Using Curved World</a></li>
 					<li><a href="#vertexmotion">Using VertExmotion</a></li>
-					<li><a href="#lightweight_srp">Using the Lightweight/Universal Pipeline (LWRP/URP)</a></li>
+					<li><a href="#lightweight_srp">Using the Universal Pipeline (URP)</a></li>
 					<li><a href="#deferred">About Deferred Shading</a></li>
 				</ul>
 			</div>
@@ -432,7 +451,7 @@
 		<!-- MATCAP -->
 		<div id="matcap" class="section">
 			<h4>MatCap (Mobile)</h4>
-			<p>Enables texture-based fixed reflections, using a simple square texture. See my free <a href="http://www.jeanmoreno.com/matcap/" target="_blank" class="external">MatCap Shader Pack</a> for more examples!</p>
+			<p>Enables texture-based fixed reflections, using a simple square texture. See my free <a href="https://www.jeanmoreno.com/matcap/" target="_blank" class="external">MatCap Shader Pack</a> for more examples!</p>
 			<ul>
 				<li><strong>Global</strong>: applies the reflection on the whole model</li>
 				<li><strong>Masked</strong>: uses the main texture's alpha channel to mask parts of the reflection</li>
@@ -561,11 +580,11 @@
 		<div class="box">
 
 		<div class="helpbox"><table><td><div class="icon icon_info"></div></td><td><div>
-		The <b>Shader Generator 2</b> beta is currently available as of version 2.4.0.<br />
+		The <b>Shader&nbsp;Generator&nbsp;2</b> is currently available as of version 2.4.0.<br />
 		It is a much more flexible system that remains as simple as it was to enable features, but allows further customization of various properties of the resulting shader.<br />
 		For example, you can change options for any texture used (enable/disable tiling/offset, use scrolling UVs, use screen-space UVs...), or use another data source (e.g. vertex colors), or define your own custom mask for about any property in the shader.<br />
-		It will eventually replace the current Shader Generator, and is currently the only option for <a href="#lightweight_srp">LWRP support</a>.<br />
-		You can read its <a href="https://jeanmoreno.com/unity/toonycolorspro/shader_generator_2_beta/documentation" target="_blank" class="external">documentation here</a>.
+		It will eventually replace the current Shader Generator, and is currently the only option for <a href="#lightweight_srp">URP support</a>.<br />
+		You can read its <a href="https://jeanmoreno.com/unity/toonycolorspro/doc/shader_generator_2" target="_blank" class="external">documentation here</a>.
 		</div></td></table></div>
 
 		<p>The <strong>Shader Generator</strong> allows you to generate your own shader files with even more features than in the <a href="#unified_shader">Unified Material Inspector</a>. Indeed each on/off feature in the Unified Shader doubles the number of internal variants, which quickly adds up to lots of internal shader programs. Moreover, Unity's shader_feature directive has its limits.</p>
@@ -747,7 +766,7 @@
 		<!-- MATCAP -->
 		<div id="matcap_sg" class="section">
 			<h4>MatCap (Shader Generator)</h4>
-			<p>Enables texture-based fixed reflections, using a simple square texture. See my free <a href="http://www.jeanmoreno.com/matcap/" target="_blank" class="external">MatCap Shader Pack</a> for more examples!</p>
+			<p>Enables texture-based fixed reflections, using a simple square texture. See my free <a href="https://www.jeanmoreno.com/matcap/" target="_blank" class="external">MatCap Shader Pack</a> for more examples!</p>
 			<h5>Properties</h5>
 			<ul>
 				<li><strong>MatCap Texture (RGB)</strong>: the MatCap texture</li>
@@ -906,7 +925,7 @@
 					<li><strong>Linear (Additive)</strong>: smooth linear transition, but each texture is added rather than linearly blended</li>
 					<li><strong>Height (Texture Alpha)</strong>: texture alpha-based blending, to simulate a more natural blending</li>
 				</ul>
-				<li><strong>Enhance Blend Contrast</strong>: add a normal map slot for each additional texture (will enable the <a href="#normal_bump_map_sg">Normal/Bump Map</a> feature)</li>
+				<li><strong>Enhance Blend Contrast</strong>: add a Vector4 property to the material to allow fine-tuning the contrast of each color of the source map</li>
 				<li><strong>Texture # / Color Channel</strong>: set the number of textures, and define the color channel they will map to from the source</li>
 				<li><strong>Normal Map Blending</strong>: add a normal map slot for each additional texture (will enable the <a href="#normal_bump_map_sg">Normal/Bump Map</a> feature)</li>
 			</ul>
@@ -1176,26 +1195,39 @@
 
 		<h4>USAGE</h4>
 		<p>Open the utility via the menu: <strong>Tools > Toony Colors Pro 2 > Smoothed Normals Utility</strong></p>
-		<p>In Unity, select:
+		<p>In Unity, select one or multiple:
 		<ul>
-		<li>a mesh or a model from the Project view</li>
-		<li>a GameObject with a MeshFilter or SkinnedMeshRenderer attached</li>
+		<li>meshes or models assets from the Project view</li>
+		<li>GameObjects with a MeshFilter or SkinnedMeshRenderer attached</li>
 		</ul>
-		The meshes ready to be processed should appear in the Smoothed Normals Utility when it gets the focus.<br />
-		Select the mesh data where you want to store the smoothed normals:
+		The list of meshes ready to be processed should then appear in the Smoothed Normals Utility.<br />
+		</p>
+		Select the vertex data target to stored the smoothed normals:
 		<ul>
-		<li><strong>Vertex Colors</strong>: <b>do not</b> use this if you are using vertex colors elsewhere (texture blending, tinting...)</li>
-		<li><strong>Tangents</strong>: <b>do not</b> use this if you are using bump/normal maps or anisotropic specular</li>
-		<li><strong>UV2</strong>: <b>do not</b> use this if you are using lightmaps or the detail texture on the second UV coordinates</li>
+			<li><strong>Vertex Colors</strong></li>
+			<li><strong>Tangents</strong></li>
+			<li><strong>UV1-UV4</strong></li>
 		</ul>
+		If using UV data, you can select how to store the smoothed normals:
+		<ul>
+			<li><strong>Full XYZ</strong>: will store the data as-is</li>
+			<li><strong>Compressed XY</strong>: will store the data compressed into the XY channels</li>
+			<li><strong>Compressed ZW</strong>: will store the data compressed into the ZW channels</li>
+		</ul>
+		<p>Using compressed types loses precision, but it can be handy to optimize storage.<br />For example, you could keep the regular texture coordinates in UV1.xy, and store smoothed normals in UV1.zw, and thus not need any extra TEXCOORD in the vertex data (or keep them free for other usages).</p>
+
+		<p>
 		Click on "<strong>Generate Smoothed Mesh</strong>" to generate a copy of the mesh with smoothed normals in the selected mesh data.<br />
 		The new mesh will automatically be assigned if you had MeshFilters or SkinnedMeshRenderers selected.
 		</p>
+		<p>
+		You will then have to <strong>select the correct option</strong> in the Material Inspector so that the shader knows where and how to interpret the outline normal data.
+		</p>
 		<div class="warning"><table><td><div class="icon icon_warning"></div></td><td><div>
-		<b>Smoothed Normals</b> will only be stored in <b>Tangents</b> for <b>skinned meshes</b>.<br />This is because normals need to be affected by bones, and in the 3 options available only tangents are affected by bones (vertex colors and UV2 data are not). Thus smoothed normals can only work stored in tangents for skinned meshes.<br />This means that smoothed normals can't work with normal/bump maps or anisotropic specular on skinned meshes.
+		<b>Smoothed Normals</b> will only be stored in <b>Tangents</b> for <b>skinned meshes</b>.<br />This is because normals need to be affected by bones, and in the 3 options available only tangents are affected by bones (vertex colors and UV data are not). Thus smoothed normals can only work stored in tangents for skinned meshes.<br />This means that smoothed normals can't work with normal/bump maps, anisotropic specular or any other feature needing actual tangents on skinned meshes.
 		</div></td></table></div>
-		<div class="helpbox"><table><td><div class="icon icon_info"></div></td><td><div>
-		If a copy of the mesh has already been made, it will be overwritten with the new settings defined.<br />You can recognize the generated meshes with the [TCP2 Smoothed] suffix, and they are all stored in the 'Smoothed Meshes' folder by default.
+		<div class="warning"><table><td><div class="icon icon_warning"></div></td><td><div>
+		<b>UV1, UV3, UV4</b> targets, and <b>Full XYZ</b> and <b>Compressed ZW</b> UV data types are only supported in shaders made with the <a href="https://jeanmoreno.com/unity/toonycolorspro/shader_generator_2_beta/documentation" target="_blank" class="external"><b>Shader&nbsp;Generator&nbsp;2</b></a>.
 		</div></td></table></div>
 		<!--
 		<h4>FORMAT</h4>
@@ -1243,7 +1275,7 @@
 		Open the <a href="#shader_generator">Shader Generator</a>, and load the Curved World template file (default or water) with the "Load..." button.<br />
 		The generated shaders will now be compatible with Curved World and react to its settings.<br />
 		<br />
-		For the <strong>Shader Generator 2</strong>, you need to enable <strong>Curved World Support</strong> in the <strong>Third Party Plugins</strong> section.
+		For the <strong>Shader&nbsp;Generator&nbsp;2</strong>, you need to enable <strong>Curved World Support</strong> in the <strong>Third Party Plugins</strong> section.
 		</div>
 
 <!-- ################################################################################################################################ -->
@@ -1253,16 +1285,16 @@
 		You can use the <a href="https://assetstore.unity.com/packages/tools/animation/vertexmotion-23930" target="_blank" class="external">VertExmotion system by Kalagaan</a> with Toony Colors Pro 2 as of version 2.4.0.<br />
 		This feature requires the <a href="https://assetstore.unity.com/packages/tools/animation/vertexmotion-23930" target="_blank" class="external">VertExmotion</a> or <a href="https://assetstore.unity.com/packages/tools/animation/vertexmotion-pro-25127" target="_blank" class="external">VertExmotion Pro</a> package from the Asset Store</a>.<br />
 		<br />
-		Open the <a href="#shader_generator">Shader Generator</a> (or the Shader Generator 2), and under the <strong>Third Party Plugins</strong> section enable <strong>VertExmotion Support</strong>.
+		Open the <a href="#shader_generator">Shader Generator</a> (or the Shader&nbsp;Generator&nbsp;2), and under the <strong>Third Party Plugins</strong> section enable <strong>VertExmotion Support</strong>.
 		</div>
 
 <!-- ################################################################################################################################ -->
 
-		<div class="header" id="lightweight_srp">Using the Lightweight Pipeline (LWRP)</div>
+		<div class="header" id="lightweight_srp">Using the Universal Render Pipeline (URP)</div>
 		<div class="box" style="text-align: left; padding-top: 12px; padding-bottom: 12px;">
-		<p>Universal Render Pipeline (formerly Lightweight Render Pipeline) support is available using the corresponding template in the <strong>Shader Generator 2</strong>, which is currently in beta as of <strong>version 2.4.0</strong><br />
-		The LWRP/URP template has been developed using <strong>Unity 2019.1.0</strong> and <strong>LWRP 5.13.0</strong>.</p>
-		<p>Please refer to the <a href="https://jeanmoreno.com/unity/toonycolorspro/shader_generator_2_beta/documentation" target="_blank" class="external">Shader Generator 2 documentation</a> for more information!</p>
+		<p>Universal Render Pipeline (formerly Lightweight Render Pipeline) support is available using the corresponding template in the <strong>Shader&nbsp;Generator&nbsp;2</strong>, which is currently in beta as of <strong>version 2.4.0</strong><br />
+		The URP template has been developed using <strong>Unity 2019.3.6</strong> and <strong>URP 7.3.1</strong>.</p>
+		<p>Please refer to the <a href="https://jeanmoreno.com/unity/toonycolorspro/doc/shader_generator_2" target="_blank" class="external">Shader&nbsp;Generator&nbsp;2 documentation</a> for more information!</p>
 		</div>
 
 <!-- ################################################################################################################################ -->
@@ -1291,17 +1323,17 @@
 		<div class="otherassets">Other JMO assets for Unity:</div>
 		<table class="amenu bottom" cellspacing="0" cellpadding="0" border="0">
 		  <tr>
-			<td><a href="http://www.jeanmoreno.com/cartoonfx/">Cartoon FX 1</a></td>
-			<td><a href="http://www.jeanmoreno.com/cartoonfx2/">Cartoon FX 2</a></td>
-			<td><a href="http://www.jeanmoreno.com/cartoonfx3/">Cartoon FX 3</a></td>
-			<td><a href="http://www.jeanmoreno.com/cartoonfx4/">Cartoon FX 4</a></td>
-			<td><a href="http://www.jeanmoreno.com/shapefx/">Shape FX</a></td>
-			<td><a href="http://www.jeanmoreno.com/warfx/">War FX</a></td>
-			<td style="border-right:none;"><a href="http://www.jeanmoreno.com/matcap/">MatCap Shaders <span class="free">(Free)</span></a></td>
+			<td><a href="https://www.jeanmoreno.com/cartoonfx/">Cartoon FX 1</a></td>
+			<td><a href="https://www.jeanmoreno.com/cartoonfx2/">Cartoon FX 2</a></td>
+			<td><a href="https://www.jeanmoreno.com/cartoonfx3/">Cartoon FX 3</a></td>
+			<td><a href="https://www.jeanmoreno.com/cartoonfx4/">Cartoon FX 4</a></td>
+			<td><a href="https://www.jeanmoreno.com/shapefx/">Shape FX</a></td>
+			<td><a href="https://www.jeanmoreno.com/warfx/">War FX</a></td>
+			<td style="border-right:none;"><a href="https://www.jeanmoreno.com/matcap/">MatCap Shaders <span class="free">(Free)</span></a></td>
 		  </tr>
 		</table>
 		<!-- FOOTER -->
-		<div class="footer">© 2014-2019 - <a href="http://www.jeanmoreno.com/" target="_blank">Jean Moreno (JMO)</a></div>
+		<div class="footer">© 2014-2020 - <a href="https://www.jeanmoreno.com/" target="_blank">Jean Moreno (JMO)</a></div>
 	</div>
 	</body>
 </html>

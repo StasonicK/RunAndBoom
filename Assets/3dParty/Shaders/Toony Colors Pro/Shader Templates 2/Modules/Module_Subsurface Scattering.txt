@@ -1,5 +1,5 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2023 Jean Moreno
 
 // Shader Generator Module: Subsurface Scattering
 
@@ -46,7 +46,7 @@ sngl	lbl="Make Optional"				kw=SS_SHADER_FEATURE											needs=SUBSURFACE_SCAT
 
 #SHADER_FEATURES_BLOCK
 /// IF SUBSURFACE_SCATTERING && SS_SHADER_FEATURE
-	#pragma shader_feature TCP2_SUBSURFACE
+	#pragma shader_feature_local_fragment TCP2_SUBSURFACE
 ///
 #END
 
@@ -73,7 +73,7 @@ sngl	lbl="Make Optional"				kw=SS_SHADER_FEATURE											needs=SUBSURFACE_SCAT
 
 //================================================================
 
-#VARIABLES
+#FUNCTIONS
 /// IF SUBSURFACE_SCATTERING && SS_SCREEN_INFLUENCE && (SS_DIR_LIGHTS || SS_ALL_LIGHTS)
 
 		//Subsurface Scattering directional light screen-space influence

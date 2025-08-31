@@ -1,5 +1,5 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2023 Jean Moreno
 
 using System.Collections.Generic;
 using System.IO;
@@ -8,13 +8,12 @@ using UnityEngine;
 using ToonyColorsPro.Utilities;
 
 // Utility to generate meshes with encoded smoothed normals, to fix hard-edged broken outline
-// TODO Fully use UV2 now that we can use float4, plus UV3/4 options
 
 namespace ToonyColorsPro
 {
 	public class TCP2_SmoothedNormalsUtility : EditorWindow
 	{
-		[MenuItem(Menu.MENU_PATH + "Smoothed Normals Utility", false, 500)]
+		[MenuItem(Menu.MENU_PATH + "Smoothed Normals Utility", false, 600)]
 		static void OpenTool()
 		{
 			GetWindowTCP2();
@@ -23,19 +22,20 @@ namespace ToonyColorsPro
 		private static TCP2_SmoothedNormalsUtility GetWindowTCP2()
 		{
 			var window = GetWindow<TCP2_SmoothedNormalsUtility>(true, "TCP2 : Smoothed Normals Utility", true);
-			window.minSize = new Vector2(352f, 300f);
-			window.maxSize = new Vector2(352f, 600f);
+			window.minSize = new Vector2(352f, 400f);
+			window.maxSize = new Vector2(352f, 5000f);
 			return window;
 		}
 
 		//--------------------------------------------------------------------------------------------------
 		// INTERFACE
 
-		private const string MESH_SUFFIX = "[TCP2 Smoothed]";
+		private const string MESH_SUFFIX_DEFAULT = "[TCP2 Smoothed]";
+		private string mFilenameSuffix = MESH_SUFFIX_DEFAULT;
 #if UNITY_EDITOR_WIN
 		private const string OUTPUT_FOLDER = "\\Smoothed Meshes\\";
 #else
-	private const string OUTPUT_FOLDER = "/Smoothed Meshes/";
+		private const string OUTPUT_FOLDER = "/Smoothed Meshes/";
 #endif
 
 		private class SelectedMesh
@@ -80,7 +80,8 @@ namespace ToonyColorsPro
 
 		private Dictionary<Mesh, SelectedMesh> mMeshes;
 		private string mFormat = "XYZ";
-		private bool mVColors, mTangents, mUV2;
+		private Utils.SmoothedNormalsChannel smoothedNormalChannel;
+		private Utils.SmoothedNormalsUVType smoothedNormalUVType;
 		private Vector2 mScroll;
 
 		private bool mAlwaysOverwrite;
@@ -94,6 +95,7 @@ namespace ToonyColorsPro
 			mAlwaysOverwrite = EditorPrefs.GetBool("TCP2SMU_mAlwaysOverwrite", false);
 			mCustomDirectory = EditorPrefs.GetBool("TCP2SMU_mCustomDirectory", false);
 			mCustomDirectoryPath = EditorPrefs.GetString("TCP2SMU_mCustomDirectoryPath", "/");
+			mFilenameSuffix = EditorPrefs.GetString("TCP2SMU_mFilenameSuffix", MESH_SUFFIX_DEFAULT);
 		}
 
 		private void SaveUserPrefs()
@@ -101,6 +103,7 @@ namespace ToonyColorsPro
 			EditorPrefs.SetBool("TCP2SMU_mAlwaysOverwrite", mAlwaysOverwrite);
 			EditorPrefs.SetBool("TCP2SMU_mCustomDirectory", mCustomDirectory);
 			EditorPrefs.SetString("TCP2SMU_mCustomDirectoryPath", mCustomDirectoryPath);
+			EditorPrefs.SetString("TCP2SMU_mFilenameSuffix", mFilenameSuffix);
 		}
 
 		void OnEnable() { LoadUserPrefs(); }
@@ -119,11 +122,15 @@ namespace ToonyColorsPro
 
 		void OnGUI()
 		{
+			TCP2_GUI.UseNewHelpIcon = true;
+
 			EditorGUILayout.BeginHorizontal();
 			TCP2_GUI.HeaderBig("TCP 2 - SMOOTHED NORMALS UTILITY");
 			TCP2_GUI.HelpButton("Smoothed Normals Utility");
 			EditorGUILayout.EndHorizontal();
 			TCP2_GUI.Separator();
+
+			TCP2_GUI.UseNewHelpIcon = false;
 
 			/*
 			mFormat = EditorGUILayout.TextField(new GUIContent("Axis format", "Normals axis may need to be swapped before being packed into vertex colors/tangent/uv2 data. See documentation for more information."), mFormat);
@@ -141,24 +148,33 @@ namespace ToonyColorsPro
 				GUILayout.Space(4);
 				TCP2_GUI.Header("Meshes ready to be processed:", null, true);
 				mScroll = EditorGUILayout.BeginScrollView(mScroll);
-				TCP2_GUI.GUILine(Color.gray, 1);
+				TCP2_GUI.SeparatorSimple();
+				bool hasSkinnedMeshes = false;
 				foreach (var sm in mMeshes.Values)
 				{
 					GUILayout.Space(2);
 					GUILayout.BeginHorizontal();
 					var label = sm.name;
-					if (label.Contains(MESH_SUFFIX))
-						label = label.Replace(MESH_SUFFIX, "\n" + MESH_SUFFIX);
-					GUILayout.Label(label, EditorStyles.wordWrappedMiniLabel, GUILayout.Width(270));
-					sm.isSkinned = GUILayout.Toggle(sm.isSkinned, new GUIContent("Skinned", "Should be checked if the mesh will be used on a SkinnedMeshRenderer"), EditorStyles.toolbarButton);
+					if (label.Contains(mFilenameSuffix))
+					{
+						label = label.Replace(mFilenameSuffix, "\n" + mFilenameSuffix);
+					}
+					GUILayout.Label(label, EditorStyles.wordWrappedMiniLabel, GUILayout.Width(260));
+					sm.isSkinned = GUILayout.Toggle(sm.isSkinned, new GUIContent(" Skinned", "Should be checked if the mesh will be used on a SkinnedMeshRenderer"));
+					hasSkinnedMeshes |= sm.isSkinned;
 					GUILayout.Space(6);
 					GUILayout.EndHorizontal();
 					GUILayout.Space(2);
-					TCP2_GUI.GUILine(Color.gray, 1);
+					TCP2_GUI.SeparatorSimple();
 				}
 				EditorGUILayout.EndScrollView();
-
 				GUILayout.FlexibleSpace();
+
+				if (hasSkinnedMeshes)
+				{
+					EditorGUILayout.HelpBox("Smoothed Normals for Skinned meshes will be stored in Tangents only. See Help to know why.", MessageType.Warning);
+				}
+
 				if (GUILayout.Button(mMeshes.Count == 1 ? "Generate Smoothed Mesh" : "Generate Smoothed Meshes", GUILayout.Height(30)))
 				{
 					try
@@ -195,21 +211,25 @@ namespace ToonyColorsPro
 
 			TCP2_GUI.Separator();
 
-			TCP2_GUI.Header("Store smoothed normals in:", "You will have to select the correct option in the Material Inspector when using outlines", true);
+			smoothedNormalChannel = (Utils.SmoothedNormalsChannel)EditorGUILayout.EnumPopup(TCP2_GUI.TempContent("Vertex Data Target", "Defines where to store the smoothed normals in the mesh; use a target where there isn't any data already."), smoothedNormalChannel);
+			EditorGUI.BeginDisabledGroup(smoothedNormalChannel == Utils.SmoothedNormalsChannel.Tangents || smoothedNormalChannel == Utils.SmoothedNormalsChannel.VertexColors);
+			smoothedNormalUVType = (Utils.SmoothedNormalsUVType)EditorGUILayout.EnumPopup(TCP2_GUI.TempContent("UV Data Type", "Defines where and how to store the smoothed normals in the target vertex UV channel."), smoothedNormalUVType);
+			EditorGUI.EndDisabledGroup();
 
-			var choice = 0;
-			if (mTangents) choice = 1;
-			if (mUV2) choice = 2;
-			choice = TCP2_GUI.RadioChoice(choice, true, "Vertex Colors", "Tangents", "UV2");
-			EditorGUILayout.HelpBox("Smoothed Normals for Skinned meshes will be stored in Tangents only. See Help to know why.", MessageType.Warning);
+			EditorGUILayout.HelpBox("You will need to select the proper option in the Material Inspector depending on the selected target/format!", MessageType.Info);
 
-			mVColors    = (choice == 0);
-			mTangents   = (choice == 1);
-			mUV2        = (choice == 2);
+			/*
+			if (smoothedNormalChannel == Utils.SmoothedNormalsChannel.UV1 || smoothedNormalChannel == Utils.SmoothedNormalsChannel.UV3 || smoothedNormalChannel == Utils.SmoothedNormalsChannel.UV4 ||
+				(smoothedNormalChannel == Utils.SmoothedNormalsChannel.UV2 && smoothedNormalUVType != Utils.SmoothedNormalsUVType.CompressedXY))
+			{
+				EditorGUILayout.HelpBox("Only shaders made with the Shader Generator 2 support all texture coordinates.\nOther shaders only support UV2 with 'Compressed XY' option. UV1, UV3, UV4 won't work with them, as well as 'Full XYZ' and 'Compressed ZW' data types.", MessageType.Warning);
+			}
+			*/
 
 			TCP2_GUI.Separator();
 
 			TCP2_GUI.Header("Options", null, true);
+			mFilenameSuffix = EditorGUILayout.TextField(TCP2_GUI.TempContent("File name suffix"), mFilenameSuffix);
 			mAlwaysOverwrite = EditorGUILayout.Toggle(new GUIContent("Always Overwrite", "Will always overwrite existing [TCP2 Smoothed] meshes"), mAlwaysOverwrite);
 			mCustomDirectory = EditorGUILayout.Toggle(new GUIContent("Custom Output Directory", "Save the generated smoothed meshes in a custom directory"), mCustomDirectory);
 			using (new EditorGUI.DisabledScope(!mCustomDirectory))
@@ -263,8 +283,8 @@ namespace ToonyColorsPro
 
 			var originalMeshName = GetSafeFilename(originalMesh.name);
 			var assetPath = "Assets" + rootPath;
-			var newAssetName = originalMeshName + " " + MESH_SUFFIX + ".asset";
-			if (originalMeshName.Contains(MESH_SUFFIX))
+			var newAssetName = string.Format("{0}{1}.asset", originalMeshName, string.IsNullOrEmpty(mFilenameSuffix) ? "" : " " + mFilenameSuffix);
+			if (originalMeshName.Contains(mFilenameSuffix))
 			{
 				newAssetName = originalMeshName + ".asset";
 			}
@@ -285,15 +305,8 @@ namespace ToonyColorsPro
 				originalMesh.name = existingAsset.name;
 			}
 
-			Mesh newMesh = null;
-			if (originalMesh.isSkinned)
-			{
-				newMesh = Utils.CreateSmoothedMesh(originalMesh.mesh, mFormat, false, true, false, !originalMesh.isAsset || (originalMesh.isAsset && assetExists));
-			}
-			else
-			{
-				newMesh = Utils.CreateSmoothedMesh(originalMesh.mesh, mFormat, mVColors, mTangents, mUV2, !originalMesh.isAsset || (originalMesh.isAsset && assetExists));
-			}
+			var channel = originalMesh.isSkinned ? Utils.SmoothedNormalsChannel.Tangents : smoothedNormalChannel;
+			Mesh newMesh = Utils.CreateSmoothedMesh(originalMesh.mesh, mFormat, channel, smoothedNormalUVType, !originalMesh.isAsset || (originalMesh.isAsset && assetExists));
 
 			if (newMesh == null)
 			{
@@ -386,7 +399,7 @@ namespace ToonyColorsPro
 							}
 							else
 							{
-								if (r.sharedMesh.name.Contains(MESH_SUFFIX))
+								if (r.sharedMesh.name.Contains(mFilenameSuffix))
 								{
 									meshDict.Add(r.sharedMesh, new SelectedMesh(r.sharedMesh, r.sharedMesh.name, false));
 								}
@@ -415,7 +428,7 @@ namespace ToonyColorsPro
 							}
 							else
 							{
-								if (mf.sharedMesh.name.Contains(MESH_SUFFIX))
+								if (mf.sharedMesh.name.Contains(mFilenameSuffix))
 								{
 									meshDict.Add(mf.sharedMesh, new SelectedMesh(mf.sharedMesh, mf.sharedMesh.name, false));
 								}

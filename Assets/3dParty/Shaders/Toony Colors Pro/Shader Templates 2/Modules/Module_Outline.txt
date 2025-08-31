@@ -1,21 +1,23 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2023 Jean Moreno
 
 // Shader Generator Module: Outline Pass
 // Note: only handles UI, implementation is made in the templates directly
 
 #FEATURES
-sngl	lbl="Outline"		kw=OUTLINE					tt="Add an outline around the model using the inverted hull method"
-sngl	lbl="URP Renderer Feature"	kw=OUTLINE_URP_FEATURE		needs=OUTLINE	templates=TEMPLATE_URP	indent		tt="Set the outline pass to be used as a Renderer Feature (see documentation)"
+sngl	lbl="Outline"		kw=OUTLINE				help="featuresreference/stylization/outline"						tt="Add an outline around the model using the inverted hull method"
+sngl	lbl="URP Renderer Feature"	kw=OUTLINE_URP_FEATURE		needs=OUTLINE	templates=TEMPLATE_URP		indent		tt="Set the outline pass to be used as a Renderer Feature (see documentation)"
 mult	lbl="Blending"		kw=Inherit|,Opaque|OUTLINE_OPAQUE,Custom|OUTLINE_BLENDING		needs=OUTLINE	indent		tt="How the outline will be blended with the scene"
-mult	lbl="Space"			kw=Object Space|,Clip Space|OUTLINE_CLIP_SPACE					indent		tt="In which space should the outline mesh vertices be moved"
+mult	lbl="Space"			kw=Object Space|,Clip Space|OUTLINE_CLIP_SPACE									indent		tt="In which space should the outline mesh vertices be moved"
 #legacy:
 mult	lbl="Outline behind model"	kw=Off|,Depth Buffer|OUTLINE_BEHIND_DEPTH,Stencil Buffer|OUTLINE_BEHIND_STENCIL		needs=OUTLINE	templates=TEMPLATE_DEFAULT	indent		tt="Show outline behind model"
 #lwrp:
 mult	lbl="Outline behind model"	kw=Off|,Stencil Buffer|OUTLINE_BEHIND_STENCIL		needs=OUTLINE	templates=TEMPLATE_LWRP,TEMPLATE_URP	indent		tt="Show outline behind model"
 sngl	lbl="Depth Pass"				kw=OUTLINE_DEPTH	needs=OUTLINE	needs=OUTLINE_BEHIND_DEPTH	templates=TEMPLATE_DEFAULT	indent=2	tt="Adds a depth writing pass for the outline behind model: this can solve issues with sorting and drawing order"
-sngl	lbl="Constant-size"			kw=OUTLINE_CONSTANT_SIZE	needs=OUTLINE								indent		tt="Constant-size outline independent from the camera distance"
-sngl	lbl="Pixel-Perfect"			kw=OUTLINE_PIXEL_PERFECT	needs=OUTLINE	needs=OUTLINE_CLIP_SPACE,OUTLINE_CONSTANT_SIZE	indent=2		tt="Pixel-perfect outline width (needs Outline in Clip Space)"
+sngl	lbl="Constant-size"			kw=OUTLINE_CONSTANT_SIZE	needs=OUTLINE											indent			tt="Constant-size outline independent from the camera distance"
+sngl	lbl="Pixel-Perfect"			kw=OUTLINE_PIXEL_PERFECT	needs=OUTLINE,OUTLINE_CLIP_SPACE,OUTLINE_CONSTANT_SIZE	indent=2		tt="Pixel-perfect outline width (needs Outline in Clip Space)"
+sngl	lbl="Maximum Pixel Width"	kw=OUTLINE_MAX_WIDTH		needs=OUTLINE,OUTLINE_CLIP_SPACE	excl=OUTLINE_CONSTANT_SIZE	indent	tt="Apply a maximum pixel width for the outline in view space (needs Outline in Clip Space)"
+sngl	lbl="Minimum Pixel Width"	kw=OUTLINE_MIN_WIDTH		needs=OUTLINE,OUTLINE_CLIP_SPACE	excl=OUTLINE_CONSTANT_SIZE	indent	tt="Apply a minimum pixel width for the outline in view space (needs Outline in Clip Space)"
 sngl	lbl="Z Correction"			kw=OUTLINE_ZSMOOTH			needs=OUTLINE		indent		tt="Add parameters to adjust the Z position of the outline.  Can help with some sorting artefacts with the base geometry."
 #sngl	lbl="Vertex Lighting"			kw=OUTLINE_LIGHTING_VERT			needs=OUTLINE						indent		tt="Apply basic vertex lighting to attenuate the outline color based on the main directional light"
 mult	lbl="Lighting"				kw=Off|,Vertex|OUTLINE_LIGHTING_VERT,Fragment|OUTLINE_LIGHTING_FRAG		toggles=OUTLINE_LIGHTING	needs=OUTLINE	indent			tt="Apply basic lighting to attenuate the outline color based on the main directional light"
@@ -30,6 +32,12 @@ sngl	lbl="Shadow/Depth Pass"		kw=OUTLINE_SHADOWCASTER	needs=OUTLINE	templates=TE
 /// IF OUTLINE
 		header			Outline
 		float			Outline Width		vertex, label = "Width", imp(range, label = "Width", default = 1, min = 0.1, max = 4)
+	/// IF OUTLINE_CLIP_SPACE && OUTLINE_MIN_WIDTH && !OUTLINE_CONSTANT_SIZE
+		float			Outline Min Width	vertex, label = "Min Width", imp(range, label = "Min Width", default = 1, min = 0, max = 20)
+	///
+	/// IF OUTLINE_CLIP_SPACE && OUTLINE_MAX_WIDTH && !OUTLINE_CONSTANT_SIZE
+		float			Outline Max Width	vertex, label = "Max Width", imp(range, label = "Max Width", default = 1, min = 0, max = 20)
+	///
 	/// IF OUTLINE_FAKE_RIM
 		float3			Outline Offset		vertex, label = "Position Offset", imp(vector, label = "Offset", default = (0,0,0))
 	///
@@ -75,6 +83,12 @@ sngl	lbl="Shadow/Depth Pass"		kw=OUTLINE_SHADOWCASTER	needs=OUTLINE	templates=TE
 
 		[TCP2HeaderHelp(Outline)]
 		[[PROP:Outline Width]]
+	/// IF OUTLINE_CLIP_SPACE && OUTLINE_MIN_WIDTH && !OUTLINE_CONSTANT_SIZE
+		[[PROP:Outline Min Width]]
+	///
+	/// IF OUTLINE_CLIP_SPACE && OUTLINE_MAX_WIDTH && !OUTLINE_CONSTANT_SIZE
+		[[PROP:Outline Max Width]]
+	///
 		[[PROP:Outline Color]]
 		[[PROP:Outline Color Vertex]]
 	/// IF OUTLINE_FAKE_RIM
@@ -106,15 +120,20 @@ sngl	lbl="Shadow/Depth Pass"		kw=OUTLINE_SHADOWCASTER	needs=OUTLINE	templates=TE
 	/// IF OUTLINE_BEHIND_STENCIL
 		[[PROP:Outline Stencil Reference]]
 	///
-		//This property will be ignored and will draw the custom normals GUI instead
-		[TCP2OutlineNormalsGUI] __outline_gui_dummy__ ("_unused_", Float) = 0
+	/// IF !OUTLINE_FAKE_RIM_DIRLIGHT && !OUTLINE_FAKE_RIM
+		// Outline Normals
+		[TCP2MaterialKeywordEnumNoPrefix(Regular, _, Vertex Colors, TCP2_COLORS_AS_NORMALS, Tangents, TCP2_TANGENT_AS_NORMALS, UV1, TCP2_UV1_AS_NORMALS, UV2, TCP2_UV2_AS_NORMALS, UV3, TCP2_UV3_AS_NORMALS, UV4, TCP2_UV4_AS_NORMALS)]
+		_NormalsSource ("Outline Normals Source", Float) = 0
+		[TCP2MaterialKeywordEnumNoPrefix(Full XYZ, TCP2_UV_NORMALS_FULL, Compressed XY, _, Compressed ZW, TCP2_UV_NORMALS_ZW)]
+		_NormalsUVType ("UV Data Type", Float) = 0
 		[TCP2Separator]
+	///
 ///
 #END
 
 //================================================================
 
-#VARIABLES
+#FUNCTIONS
 /// IF LWRP
 
 	// Built-in renderer (CG) to SRP (HLSL) bindings
@@ -186,20 +205,48 @@ float3 worldPos;
 	#elif TCP2_TANGENT_AS_NORMALS
 		//Tangent for Normals
 		float3 normal = v.tangent.xyz;
-	#elif TCP2_UV2_AS_NORMALS
-		//UV2 for Normals
+	#elif TCP2_UV1_AS_NORMALS || TCP2_UV2_AS_NORMALS || TCP2_UV3_AS_NORMALS || TCP2_UV4_AS_NORMALS
+		#if TCP2_UV1_AS_NORMALS
+			#define uvChannel texcoord0
+		#elif TCP2_UV2_AS_NORMALS
+			#define uvChannel texcoord1
+		#elif TCP2_UV3_AS_NORMALS
+			#define uvChannel texcoord2
+		#elif TCP2_UV4_AS_NORMALS
+			#define uvChannel texcoord3
+		#endif
+
+		#if TCP2_UV_NORMALS_FULL
+		//UV for Normals, full
+		float3 normal = v.uvChannel.xyz;
+		#else
+		//UV for Normals, compressed
+		#if TCP2_UV_NORMALS_ZW
+			#define ch1 z
+			#define ch2 w
+		#else
+			#define ch1 x
+			#define ch2 y
+		#endif
 		float3 n;
-		//unpack uv2
-		v.uv2.x = v.uv2.x * 255.0/16.0;
-		n.x = floor(v.uv2.x) / 15.0;
-		n.y = frac(v.uv2.x) * 16.0 / 15.0;
+		//unpack uvs
+		v.uvChannel.ch1 = v.uvChannel.ch1 * 255.0/16.0;
+		n.x = floor(v.uvChannel.ch1) / 15.0;
+		n.y = frac(v.uvChannel.ch1) * 16.0 / 15.0;
 		//- get z
-		n.z = v.uv2.y;
+		n.z = v.uvChannel.ch2;
 		//- transform
 		n = n*2 - 1;
 		float3 normal = n;
+		#endif
 	#else
 		float3 normal = v.normal;
+	#endif
+
+	#if TCP2_ZSMOOTH_ON
+		//Correct Z artefacts
+		normal = UnityObjectToViewPos(normal);
+		normal.z = -_ZSmooth;
 	#endif
 ///
 /// IF OUTLINE_ZSMOOTH
@@ -225,19 +272,46 @@ float3 worldPos;
 		normal = mul(unity_ObjectToWorld, float4(normal, 0)).xyz;
 	///
 		float2 clipNormals = normalize(mul(UNITY_MATRIX_VP, float4(normal,0)).xy);
-	/// IF OUTLINE_CONSTANT_SIZE
-		clipNormals.xy *= output.vertex.w;
+	/// IF (OUTLINE_CONSTANT_SIZE && OUTLINE_PIXEL_PERFECT) || (OUTLINE_MIN_WIDTH && !OUTLINE_CONSTANT_SIZE) || (OUTLINE_MAX_WIDTH && !OUTLINE_CONSTANT_SIZE)
+# Outline in clip space and pixel size : adjust based on screen resolution
 		/// IF OUTLINE_PIXEL_PERFECT
-		clipNormals.xy = (clipNormals.xy / _ScreenParams.xy) * 2.0;
+		half2 outlineWidth = ([[VALUE:Outline Width]] * output.vertex.w) / (_ScreenParams.xy / 2.0);
+		/// ELSE
+		half2 screenRatio = half2(1.0, _ScreenParams.x / _ScreenParams.y);
+			/// IF OUTLINE_MIN_WIDTH && OUTLINE_MAX_WIDTH
+		half2 outlineWidth = max(
+			([[VALUE:Outline Min Width]] * output.vertex.w) / (_ScreenParams.xy / 2.0),
+			([[VALUE:Outline Width]] / 100) * screenRatio
+		);
+		outlineWidth = min(
+			([[VALUE:Outline Max Width]] * output.vertex.w) / (_ScreenParams.xy / 2.0),
+			outlineWidth
+		);
+			/// ELIF OUTLINE_MIN_WIDTH
+		half2 outlineWidth = max(
+			([[VALUE:Outline Min Width]] * output.vertex.w) / (_ScreenParams.xy / 2.0),
+			([[VALUE:Outline Width]] / 100) * screenRatio
+		);
+			/// ELIF OUTLINE_MAX_WIDTH
+		half2 outlineWidth = min(
+			([[VALUE:Outline Max Width]] * output.vertex.w) / (_ScreenParams.xy / 2.0),
+			([[VALUE:Outline Width]] / 100) * screenRatio
+		);
+			///
+		///
+	/// ELSE
+# Outline in clip space but no pixel size : adjust based on screen ratio
+		half2 screenRatio = half2(1.0, _ScreenParams.x / _ScreenParams.y);
+		half2 outlineWidth = ([[VALUE:Outline Width]] / 100) * screenRatio;
+		/// IF OUTLINE_CONSTANT_SIZE
+		outlineWidth *= output.vertex.w;
 		///
 	///
-	/// IF !(OUTLINE_PIXEL_PERFECT && OUTLINE_CONSTANT_SIZE)
-		clipNormals.xy *= 0.01;
-	///
-		output.vertex.xy += clipNormals.xy * [[VALUE:Outline Width]] * size;
-/// IF OUTLINE_ZSMOOTH
+		output.vertex.xy += clipNormals.xy * outlineWidth;
+		
+	/// IF OUTLINE_ZSMOOTH
 		output.vertex.z += [[VALUE:Outline ZSmooth]] * 0.0001;
-///
+	///
 /// ELSE
 		output.vertex = UnityObjectToClipPos(v.vertex.xyz + normal * [[VALUE:Outline Width]] * size * 0.01);
 ///
@@ -277,7 +351,6 @@ float3 worldPos;
 	///
 		outlineColor *= ndl;
 ///
-		return outlineColor;
 #DISABLE_IMPL_ALL
 ///
 #END

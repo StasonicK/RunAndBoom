@@ -12,6 +12,7 @@ namespace ToonyColorsPro
 		const float closeDelay = 0.1f;
 		static bool updateEvent;
 		static bool isHiding;
+		static Rect _labelRect = new Rect();
 
 		static GUIStyle _style;
 		static GUIStyle style
@@ -22,6 +23,7 @@ namespace ToonyColorsPro
 				{
 					_style = new GUIStyle(EditorStyles.wordWrappedLabel);
 					_style.richText = true;
+					_style.alignment = TextAnchor.MiddleLeft;
 				}
 				return _style;
 			}
@@ -57,9 +59,14 @@ namespace ToonyColorsPro
 			}
 
 
+			const float padding = 4.0f;
+
 			guiContent.text = message.Replace("  ", "\n");
-			float height = style.CalcHeight(guiContent, width) + 4;
-			instance.position = new Rect(position.x, position.y, width, height);
+			float height = style.CalcHeight(guiContent, width) + padding;
+			instance.position = new Rect(position.x, position.y, width + padding, height);
+			_labelRect.x = padding / 2.0f;
+			_labelRect.width = width;
+			_labelRect.height = instance.position.height;
 			instance.ShowPopup();
 			isHiding = false;
 		}
@@ -102,7 +109,7 @@ namespace ToonyColorsPro
 			EditorGUI.DrawRect(new Rect(0, position.height-1, position.width, 1), Color.black);
 
 			// label
-			GUILayout.Label(guiContent, style);
+			GUI.Label(_labelRect, guiContent, style);
 		}
 	}
 }

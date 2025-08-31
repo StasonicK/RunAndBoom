@@ -1,5 +1,5 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2023 Jean Moreno
 
 using System;
 using System.Linq;
@@ -78,6 +78,8 @@ internal class TCP2_MaterialInspector_PBS : ShaderGUI
 		public static GUIContent tcp2_rimMaxText = new GUIContent("Fresnel Max", "Stylized Fresnel max ramp threshold");
 		public static GUIContent tcp2_outlineColorText = new GUIContent("Outline Color", "Color of the outline");
 		public static GUIContent tcp2_outlineWidthText = new GUIContent("Outline Width", "Width of the outline");
+		public static GUIContent tcp2_normalsSourceText = new GUIContent("Outline Normals Source", "Vertex data source to use as smoothed normals, see the Smoothed Normals Utility in the documentation");
+		public static GUIContent tcp2_uvDataTypeText = new GUIContent("UV Data Type", "Defines how the smoothed normals are encoded in the selected UV channel");
 
 		public static string tcp2_TexLodText = "Outline Texture LOD";
 		public static string tcp2_ZSmoothText = "ZSmooth Value";
@@ -141,6 +143,8 @@ internal class TCP2_MaterialInspector_PBS : ShaderGUI
 	MaterialProperty tcp2_Offset2;
 	MaterialProperty tcp2_srcBlendOutline;
 	MaterialProperty tcp2_dstBlendOutline;
+	MaterialProperty tcp2_normalsSource;
+	MaterialProperty tcp2_uvDataType;
 	static bool expandStandardProperties = true;
 	static bool expandTCP2Properties = true;
 	readonly string[] outlineNormalsKeywords = { "TCP2_NONE", "TCP2_COLORS_AS_NORMALS", "TCP2_TANGENT_AS_NORMALS", "TCP2_UV2_AS_NORMALS" };
@@ -219,6 +223,8 @@ internal class TCP2_MaterialInspector_PBS : ShaderGUI
 		tcp2_Offset2 = FindProperty("_Offset2", props, false);
 		tcp2_srcBlendOutline = FindProperty("_SrcBlendOutline", props, false);
 		tcp2_dstBlendOutline = FindProperty("_DstBlendOutline", props, false);
+		tcp2_normalsSource = FindProperty("_NormalsSource", props, false);
+		tcp2_uvDataType = FindProperty("_NormalsUVType", props, false);
 	}
 
 	public override void OnGUI (MaterialEditor materialEditor, MaterialProperty[] props)
@@ -246,9 +252,14 @@ internal class TCP2_MaterialInspector_PBS : ShaderGUI
 #endif
 	}
 
+	bool outlineShouldChange;
+	bool showOutline;
+	bool showOutlineBlended;
+
 	public void ShaderPropertiesGUI (Material material)
 	{
 		// Use default labelWidth
+		float labelWidth = EditorGUIUtility.labelWidth;
 		EditorGUIUtility.labelWidth = 0f;
 
 		// Detect any changes to the material
@@ -310,14 +321,12 @@ internal class TCP2_MaterialInspector_PBS : ShaderGUI
 			//----------------------------------------------------------------
 			//    TOONY COLORS PRO 2
 
-			var useOutline = (m_MaterialEditor.target as Material).shaderKeywords.Contains("OUTLINES");
-			var useOutlineBlended = (m_MaterialEditor.target as Material).shaderKeywords.Contains("OUTLINE_BLENDING");
+			int outlineType = (int)((Material)m_MaterialEditor.target).GetFloat("_EnableOutline");
+			var useOutline = outlineType >= 1;
+			var useOutlineBlended = outlineType == 2;
 
 			var hasOutlineShader = tcp2_outlineWidth != null;
 			var hasOutlineBlendedShader = tcp2_srcBlendOutline != null;
-
-			var useOutlineNew = useOutline;
-			var useOutlineBlendedNew = useOutlineBlended;
 
 			expandTCP2Properties = GUILayout.Toggle(expandTCP2Properties, "TOONY COLORS PRO 2", EditorStyles.toolbarButton);
 			if (expandTCP2Properties)
@@ -377,7 +386,13 @@ internal class TCP2_MaterialInspector_PBS : ShaderGUI
 				}
 
 				//Outline
-				useOutlineNew = EditorGUILayout.Toggle(new GUIContent("Outline", "Enable mesh-based outline"), useOutline);
+				bool useOutlineNew = EditorGUILayout.Toggle(new GUIContent("Outline", "Enable mesh-based outline"), useOutline);
+				if (useOutlineNew != useOutline)
+				{
+					outlineShouldChange = true;
+					showOutline = useOutlineNew;
+					showOutlineBlended = hasOutlineBlendedShader;
+				}
 				if (useOutline && hasOutlineShader)
 				{
 					//Outline base props
@@ -401,7 +416,13 @@ internal class TCP2_MaterialInspector_PBS : ShaderGUI
 
 					//Blended Outline
 					EditorGUI.indentLevel++;
-					useOutlineBlendedNew = EditorGUILayout.Toggle(new GUIContent("Blended Outline", "Enable blended outline rather than opaque"), useOutlineBlended);
+					bool useOutlineBlendedNew = EditorGUILayout.Toggle(new GUIContent("Blended Outline", "Enable blended outline rather than opaque"), useOutlineBlended);
+					if (useOutlineBlendedNew != useOutlineBlended)
+					{
+						outlineShouldChange = true;
+						showOutline = useOutline;
+						showOutlineBlended = useOutlineBlendedNew;
+					}
 					if (useOutlineBlended && hasOutlineBlendedShader)
 					{
 						EditorGUI.indentLevel++;
@@ -419,45 +440,9 @@ internal class TCP2_MaterialInspector_PBS : ShaderGUI
 					}
 					EditorGUI.indentLevel--;
 
-					//Outline Normals
-					var onIndex = GetOutlineNormalsIndex();
-					var newIndex = onIndex;
-					EditorGUI.indentLevel++;
-					if (Utils.ScreenWidthRetina < 390f)
-					{
-						newIndex = Utils.ShaderKeywordRadioGeneric("Outline Normals", newIndex, new[]
-						{
-							new GUIContent("R", "Use regular vertex normals"),
-							new GUIContent("VC", "Use vertex colors as normals (with smoothed mesh)"),
-							new GUIContent("T", "Use tangents as normals (with smoothed mesh)"),
-							new GUIContent("UV2", "Use second texture coordinates as normals (with smoothed mesh)")
-						});
-					}
-					else if (Utils.ScreenWidthRetina < 560f)
-					{
-						newIndex = Utils.ShaderKeywordRadioGeneric("Outline Normals", newIndex, new[]
-						{
-							new GUIContent("Regular", "Use regular vertex normals"),
-							new GUIContent("VColors", "Use vertex colors as normals (with smoothed mesh)"),
-							new GUIContent("Tangents", "Use tangents as normals (with smoothed mesh)"),
-							new GUIContent("UV2", "Use second texture coordinates as normals (with smoothed mesh)")
-						});
-					}
-					else
-					{
-						newIndex = Utils.ShaderKeywordRadioGeneric("Outline Normals", newIndex, new[]
-						{
-							new GUIContent("Regular", "Use regular vertex normals"),
-							new GUIContent("Vertex Colors", "Use vertex colors as normals (with smoothed mesh)"),
-							new GUIContent("Tangents", "Use tangents as normals (with smoothed mesh)"),
-							new GUIContent("UV2", "Use second texture coordinates as normals (with smoothed mesh)")
-						});
-					}
-					EditorGUI.indentLevel--;
-					if (newIndex != onIndex)
-					{
-						UpdateOutlineNormalsKeyword(newIndex);
-					}
+					// Outline Normals
+					m_MaterialEditor.ShaderProperty(tcp2_normalsSource, Styles.tcp2_normalsSourceText.text, 1);
+					m_MaterialEditor.ShaderProperty(tcp2_uvDataType, Styles.tcp2_uvDataTypeText.text, 1);
 				}
 
 				GUILayout.Space(8f);
@@ -469,14 +454,18 @@ internal class TCP2_MaterialInspector_PBS : ShaderGUI
 
 			GUILayout.Space(10f);
 
-			//TCP2: set correct shader based on outline properties
-			if (useOutline != useOutlineNew || useOutlineBlended != useOutlineBlendedNew)
+			if ((hasOutlineShader && !useOutline) || (!hasOutlineShader && useOutline))
 			{
-				SetTCP2Shader(useOutlineNew, useOutlineBlendedNew);
+				outlineShouldChange = true;
+				showOutline = hasOutlineShader;
+				showOutlineBlended = hasOutlineBlendedShader;
 			}
-			else if (useOutline != hasOutlineShader || useOutlineBlended != hasOutlineBlendedShader)
+
+			//TCP2: set correct shader based on outline properties
+			if (outlineShouldChange && Event.current.type == EventType.Repaint)
 			{
-				SetTCP2Shader(useOutline, useOutlineBlended);
+				outlineShouldChange = false;
+				SetTCP2Shader(showOutline, showOutlineBlended);
 			}
 		}
 		if (EditorGUI.EndChangeCheck())
@@ -484,25 +473,11 @@ internal class TCP2_MaterialInspector_PBS : ShaderGUI
 			foreach (var obj in blendMode.targets)
 				MaterialChanged((Material)obj, m_WorkflowMode);
 		}
+
+		EditorGUIUtility.labelWidth = labelWidth;
 	}
 
-	void UpdateOutlineNormalsKeyword(int index)
-	{
-		var selectedKeyword = outlineNormalsKeywords[index];
-
-		foreach (var obj in m_MaterialEditor.targets)
-		{
-			if (obj is Material)
-			{
-				var m = obj as Material;
-				foreach (var kw in outlineNormalsKeywords)
-					m.DisableKeyword(kw);
-				m.EnableKeyword(selectedKeyword);
-			}
-		}
-	}
-
-	internal void DetermineWorkflow(MaterialProperty[] props)
+	void DetermineWorkflow(MaterialProperty[] props)
 	{
 		if (FindProperty("_SpecGlossMap", props, false) != null && FindProperty("_SpecColor", props, false) != null)
 			m_WorkflowMode = WorkflowMode.Specular;
@@ -801,15 +776,12 @@ internal class TCP2_MaterialInspector_PBS : ShaderGUI
 			{
 				if (obj is Material)
 				{
-					if (blendedOutline)
-						(obj as Material).EnableKeyword("OUTLINE_BLENDING");
+					if (useOutline && blendedOutline)
+						(obj as Material).SetFloat("_EnableOutline", 2);
+					else if (useOutline)
+						(obj as Material).SetFloat("_EnableOutline", 1);
 					else
-						(obj as Material).DisableKeyword("OUTLINE_BLENDING");
-
-					if (useOutline)
-						(obj as Material).EnableKeyword("OUTLINES");
-					else
-						(obj as Material).DisableKeyword("OUTLINES");
+						(obj as Material).SetFloat("_EnableOutline", 0);
 				}
 			}
 

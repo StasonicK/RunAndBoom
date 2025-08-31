@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using CodeBase.Hero;
 using CodeBase.Projectiles.Hit;
 using CodeBase.Projectiles.Movement;
 using CodeBase.Services.Audio;
 using CodeBase.StaticData.Projectiles;
 using CodeBase.StaticData.Weapons;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace CodeBase.Weapons
@@ -105,7 +105,7 @@ namespace CodeBase.Weapons
             }
         }
 
-        protected override async Task<GameObject> GetProjectile()
+        protected override async UniTask<GameObject> GetProjectile()
         {
             _projectile = await _poolService.GetHeroProjectile(_projectileTypeId.ToString());
             _heroWeaponStaticData = _staticDataService.ForHeroWeapon(_heroWeaponTypeId);

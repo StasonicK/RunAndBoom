@@ -14,6 +14,13 @@
       "dependencies": {},
       "hash": "faf20595c0f18f4a471e6b27fbd5fbf5fd05d7a2"
     },
+    "com.cysharp.unitask": {
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "64285ae060c9fe2aeb2a73b076b160939ce3be1a"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,

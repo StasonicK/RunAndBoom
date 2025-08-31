@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using CodeBase.Data;
 using CodeBase.Data.Progress;
 using CodeBase.Hero;
@@ -27,6 +26,8 @@ using CodeBase.UI.Windows.Results;
 using CodeBase.UI.Windows.Settings;
 using CodeBase.UI.Windows.Shop;
 using CodeBase.UI.Windows.Start;
+using CodeBase.UI.Windows.StartNewGame;
+using Cysharp.Threading.Tasks;
 using Plugins.SoundInstance.Core.Static;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -143,7 +144,7 @@ namespace CodeBase.Infrastructure.States
                 progressReader.LoadProgressData(_progressService.ProgressData);
         }
 
-        private async Task InitializeGameWorld()
+        private async UniTask InitializeGameWorld()
         {
             LevelStaticData levelData = LevelStaticData();
 
@@ -155,7 +156,7 @@ namespace CodeBase.Infrastructure.States
             }
         }
 
-        private async Task InitUIRoot() =>
+        private async UniTask InitUIRoot() =>
             await _uiFactory.CreateUIRoot();
 
         private LevelStaticData LevelStaticData()
@@ -164,7 +165,7 @@ namespace CodeBase.Infrastructure.States
             return _staticDataService.ForLevel(sceneId);
         }
 
-        private async Task InitializeGameWorld(LevelStaticData levelData)
+        private async UniTask InitializeGameWorld(LevelStaticData levelData)
         {
             _hero = await InitHero(levelData);
             await InitHud(_hero);
@@ -174,7 +175,7 @@ namespace CodeBase.Infrastructure.States
             _hero.StopHero();
         }
 
-        private async Task InitializeSpawners(LevelStaticData levelData)
+        private async UniTask InitializeSpawners(LevelStaticData levelData)
         {
             foreach (EnemySpawnerData spawnerData in levelData.EnemySpawners)
             {
@@ -191,7 +192,7 @@ namespace CodeBase.Infrastructure.States
             }
         }
 
-        private async Task<GameObject> InitHero(LevelStaticData levelStaticData) =>
+        private async UniTask<GameObject> InitHero(LevelStaticData levelStaticData) =>
             await _gameFactory.CreateHero(levelStaticData.InitialHeroPosition);
 
         private void InitLevelTransfer(LevelStaticData levelData)
@@ -200,7 +201,7 @@ namespace CodeBase.Infrastructure.States
             findWithTag.GetComponent<Finish>().Construct(levelData.Level, levelData.LevelTransfer.TransferTo);
         }
 
-        private async Task InitHud(GameObject hero)
+        private async UniTask InitHud(GameObject hero)
         {
             if (_hud == null)
                 _hud = await _uiFactory.CreateHud(hero);
@@ -235,7 +236,7 @@ namespace CodeBase.Infrastructure.States
             _hud.GetComponentInChildren<Crosshairs>().Construct(heroReloading, heroWeaponSelection);
         }
 
-        private async Task InitWindows(GameObject hero)
+        private async UniTask InitWindows(GameObject hero)
         {
             if (_openSettings == null)
                 _openSettings = _hud.GetComponent<OpenSettings>();
@@ -272,6 +273,9 @@ namespace CodeBase.Infrastructure.States
             GameObject startWindow = await _uiFactory.CreateStartWindow();
             startWindow.GetComponent<StartWindow>()
                 ?.Construct(hero, _openSettings, _progressService, _adsService, _mobileInput);
+            GameObject startNewGameWindow = await _uiFactory.CreateStartWindow();
+            startNewGameWindow.GetComponent<StartNewGameWindow>()
+                ?.Construct(hero, _openSettings, _mobileInput);
 
             _windowService.AddWindow(WindowId.Shop, shopWindow);
             _windowService.AddWindow(WindowId.Death, deathWindow);
@@ -282,6 +286,7 @@ namespace CodeBase.Infrastructure.States
             _windowService.AddWindow(WindowId.GameEnd, gameEndWindow);
             _windowService.AddWindow(WindowId.Settings, settingsWindow);
             _windowService.AddWindow(WindowId.Start, startWindow);
+            _windowService.AddWindow(WindowId.StartNewGame, startNewGameWindow);
 
             _windowService.Show<StartWindow>(WindowId.Start);
         }

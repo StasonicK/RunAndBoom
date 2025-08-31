@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using CodeBase.Infrastructure.AssetManagement;
 using CodeBase.StaticData.Projectiles;
 using CodeBase.StaticData.ShotVfxs;
+using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -233,13 +233,13 @@ namespace CodeBase.Services.Pool
             _activeShotVfxs.Add(ShotVfxTypeId.Shot.ToString(), new List<GameObject>(gameObjects.Count));
         }
 
-        public async Task<GameObject> GetEnemyProjectile(string name) =>
+        public async UniTask<GameObject> GetEnemyProjectile(string name) =>
             await GetGameObject(Pools.EnemyProjectiles, name, _activeEnemyProjectiles, _passiveEnemyProjectiles);
 
-        public async Task<GameObject> GetHeroProjectile(string name) =>
+        public async UniTask<GameObject> GetHeroProjectile(string name) =>
             await GetGameObject(Pools.HeroProjectiles, name, _activeHeroProjectiles, _passiveHeroProjectiles);
 
-        public async Task<GameObject> GetShotVfx(ShotVfxTypeId typeId) =>
+        public async UniTask<GameObject> GetShotVfx(ShotVfxTypeId typeId) =>
             await GetGameObject(Pools.ShotVfxs, typeId.ToString(), _activeShotVfxs, _passiveShotVfxs);
 
         public void ReturnEnemyProjectile(string name, GameObject gameObject)
@@ -269,7 +269,7 @@ namespace CodeBase.Services.Pool
             gameObject.transform.SetParent(parent);
         }
 
-        private async Task<GameObject> GetGameObject(Pools pool, string name,
+        private async UniTask<GameObject> GetGameObject(Pools pool, string name,
             Dictionary<string, List<GameObject>> activeDictionary,
             Dictionary<string, List<GameObject>> passiveDictionary)
         {
@@ -301,7 +301,7 @@ namespace CodeBase.Services.Pool
             return _gameObject;
         }
 
-        private async Task<GameObject> ExtendList(Pools pool, string name)
+        private async UniTask<GameObject> ExtendList(Pools pool, string name)
         {
             int newCapacity = _activeList.Capacity + AdditionalCount;
             _tempList = new List<GameObject>(newCapacity);
@@ -315,7 +315,7 @@ namespace CodeBase.Services.Pool
             return _passiveList[0];
         }
 
-        private async Task<GameObject> CreateObject(Pools pool, string name)
+        private async UniTask<GameObject> CreateObject(Pools pool, string name)
         {
             _gameObject = null;
 
@@ -364,7 +364,7 @@ namespace CodeBase.Services.Pool
             }
 
             while (_gameObject == null)
-                Task.Yield();
+                UniTask.Yield();
 
             _gameObject.SetActive(false);
             _tempList.Add(_gameObject);

@@ -17,6 +17,7 @@
         public const string AuthorizationWindow = "AuthorizationWindow";
         public const string GameEndWindow = "GameEndWindow";
         public const string StartWindow = "StartWindow";
+        public const string StartNewGameWindow = "StartNewGameWindow";
 
         // Roots for game objects created by pool
         public const string SpawnersRoot = "SpawnersRoot";

@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using CodeBase.Data.Settings;
+﻿using CodeBase.Data.Settings;
 using CodeBase.Logic;
 using CodeBase.Projectiles;
 using CodeBase.Projectiles.Hit;
@@ -12,6 +11,7 @@ using CodeBase.Services.Pool;
 using CodeBase.Services.StaticData;
 using CodeBase.StaticData.Projectiles;
 using CodeBase.StaticData.ShotVfxs;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -105,7 +105,7 @@ namespace CodeBase.Weapons
             _settingsData.SoundVolumeChanged -= VolumeChanged;
         }
 
-        protected async Task<GameObject> SetNewProjectile(Transform respawn)
+        protected async UniTask<GameObject> SetNewProjectile(Transform respawn)
         {
             // Debug.Log("SetNewProjectile");
             GameObject projectile = await GetProjectile();
@@ -116,7 +116,7 @@ namespace CodeBase.Weapons
             return projectile;
         }
 
-        protected async Task<GameObject> SetNewProjectile(Transform respawn, Vector3 targetPosition)
+        protected async UniTask<GameObject> SetNewProjectile(Transform respawn, Vector3 targetPosition)
         {
             GameObject projectile = await GetProjectile();
             projectile.transform.SetParent(respawn);
@@ -150,7 +150,7 @@ namespace CodeBase.Weapons
 
         protected abstract void PlayShootSound();
 
-        protected abstract Task<GameObject> GetProjectile();
+        protected abstract UniTask<GameObject> GetProjectile();
 
         protected abstract void Launch();
 

@@ -176,12 +176,21 @@
         public static string GameEndWriteReviewEn = "Please write a review :)";
         public static string GameEndWriteReviewTr = "Lütfen bir yorum yazın :)";
 
-        public static string GameEndStartNewStardardGameRu = "Начать игру на Стандартной сложности (доступно всё оружие)";
-        public static string GameEndStartNewStardardGameEn = "Start the game on Standard difficulty (all weapons available)";
-        public static string GameEndStartNewStardardGameTr = "Oyuna Standart zorluk seviyesinde başlayın (tüm silahlar mevcut)";
+        public static string GameEndStartNewStardardGameRu =
+            "Начать игру на Стандартной сложности (доступно всё оружие)";
+
+        public static string GameEndStartNewStardardGameEn =
+            "Start the game on Standard difficulty (all weapons available)";
+
+        public static string GameEndStartNewStardardGameTr =
+            "Oyuna Standart zorluk seviyesinde başlayın (tüm silahlar mevcut)";
 
         public static string GameEndStartNewAsianGameRu = "Начать игру на Азиатской сложности (начало с гранатомётом)";
-        public static string GameEndStartNewAsianGameEn = "Start the game on Asian difficulty (start with a grenade launcher)";
-        public static string GameEndStartNewAsianGameTr = "Oyuna Asya zorluğunda başlayın (bir el bombası fırlatıcısıyla başlayın)";
+
+        public static string GameEndStartNewAsianGameEn =
+            "Start the game on Asian difficulty (start with a grenade launcher)";
+
+        public static string GameEndStartNewAsianGameTr =
+            "Oyuna Asya zorluğunda başlayın (bir el bombası fırlatıcısıyla başlayın)";
     }
 }

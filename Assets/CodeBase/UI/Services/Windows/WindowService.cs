@@ -11,6 +11,7 @@ using CodeBase.UI.Windows.Results;
 using CodeBase.UI.Windows.Settings;
 using CodeBase.UI.Windows.Shop;
 using CodeBase.UI.Windows.Start;
+using CodeBase.UI.Windows.StartNewGame;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -78,6 +79,9 @@ namespace CodeBase.UI.Services.Windows
                     break;
                 case WindowId.Start:
                     _window = ShowWindow<StartWindow>(WindowId.Start);
+                    break;
+                case WindowId.StartNewGame:
+                    _window = ShowWindow<StartNewGameWindow>(WindowId.StartNewGame);
                     break;
             }
 

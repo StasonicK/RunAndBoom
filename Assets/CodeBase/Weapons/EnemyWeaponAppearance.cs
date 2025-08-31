@@ -1,10 +1,10 @@
 ﻿using System.Collections;
-using System.Threading.Tasks;
 using CodeBase.Enemy;
 using CodeBase.Projectiles.Movement;
 using CodeBase.Services.Audio;
 using CodeBase.StaticData.Enemies;
 using CodeBase.StaticData.Weapons;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace CodeBase.Weapons
@@ -76,7 +76,7 @@ namespace CodeBase.Weapons
             TuneProjectileBeforeLaunch(projectile, projectileMovement);
         }
 
-        protected override async Task<GameObject> GetProjectile()
+        protected override async UniTask<GameObject> GetProjectile()
         {
             _projectile = await _poolService.GetEnemyProjectile(_projectileTypeId.ToString());
             _enemyStaticData = _staticDataService.ForEnemy(_enemyTypeId);

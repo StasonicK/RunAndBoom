@@ -11,6 +11,7 @@ namespace CodeBase.UI.Windows.Settings
 {
     public class SettingsWindow : WindowBase
     {
+        [SerializeField] private Button _startNewGameButton;
         [SerializeField] private Button _restartButton;
         [SerializeField] private Button _closeButton;
 
@@ -20,6 +21,7 @@ namespace CodeBase.UI.Windows.Settings
 
         private void OnEnable()
         {
+            _startNewGameButton.onClick.AddListener(StartNewGame);
             _restartButton.onClick.AddListener(Restart);
             _closeButton.onClick.AddListener(Close);
             PlayerInput.Player.ESC.performed += Close;
@@ -28,6 +30,7 @@ namespace CodeBase.UI.Windows.Settings
 
         private void OnDisable()
         {
+            _startNewGameButton.onClick.RemoveListener(StartNewGame);
             _restartButton.onClick.RemoveListener(Restart);
             _closeButton.onClick.RemoveListener(Close);
             PlayerInput.Player.ESC.performed -= Close;
@@ -54,6 +57,9 @@ namespace CodeBase.UI.Windows.Settings
 
             _musicButton.Construct(hero.transform);
         }
+
+        private void StartNewGame() =>
+            RestartLevel();
 
         private void Restart() =>
             RestartLevel();

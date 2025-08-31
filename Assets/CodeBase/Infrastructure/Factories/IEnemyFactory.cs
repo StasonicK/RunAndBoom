@@ -1,6 +1,6 @@
-using System.Threading.Tasks;
 using CodeBase.Services;
 using CodeBase.StaticData.Enemies;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace CodeBase.Infrastructure.Factories
@@ -9,11 +9,11 @@ namespace CodeBase.Infrastructure.Factories
     {
         void CreateSpawnersRoot();
 
-        Task CreateSpawner(Vector3 at, EnemyTypeId enemyTypeId
+        UniTask CreateSpawner(Vector3 at, EnemyTypeId enemyTypeId
             // , AreaData area
         );
 
-        Task<GameObject> CreateEnemy(EnemyTypeId typeId, Transform parent
+        UniTask<GameObject> CreateEnemy(EnemyTypeId typeId, Transform parent
             // , AreaData area
         );
     }

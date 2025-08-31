@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using CodeBase.Infrastructure.AssetManagement;
 using CodeBase.Services.PersistentProgress;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace CodeBase.Services.Registrator
@@ -29,28 +29,28 @@ namespace CodeBase.Services.Registrator
             return gameObject;
         }
 
-        public async Task<GameObject> InstantiateRegisteredAsync(string prefabPath)
+        public async UniTask<GameObject> InstantiateRegisteredAsync(string prefabPath)
         {
             GameObject gameObject = await _assets.Instantiate(prefabPath);
             RegisterProgressWatchers(gameObject);
             return gameObject;
         }
 
-        public async Task<GameObject> InstantiateRegisteredAsync(string prefabPath, Vector3 at)
+        public async UniTask<GameObject> InstantiateRegisteredAsync(string prefabPath, Vector3 at)
         {
             GameObject gameObject = await _assets.Instantiate(prefabPath, at: at);
             RegisterProgressWatchers(gameObject);
             return gameObject;
         }
 
-        public async Task<GameObject> InstantiateRegisteredAsync(string prefabPath, Transform parent)
+        public async UniTask<GameObject> InstantiateRegisteredAsync(string prefabPath, Transform parent)
         {
             GameObject gameObject = await _assets.Instantiate(prefabPath, parent: parent);
             RegisterProgressWatchers(gameObject);
             return gameObject;
         }
 
-        public async Task<GameObject> LoadRegisteredAsync(string prefabPath)
+        public async UniTask<GameObject> LoadRegisteredAsync(string prefabPath)
         {
             GameObject gameObject = await _assets.Load<GameObject>(prefabPath);
             return gameObject;

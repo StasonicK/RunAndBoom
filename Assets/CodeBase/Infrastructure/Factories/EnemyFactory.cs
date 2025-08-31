@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using CodeBase.Data;
+﻿using CodeBase.Data;
 using CodeBase.Enemy;
 using CodeBase.Enemy.Attacks;
 using CodeBase.Hero;
@@ -11,6 +10,7 @@ using CodeBase.Services.StaticData;
 using CodeBase.StaticData.Enemies;
 using CodeBase.StaticData.Weapons;
 using CodeBase.Weapons;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace CodeBase.Infrastructure.Factories
@@ -41,7 +41,7 @@ namespace CodeBase.Infrastructure.Factories
             _spawnersRoot = gameObject.transform;
         }
 
-        public async Task CreateSpawner(Vector3 at, EnemyTypeId enemyTypeId)
+        public async UniTask CreateSpawner(Vector3 at, EnemyTypeId enemyTypeId)
         {
             GameObject prefab = await _assets.Load<GameObject>(AssetAddresses.Spawner);
             GameObject spawnerObject = _registratorService.InstantiateRegistered(prefab, at);
@@ -51,7 +51,7 @@ namespace CodeBase.Infrastructure.Factories
             spawnerObject.transform.SetParent(_spawnersRoot);
         }
 
-        public async Task<GameObject> CreateEnemy(EnemyTypeId typeId, Transform parent)
+        public async UniTask<GameObject> CreateEnemy(EnemyTypeId typeId, Transform parent)
         {
             EnemyStaticData enemyData = _staticData.ForEnemy(typeId);
             EnemyWeaponStaticData enemyWeaponStaticData = _staticData.ForEnemyWeapon(enemyData.EnemyWeaponTypeId);

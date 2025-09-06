@@ -7,6 +7,7 @@ namespace CodeBase.Services.PersistentProgress
     {
         public ProgressData ProgressData { get; }
         public SettingsData SettingsData { get; }
+        bool FirstLaunch { get; set; } 
         void ClearProgressData();
         void SetProgressData(ProgressData progressData);
         void SetSettingsData(SettingsData settingsData);

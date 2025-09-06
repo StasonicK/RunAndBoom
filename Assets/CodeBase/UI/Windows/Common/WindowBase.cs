@@ -25,6 +25,7 @@ namespace CodeBase.UI.Windows.Common
     {
         protected IWindowService _windowService;
         protected ISaveLoadService _saveLoadService;
+        protected IPlayerProgressService _playerProgressService;
         protected IGameStateMachine _gameStateMachine;
         protected IStaticDataService _staticDataService;
         protected IAdsService _adsService;
@@ -53,6 +54,7 @@ namespace CodeBase.UI.Windows.Common
             _saveLoadService = AllServices.Container.Single<ISaveLoadService>();
             _gameStateMachine = AllServices.Container.Single<IGameStateMachine>();
             _staticDataService = AllServices.Container.Single<IStaticDataService>();
+            _playerProgressService = AllServices.Container.Single<IPlayerProgressService>();
             _adsService = AllServices.Container.Single<IAdsService>();
             _leaderBoardService = AllServices.Container.Single<ILeaderboardService>();
             _audioService = AllServices.Container.Single<IAudioService>();

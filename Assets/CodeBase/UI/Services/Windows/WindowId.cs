@@ -12,7 +12,7 @@
         Authorization = 7,
         LeaderBoard = 8,
         GameEnd = 9,
-        Start = 10,
+        // Start = 10,
         StartNewGame = 11,
     }
 }

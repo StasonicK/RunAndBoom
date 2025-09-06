@@ -6,7 +6,6 @@ namespace CodeBase.Services.SaveLoad
     public interface ISaveLoadService : IService
     {
         void SaveProgressData();
-
         void SaveSettingsData();
         void SaveMusicOn(bool musicOn);
         void SaveSoundOn(bool soundOn);

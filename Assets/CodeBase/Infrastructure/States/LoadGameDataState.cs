@@ -33,9 +33,9 @@ namespace CodeBase.Infrastructure.States
             _language = language;
         }
 
-        public void Enter(bool sceneId)
+        public void Enter(bool payload)
         {
-            LoadProgressOrInitNew(sceneId);
+            LoadProgressOrInitNew(payload);
             _stateMachine.Enter<LoadSceneState, SceneId>(_progressService.ProgressData.AllStats.CurrentLevelStats
                 .SceneId);
         }

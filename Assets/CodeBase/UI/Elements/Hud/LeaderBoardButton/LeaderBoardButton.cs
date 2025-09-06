@@ -24,8 +24,13 @@ namespace CodeBase.UI.Elements.Hud.LeaderBoardButton
 
         private List<WindowId> _windowIds = new List<WindowId>()
         {
-            WindowId.Start, WindowId.Shop, WindowId.Settings,
-            WindowId.Death, WindowId.Gifts, WindowId.GameEnd, WindowId.GameEnd
+            WindowId.StartNewGame,
+            WindowId.Shop, 
+            WindowId.Settings,
+            WindowId.Death,
+            WindowId.Gifts,
+            WindowId.GameEnd,
+            WindowId.GameEnd
         };
 
         private void OnEnable()

@@ -8,6 +8,7 @@ namespace CodeBase.Services.PersistentProgress
         public ProgressData ProgressData { get; private set; }
         public SettingsData SettingsData { get; private set; }
         public string CurrentError { get; set; }
+        public bool FirstLaunch { get; set; } = true;
 
         public void ClearProgressData() =>
             ProgressData = null;

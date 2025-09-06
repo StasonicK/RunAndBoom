@@ -39,7 +39,7 @@ namespace CodeBase.UI.Windows.Start
         {
             _progressService = progressService;
             _adsService = adsService;
-            base.Construct(hero, WindowId.Start, openSettings, mobileInput);
+            // base.Construct(hero, WindowId.Start, openSettings, mobileInput);
 
             if (Application.isEditor)
                 return;

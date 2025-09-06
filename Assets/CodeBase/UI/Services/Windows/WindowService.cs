@@ -77,9 +77,9 @@ namespace CodeBase.UI.Services.Windows
                 case WindowId.GameEnd:
                     _window = ShowWindow<GameFinishedWindow>(WindowId.GameEnd);
                     break;
-                case WindowId.Start:
-                    _window = ShowWindow<StartWindow>(WindowId.Start);
-                    break;
+                // case WindowId.Start:
+                //     _window = ShowWindow<StartWindow>(WindowId.Start);
+                //     break;
                 case WindowId.StartNewGame:
                     _window = ShowWindow<StartNewGameWindow>(WindowId.StartNewGame);
                     break;

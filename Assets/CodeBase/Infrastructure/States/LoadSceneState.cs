@@ -25,7 +25,6 @@ using CodeBase.UI.Windows.LeaderBoard;
 using CodeBase.UI.Windows.Results;
 using CodeBase.UI.Windows.Settings;
 using CodeBase.UI.Windows.Shop;
-using CodeBase.UI.Windows.Start;
 using CodeBase.UI.Windows.StartNewGame;
 using Cysharp.Threading.Tasks;
 using Plugins.SoundInstance.Core.Static;
@@ -92,9 +91,9 @@ namespace CodeBase.Infrastructure.States
             }
         }
 
-        public void Enter(SceneId sceneId)
+        public void Enter(SceneId payload)
         {
-            _sceneId = sceneId;
+            _sceneId = payload;
 
             if (_sceneId.ToString().Contains(LevelName))
             {
@@ -173,6 +172,9 @@ namespace CodeBase.Infrastructure.States
             InitLevelTransfer(levelData);
             _adListener.Construct(_hero, _adsService, _progressService);
             _hero.StopHero();
+
+            // if (_sceneId == SceneId.Level_1 && _progressService.FirstLaunch)
+                _windowService.Show<StartNewGameWindow>(WindowId.StartNewGame);
         }
 
         private async UniTask InitializeSpawners(LevelStaticData levelData)
@@ -270,9 +272,9 @@ namespace CodeBase.Infrastructure.States
             GameObject gameEndWindow = await _uiFactory.CreateGameEndWindow();
             gameEndWindow.GetComponent<GameFinishedWindow>()
                 ?.Construct(hero, _openSettings, _mobileInput);
-            GameObject startWindow = await _uiFactory.CreateStartWindow();
-            startWindow.GetComponent<StartWindow>()
-                ?.Construct(hero, _openSettings, _progressService, _adsService, _mobileInput);
+            // GameObject startWindow = await _uiFactory.CreateStartWindow();
+            // startWindow.GetComponent<StartWindow>()
+            //     ?.Construct(hero, _openSettings, _progressService, _adsService, _mobileInput);
             GameObject startNewGameWindow = await _uiFactory.CreateStartNewGameWindow();
             startNewGameWindow.GetComponent<StartNewGameWindow>()
                 ?.Construct(hero, _openSettings, _mobileInput);
@@ -285,10 +287,8 @@ namespace CodeBase.Infrastructure.States
             _windowService.AddWindow(WindowId.LeaderBoard, leaderBoardWindow);
             _windowService.AddWindow(WindowId.GameEnd, gameEndWindow);
             _windowService.AddWindow(WindowId.Settings, settingsWindow);
-            _windowService.AddWindow(WindowId.Start, startWindow);
+            // _windowService.AddWindow(WindowId.Start, startWindow);
             _windowService.AddWindow(WindowId.StartNewGame, startNewGameWindow);
-
-            _windowService.Show<StartWindow>(WindowId.Start);
         }
     }
 }

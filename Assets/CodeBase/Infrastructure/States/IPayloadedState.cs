@@ -2,6 +2,6 @@
 {
     public interface IPayloadedState<Tpayload> : IExitableState
     {
-        void Enter(Tpayload sceneId);
+        void Enter(Tpayload payload);
     }
 }

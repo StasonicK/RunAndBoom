@@ -66,9 +66,9 @@ namespace CodeBase.UI.Windows.Common
             _isInitial = true;
         }
 
-        protected void Hide()
+        protected void Close()
         {
-            gameObject.SetActive(false);
+            Hide();
             PlayCloseSound();
 
             if (!_windowService.IsAnotherActive(_windowId))
@@ -83,6 +83,21 @@ namespace CodeBase.UI.Windows.Common
                 if (_mobileInput != null)
                     _mobileInput.On();
             }
+        }
+
+        public void Hide()
+        {
+            gameObject.SetActive(false);
+
+            if (AllServices.Container.Single<IInputService>() is DesktopInputService)
+                Cursor.lockState = CursorLockMode.Locked;
+
+            _hero.ResumeHero();
+            Time.timeScale = Constants.TimeScaleResume;
+            _openSettings.On();
+
+            if (_mobileInput != null)
+                _mobileInput.On();
         }
 
         public void Show(bool showCursor = true)

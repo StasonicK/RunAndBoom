@@ -114,24 +114,8 @@ namespace CodeBase.Infrastructure.States
         {
             await InitUIRoot();
 
-            switch (sceneId)
-            {
-                case SceneId.Level_1:
-                    await InitializeGameWorld();
-                    break;
-                case SceneId.Level_2:
-                    await InitializeGameWorld();
-                    break;
-                case SceneId.Level_3:
-                    await InitializeGameWorld();
-                    break;
-                case SceneId.Level_4:
-                    await InitializeGameWorld();
-                    break;
-                case SceneId.Level_5:
-                    await InitializeGameWorld();
-                    break;
-            }
+            if (sceneId != SceneId.Initial)
+                await InitializeGameWorld();
 
             InformProgressReaders();
             _stateMachine.Enter<GameLoopState>();
@@ -173,8 +157,10 @@ namespace CodeBase.Infrastructure.States
             _adListener.Construct(_hero, _adsService, _progressService);
             _hero.StopHero();
 
-            // if (_sceneId == SceneId.Level_1 && _progressService.FirstLaunch)
+            if (_sceneId == SceneId.Level_1 && _progressService.FirstLaunch)
                 _windowService.Show<StartNewGameWindow>(WindowId.StartNewGame);
+            else
+                _windowService.HideAll();
         }
 
         private async UniTask InitializeSpawners(LevelStaticData levelData)

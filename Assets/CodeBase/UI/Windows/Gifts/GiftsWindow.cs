@@ -106,7 +106,7 @@ namespace CodeBase.UI.Windows.Gifts
 
         private void Close()
         {
-            Hide();
+            base.Close();
             Cursor.lockState = CursorLockMode.Locked;
         }
 

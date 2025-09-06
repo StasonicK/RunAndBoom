@@ -55,8 +55,10 @@ namespace CodeBase.Projectiles
             }
         }
 
-        public void HideTrace() =>
+        public void HideTrace()
+        {
             StartCoroutine(CoroutineHideTrace());
+        }
 
         private IEnumerator CoroutineHideTrace()
         {

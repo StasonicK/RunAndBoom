@@ -118,7 +118,7 @@ namespace CodeBase.UI.Windows.LeaderBoard
         }
 
         private void Close() =>
-            Hide();
+            base.Close();
 
         private void ClearLeaderBoard()
         {

@@ -1,9 +1,8 @@
 using System;
-using System.Collections;
 using CodeBase.Services;
 using CodeBase.Services.Ads;
-using CodeBase.Services.GameReadyService;
 using CodeBase.Services.SaveLoad;
+using Cysharp.Threading.Tasks;
 using Plugins.SoundInstance.Core.Static;
 using UnityEngine;
 
@@ -43,32 +42,59 @@ namespace CodeBase.Infrastructure
         {
             SoundInstance.SetStartFade();
             SoundInstance.StartRandomMusic();
-            StartCoroutine(FadeOut());
-        }
-
-        private IEnumerator FadeOut()
-        {
-            yield return _waitForSeconds;
-
-            while (_curtain.alpha > MinimumAlpha)
-            {
-                if (_isInitial && !Application.isEditor)
-                {
-                    if (_adsService != null)
-                    {
-                        if (_adsService.IsInitialized())
-                            AllServices.Container.Single<IGameReadyService>().GameReady();
-                    }
-                }
-
-                _curtain.alpha -= StepAlpha;
-                yield return _forSeconds;
-            }
-
-
+            // StartCoroutine(FadeOut());
+            // FadeOut().Forget();
             FadedOut?.Invoke();
             _isInitial = false;
             SaveData();
+            gameObject.SetActive(false);
+        }
+
+        // private IEnumerator FadeOut()
+        // {
+        //     yield return _waitForSeconds;
+        //
+        //     while (_curtain.alpha > MinimumAlpha)
+        //     {
+        //         if (_isInitial && !Application.isEditor)
+        //         {
+        //             if (_adsService != null)
+        //             {
+        //                 if (_adsService.IsInitialized())
+        //                     AllServices.Container.Single<IGameReadyService>().GameReady();
+        //             }
+        //         }
+        //     
+        //         _curtain.alpha -= StepAlpha;
+        //         yield return _forSeconds;
+        //     }
+        //
+        //     FadedOut?.Invoke();
+        //     _isInitial = false;
+        //     SaveData();
+        //     gameObject.SetActive(false);
+        // }
+        
+        private async UniTask FadeOut()
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(PrepareWaiting));
+
+            float fadeDuration = 2f;
+            float elapsed = 0f;
+            float startAlpha = _curtain.alpha;
+
+            while (elapsed < fadeDuration)
+            {
+                elapsed += Time.deltaTime;
+                _curtain.alpha = Mathf.Lerp(startAlpha, MinimumAlpha, elapsed / fadeDuration);
+                await UniTask.Yield();
+            }
+
+            _curtain.alpha = MinimumAlpha;
+            FadedOut?.Invoke();
+            _isInitial = false;
+            SaveData();
+            await UniTask.Yield(); // Ensure the log is processed before deactivating the object
             gameObject.SetActive(false);
         }
 

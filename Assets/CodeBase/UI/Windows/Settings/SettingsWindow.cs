@@ -65,6 +65,6 @@ namespace CodeBase.UI.Windows.Settings
             RestartLevel();
 
         private void Close() =>
-            Hide();
+            base.Close();
     }
 }

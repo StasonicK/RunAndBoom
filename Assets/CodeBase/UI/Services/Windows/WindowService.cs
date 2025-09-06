@@ -10,7 +10,6 @@ using CodeBase.UI.Windows.LeaderBoard;
 using CodeBase.UI.Windows.Results;
 using CodeBase.UI.Windows.Settings;
 using CodeBase.UI.Windows.Shop;
-using CodeBase.UI.Windows.Start;
 using CodeBase.UI.Windows.StartNewGame;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -100,6 +99,15 @@ namespace CodeBase.UI.Services.Windows
             }
 
             _windows.Clear();
+        }
+
+        public void HideAll()
+        {
+            foreach (KeyValuePair<WindowId, GameObject> pair in _windows)
+            {
+                WindowBase window = pair.Value?.GetComponent<WindowBase>();
+                window?.Hide();
+            }
         }
 
         private void HideOthers(WindowId windowId)

@@ -75,6 +75,6 @@ namespace CodeBase.UI.Windows.Start
         }
 
         private void Close() =>
-            Hide();
+            base.Close();
     }
 }

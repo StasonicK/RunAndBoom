@@ -23,7 +23,7 @@ namespace CodeBase.UI.Windows.Authorization
         private void OnEnable()
         {
             _applyButton.onClick.AddListener(Authorize);
-            _denyButton.onClick.AddListener(Hide);
+            _denyButton.onClick.AddListener(Close);
 
             if (_authorization == null)
                 _authorization = AllServices.Container.Single<IAuthorization>();
@@ -35,7 +35,7 @@ namespace CodeBase.UI.Windows.Authorization
         private void OnDisable()
         {
             _applyButton.onClick.RemoveListener(Authorize);
-            _denyButton.onClick.RemoveListener(Hide);
+            _denyButton.onClick.RemoveListener(Close);
 
             if (Application.isEditor)
                 _applyButton.onClick.RemoveListener(ToLeaderBoardWindow);
@@ -74,7 +74,7 @@ namespace CodeBase.UI.Windows.Authorization
         private void ToLeaderBoardWindow()
         {
             _windowService.Show<LeaderBoardWindow>(WindowId.LeaderBoard, null, false);
-            Hide();
+            Close();
         }
     }
 }

@@ -88,7 +88,7 @@ namespace CodeBase.UI.Windows.Shop
             Cursor.lockState = CursorLockMode.Confined;
 
         private void CloseShop() =>
-            Hide();
+            Close();
 
         private void GenerateShopItems() =>
             _generator.Generate();

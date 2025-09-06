@@ -83,7 +83,7 @@ namespace CodeBase.UI.Windows.Death
         {
             RecoverHealth();
             TryAddAmmo();
-            Hide();
+            Close();
         }
 
         private void RecoverForAds()

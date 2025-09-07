@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace CodeBase.UI.Windows.Settings.AimSensitive
 {
-    public class AimVerticalSensitiveSlider : MonoBehaviour, IProgressReader
+    public class AimSensitiveSlider : MonoBehaviour, IProgressReader
     {
         [SerializeField] private Slider _slider;
 
@@ -38,14 +38,14 @@ namespace CodeBase.UI.Windows.Settings.AimSensitive
 
         private void ChangeValue(float value)
         {
-            _settingsData.SetAimVerticalSensitiveMultiplier(value);
-            _saveLoadService.SaveVerticalAimValue(value);
+            _settingsData.SetAimSensitiveMultiplier(value);
+            _saveLoadService.SaveAimValue(value);
         }
 
         public void LoadProgressData(ProgressData progressData)
         {
-            _settingsData.SetAimVerticalSensitiveMultiplier(_settingsData.AimVerticalSensitiveMultiplier);
-            ChangeSliderValue(_settingsData.AimVerticalSensitiveMultiplier);
+            _settingsData.SetAimSensitiveMultiplier(_settingsData.AimSensitiveMultiplier);
+            ChangeSliderValue(_settingsData.AimSensitiveMultiplier);
         }
 
         private void ChangeSliderValue(float value) =>

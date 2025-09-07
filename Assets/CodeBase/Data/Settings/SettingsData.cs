@@ -10,15 +10,13 @@ namespace CodeBase.Data.Settings
         public bool MusicOn;
         public bool SoundOn;
         public Language Language;
-        public float AimVerticalSensitiveMultiplier = 2f;
-        public float AimHorizontalSensitiveMultiplier = 2f;
+        public float AimSensitiveMultiplier = 2f;
 
         public event Action MusicVolumeChanged;
         public event Action SoundVolumeChanged;
         public event Action MusicSwitchChanged;
         public event Action SoundSwitchChanged;
-        public event Action AimVerticalSensitiveMultiplierChanged;
-        public event Action AimHorizontalSensitiveMultiplierChanged;
+        public event Action AimSensitiveMultiplierChanged;
 
         public SettingsData(Language language)
         {
@@ -26,8 +24,7 @@ namespace CodeBase.Data.Settings
             SetSoundVolume(Constants.InitialSoundVolume);
             SetMusicSwitch(true);
             SetSoundSwitch(true);
-            SetAimVerticalSensitiveMultiplier(Constants.InitialAimSliderValue);
-            SetAimHorizontalSensitiveMultiplier(Constants.InitialAimSliderValue);
+            SetAimSensitiveMultiplier(Constants.InitialAimSliderValue);
             SetLanguage(language);
         }
 
@@ -75,22 +72,14 @@ namespace CodeBase.Data.Settings
             Language = language;
         }
 
-        public void SetAimVerticalSensitiveMultiplier(float value)
+        public void SetAimSensitiveMultiplier(float value)
         {
-            if (AimVerticalSensitiveMultiplier == value)
+            if (AimSensitiveMultiplier == value)
                 return;
 
-            AimVerticalSensitiveMultiplier = value;
-            AimVerticalSensitiveMultiplierChanged?.Invoke();
+            AimSensitiveMultiplier = value;
+            AimSensitiveMultiplierChanged?.Invoke();
         }
 
-        public void SetAimHorizontalSensitiveMultiplier(float value)
-        {
-            if (AimHorizontalSensitiveMultiplier == value)
-                return;
-
-            AimHorizontalSensitiveMultiplier = value;
-            AimHorizontalSensitiveMultiplierChanged?.Invoke();
-        }
     }
 }

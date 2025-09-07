@@ -7,140 +7,106 @@ namespace CodeBase.Hero
 {
     public class HeroRotating : MonoBehaviour
     {
+        [Header("Camera")]
         [SerializeField] private Camera _camera;
-        [SerializeField] private float _desktopVerticalSensitivity = 0.2f;
-        [SerializeField] private float _desktopHorizontalSensitivity = 10.0f;
-        [SerializeField] private float _mobileVerticalSensitivity = 7.5f;
-        [SerializeField] private float _mobileHorizontalSensitivity = 150.0f;
+
+        [Header("Sensitivity")]
+        [SerializeField] private float _desktopBaseSensitivity = 5.0f;
+        [SerializeField] private float _mobileBaseSensitivity = 100.0f;
+
+        [Header("Clamp")]
         [SerializeField] private float _edgeAngle = 85f;
 
         private IInputService _inputService;
         private IPlayerProgressService _playerProgressService;
         private LookJoystick _lookJoystick;
+
         private bool _isMobile;
         private bool _update;
-        private float _xAxisClamp = 0;
         private bool _canRotate = true;
+
         private float _verticalRotation;
-        private float _verticalAngle;
-        private Vector2 _lookInput = Vector3.zero;
-        private float _verticalSensitivity;
-        private float _horizontalSensitivity;
+        private Vector2 _lookInput = Vector2.zero;
+        private float _sensitivity;
 
         public void ConstructDesktopPlatform(IInputService inputService, IPlayerProgressService playerProgressService)
         {
-            _playerProgressService = playerProgressService;
             _inputService = inputService;
+            _playerProgressService = playerProgressService;
             _isMobile = false;
             _update = true;
-            _inputService.Looked += DesktopRotate;
-            _playerProgressService.SettingsData.AimVerticalSensitiveMultiplierChanged +=
-                UpdateVerticalSensitiveMultiplier;
-            _playerProgressService.SettingsData.AimHorizontalSensitiveMultiplierChanged +=
-                UpdateHorizontalSensitiveMultiplier;
-            UpdateVerticalSensitiveMultiplier();
-            UpdateHorizontalSensitiveMultiplier();
+
+            _inputService.Looked += OnDesktopLook;
+            _playerProgressService.SettingsData.AimSensitiveMultiplierChanged += UpdateSensitivity;
+
+            UpdateSensitivity();
         }
 
         public void ConstructMobilePlatform(LookJoystick lookJoystick, IPlayerProgressService playerProgressService)
         {
-            _playerProgressService = playerProgressService;
             _lookJoystick = lookJoystick;
+            _playerProgressService = playerProgressService;
             _isMobile = true;
             _update = true;
-            _playerProgressService.SettingsData.AimVerticalSensitiveMultiplierChanged +=
-                UpdateVerticalSensitiveMultiplier;
-            _playerProgressService.SettingsData.AimHorizontalSensitiveMultiplierChanged +=
-                UpdateHorizontalSensitiveMultiplier;
-            UpdateVerticalSensitiveMultiplier();
-            UpdateHorizontalSensitiveMultiplier();
+
+            _playerProgressService.SettingsData.AimSensitiveMultiplierChanged += UpdateSensitivity;
+
+            UpdateSensitivity();
         }
 
-        private void DesktopRotate(Vector2 lookInput) =>
+        private void OnDesktopLook(Vector2 lookInput) =>
             _lookInput = lookInput;
 
-        private void UpdateVerticalSensitiveMultiplier()
+        private void UpdateSensitivity()
         {
-            if (_isMobile)
-                _verticalSensitivity = _playerProgressService.SettingsData.AimVerticalSensitiveMultiplier *
-                                       _mobileVerticalSensitivity;
-            else
-                _verticalSensitivity = _playerProgressService.SettingsData.AimVerticalSensitiveMultiplier *
-                                       _desktopVerticalSensitivity;
-        }
-
-        private void UpdateHorizontalSensitiveMultiplier()
-        {
-            if (_isMobile)
-                _horizontalSensitivity = _playerProgressService.SettingsData.AimHorizontalSensitiveMultiplier *
-                                         _mobileHorizontalSensitivity;
-            else
-                _horizontalSensitivity = _playerProgressService.SettingsData.AimHorizontalSensitiveMultiplier *
-                                         _desktopHorizontalSensitivity;
+            float baseSensitivity = _isMobile ? _mobileBaseSensitivity : _desktopBaseSensitivity;
+            _sensitivity = _playerProgressService.SettingsData.AimSensitiveMultiplier * baseSensitivity;
         }
 
         private void Start()
         {
             TurnOff();
 
-            if (_inputService is DesktopInputService)
-                Cursor.lockState = CursorLockMode.Locked;
-            else
-                Cursor.lockState = CursorLockMode.Confined;
+            Cursor.lockState = _inputService is DesktopInputService
+                ? CursorLockMode.Locked
+                : CursorLockMode.Confined;
         }
 
         private void Update()
         {
-            if (_update == false)
-                return;
-
-            if (!_canRotate)
+            if (!_update || !_canRotate)
                 return;
 
             if (_isMobile)
-                MobileRotate();
+                RotateMobile();
             else
-                DesktopRotate();
+                RotateDesktop();
         }
 
-        private void DesktopRotate()
+        private void RotateDesktop()
         {
-            transform.Rotate(Vector3.up * _lookInput.x * _horizontalSensitivity * Time.deltaTime);
-            _verticalRotation -= _lookInput.y;
-            ClampAngle();
-            _camera.transform.localRotation = Quaternion.Euler(_verticalRotation * _verticalSensitivity
-                , 0, 0);
-        }
+            transform.Rotate(Vector3.up * _lookInput.x * _sensitivity * Time.deltaTime);
+            _verticalRotation -= _lookInput.y * _sensitivity * Time.deltaTime;
 
-        private void ClampAngle()
-        {
-            if (!_isMobile)
-                _verticalAngle = _edgeAngle / _verticalSensitivity;
-            else
-                _verticalAngle = _edgeAngle;
-
-            _verticalRotation = Mathf.Clamp(_verticalRotation, -_verticalAngle, _verticalAngle);
-        }
-
-        private void MobileRotate()
-        {
-            RotateHorizontal();
-            RotateVertical();
-        }
-
-        private void RotateHorizontal()
-        {
-            if (_lookJoystick.Input.sqrMagnitude > Constants.RotationEpsilon)
-                transform.Rotate(Vector3.up * _lookJoystick.Input.x * _horizontalSensitivity * Time.deltaTime);
-        }
-
-        private void RotateVertical()
-        {
-            if (_lookJoystick.Input.sqrMagnitude > Constants.RotationEpsilon)
-                _verticalRotation -= _lookJoystick.Input.y * _verticalSensitivity;
-
-            ClampAngle();
+            ClampVerticalRotation();
             _camera.transform.localRotation = Quaternion.Euler(_verticalRotation, 0, 0);
+        }
+
+        private void RotateMobile()
+        {
+            if (_lookJoystick.Input.sqrMagnitude <= Constants.RotationEpsilon)
+                return;
+
+            transform.Rotate(Vector3.up * _lookJoystick.Input.x * _sensitivity * Time.deltaTime);
+            _verticalRotation -= _lookJoystick.Input.y * _sensitivity * Time.deltaTime;
+
+            ClampVerticalRotation();
+            _camera.transform.localRotation = Quaternion.Euler(_verticalRotation, 0, 0);
+        }
+
+        private void ClampVerticalRotation()
+        {
+            _verticalRotation = Mathf.Clamp(_verticalRotation, -_edgeAngle, _edgeAngle);
         }
 
         public void TurnOn() =>
@@ -149,7 +115,7 @@ namespace CodeBase.Hero
         public void TurnOff()
         {
             _canRotate = false;
-            transform.Rotate(Vector3.zero);
+            _lookInput = Vector2.zero;
         }
     }
 }

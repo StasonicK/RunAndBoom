@@ -13,7 +13,7 @@ namespace CodeBase
         public const float RotationEpsilon = 0.002f;
         public const float MovementEpsilon = 0.05f;
         public const float MinAimSliderValue = 0.0f;
-        public const float MaxAimSliderValue = 4.0f;
+        public const float MaxAimSliderValue = 2.0f;
         public const float InitialAimSliderValue = 2.0f;
         public const float InitialMusicVolume = 0.5f;
         public const float InitialSoundVolume = 0.5f;

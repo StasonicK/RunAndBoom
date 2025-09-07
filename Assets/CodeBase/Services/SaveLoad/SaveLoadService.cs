@@ -66,13 +66,13 @@ namespace CodeBase.Services.SaveLoad
 
         public void SaveVerticalAimValue(float value)
         {
-            _progressService.SettingsData.SetAimVerticalSensitiveMultiplier(value);
+            _progressService.SettingsData.SetAimSensitiveMultiplier(value);
             PlayerPrefs.SetString(SettingsDataKey, _progressService.SettingsData.ToJson());
         }
 
-        public void SaveHorizontalAimValue(float value)
+        public void SaveAimValue(float value)
         {
-            _progressService.SettingsData.SetAimHorizontalSensitiveMultiplier(value);
+            _progressService.SettingsData.SetAimSensitiveMultiplier(value);
             PlayerPrefs.SetString(SettingsDataKey, _progressService.SettingsData.ToJson());
         }
 

@@ -13,7 +13,7 @@ namespace CodeBase.Services.SaveLoad
         void SaveSoundVolume(float value);
         void SaveLanguage(Language language);
         void SaveVerticalAimValue(float value);
-        void SaveHorizontalAimValue(float value);
+        void SaveAimValue(float value);
         void ClearProgressData();
 
         ProgressData LoadProgressData();

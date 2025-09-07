@@ -45,7 +45,8 @@ namespace CodeBase.UI.Windows.Gifts
 
         private void OnEnable()
         {
-            _addCoinsButton.enabled = Application.isEditor;
+            // _addCoinsButton.enabled = Application.isEditor;
+            _addCoinsButton.gameObject.SetActive(Application.isEditor);
             _addCoinsButton.onClick.AddListener(ShowAds);
             Cursor.lockState = CursorLockMode.Confined;
             GenerateItems();
@@ -88,7 +89,8 @@ namespace CodeBase.UI.Windows.Gifts
         protected override void AdsServiceInitializedSuccess()
         {
             base.AdsServiceInitializedSuccess();
-            _addCoinsButton.enabled = true;
+            _addCoinsButton.gameObject.SetActive(true);
+            // _addCoinsButton.enabled = true;
         }
 
         private void ShowClosed()
@@ -112,11 +114,13 @@ namespace CodeBase.UI.Windows.Gifts
 
         private void ShowAds()
         {
-            SoundInstance.StopRandomMusic(false);
+            SoundInstance.PauseMusic();
 
             if (Application.isEditor)
             {
+                _addCoinsButton.gameObject.SetActive(false);
                 AddCoins();
+                SoundInstance.ResumeMusic();
                 return;
             }
 
@@ -133,7 +137,8 @@ namespace CodeBase.UI.Windows.Gifts
         private void AddCoins()
         {
             ProgressData.AllStats.AddMoney(_coinsCount);
-            _addCoinsButton.enabled = false;
+            _addCoinsButton.gameObject.SetActive(false);
+            // _addCoinsButton.enabled = false;
         }
     }
 }

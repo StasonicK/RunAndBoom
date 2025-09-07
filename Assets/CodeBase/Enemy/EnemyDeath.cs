@@ -37,6 +37,8 @@ namespace CodeBase.Enemy
 
         private void Awake()
         {
+            _hitBox.SetActive(true);
+            _diedBox.SetActive(false);
             _progressService = AllServices.Container.Single<IPlayerProgressService>();
             _enemyAnimator = GetComponent<EnemyAnimator>();
             _agentMoveToHero = GetComponent<AgentMoveToHero>();
@@ -46,8 +48,6 @@ namespace CodeBase.Enemy
             _checkAttackRange = GetComponent<CheckAttackRange>();
             _stopMovingOnAttack = GetComponent<StopMovingOnAttack>();
             _health = GetComponent<IHealth>();
-            _hitBox.SetActive(true);
-            _diedBox.SetActive(false);
         }
 
         private void OnEnable()
@@ -83,8 +83,8 @@ namespace CodeBase.Enemy
 
         public void Die()
         {
-            _hitBox.SetActive(false);
             _diedBox.SetActive(true);
+            _hitBox.SetActive(false);
             Died?.Invoke();
             _heroHealth.Vampire(_health.Max);
             _isDead = true;

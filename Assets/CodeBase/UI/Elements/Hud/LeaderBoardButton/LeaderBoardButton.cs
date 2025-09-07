@@ -25,7 +25,7 @@ namespace CodeBase.UI.Elements.Hud.LeaderBoardButton
         private List<WindowId> _windowIds = new List<WindowId>()
         {
             WindowId.StartNewGame,
-            WindowId.Shop, 
+            WindowId.Shop,
             WindowId.Settings,
             WindowId.Death,
             WindowId.Gifts,
@@ -52,6 +52,8 @@ namespace CodeBase.UI.Elements.Hud.LeaderBoardButton
 
             if (_authorization == null)
                 _authorization = AllServices.Container.Single<IAuthorization>();
+
+            _inputService.OnLeaderBoardButtonClick += ShowLeaderboardWindow;
         }
 
         private void OnDisable()
@@ -60,20 +62,19 @@ namespace CodeBase.UI.Elements.Hud.LeaderBoardButton
 
             if (_inputService is MobileInputService)
                 _button.onClick.RemoveListener(CheckAuthorization);
+            
+            _inputService.OnLeaderBoardButtonClick -= ShowLeaderboardWindow;
         }
 
-        private void Update()
+        private void ShowLeaderboardWindow()
         {
-            if (_inputService.IsLeaderBoardButtonUp())
-            {
-                CheckAuthorization();
+            CheckAuthorization();
 
-                if (!_isTutorialVisible)
-                    return;
+            if (!_isTutorialVisible)
+                return;
 
-                _tutorialPanel.HidePanel();
-                _isTutorialVisible = false;
-            }
+            _tutorialPanel.HidePanel();
+            _isTutorialVisible = false;
         }
 
         private void CheckAuthorization()

@@ -2,7 +2,6 @@
 using CodeBase.Services.PersistentProgress;
 using CodeBase.UI.Elements.Hud;
 using CodeBase.UI.Elements.Hud.MobileInputPanel;
-using CodeBase.UI.Services.Windows;
 using CodeBase.UI.Windows.Common;
 using UnityEngine;
 using UnityEngine.InputSystem;

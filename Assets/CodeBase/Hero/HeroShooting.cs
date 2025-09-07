@@ -33,10 +33,15 @@ namespace CodeBase.Hero
             _progressService = AllServices.Container.Single<IPlayerProgressService>();
             _heroWeaponSelection.WeaponSelected += GetCurrentWeaponObject;
             _heroReloading.OnStopReloading += TurnOn;
+            _inputService.Shot += TryShoot;
         }
 
-        private void Update() =>
-            TryShoot();
+        private void OnDestroy()
+        {
+            _heroWeaponSelection.WeaponSelected -= GetCurrentWeaponObject;
+            _heroReloading.OnStopReloading -= TurnOn;
+            _inputService.Shot -= TryShoot;
+        }
 
         private void GetCurrentWeaponObject(GameObject weaponPrefab, HeroWeaponStaticData heroWeaponStaticData,
             TrailStaticData trailStaticData)
@@ -78,7 +83,8 @@ namespace CodeBase.Hero
             if (!_canShoot)
                 return;
 
-            if (_inputService.IsAttackButtonUp() && IsAvailableAmmo())
+            if (IsAvailableAmmo())
+            // if (_inputService.IsAttackButtonUp() && IsAvailableAmmo())
                 Shoot();
         }
 

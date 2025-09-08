@@ -66,6 +66,7 @@ namespace CodeBase.UI.Windows.GameFinished
             SoundInstance.StopRandomMusic();
             _windowService.ClearAll();
             _saveLoadService.ClearProgressData();
+            _playerProgressService.FirstLaunch = false;
         }
 
         private void AddGameResult()

@@ -78,22 +78,15 @@ namespace CodeBase.Projectiles.Hit
             {
                 if (_prefab != null)
                 {
-                    // RaycastHit hit;
-                    // int count = Physics.SphereCastNonAlloc(other.transform.position, SphereCastRadius,
-                    //     other.transform.forward, out RaycastHit hit);
-                    // if (Physics.SphereCast(other.transform.position, SphereCastRadius,
-                    //         other.transform.forward, out RaycastHit hit))
-                    // if (Physics.Raycast(transform.position, transform.forward, out hit, 1f, _layerMask))
-                    // if (count > 0)
-                    // {
-                    // ShowBlast(hit.point, hit.normal);
                     ShowBlast();
                     PlaySound();
                     Trail?.HideTrace();
                     _destroyWithBlast.HitAllAround(_sphereRadius, _damage);
-                    StartCoroutine(DestroyBlast());
+
+                    if (gameObject.activeInHierarchy)
+                        StartCoroutine(DestroyBlast());
+
                     Movement.Stop();
-                    // }
                 }
             }
         }

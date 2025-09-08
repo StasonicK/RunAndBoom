@@ -34,35 +34,44 @@ namespace CodeBase.Projectiles
 
         private void CreateTrailVfx(GameObject prefab)
         {
-            // Debug.Log($"trailVfx {_trailVfx}");
             if (_trailVfx == null)
                 _trailVfx = Instantiate(prefab, _trailPosition.position, Quaternion.identity, _trailPosition);
         }
 
-        public void ShowTrail() =>
+        public void ShowTrail()
+        {
+            if (!isActiveAndEnabled)
+                return;
+
             StartCoroutine(CoroutineShowTrace());
+        }
 
         private IEnumerator CoroutineShowTrace()
         {
             if (_trailVfx != null)
             {
-                // if (_particleSystem == null) 
-                //     _particleSystem = _trailVfx.GetComponent<ParticleSystem>();
-
-                yield return _coroutineShowTrace;
+                var wait = _coroutineShowTrace ?? new WaitForSeconds(0f);
+                yield return wait;
                 _trailVfx.SetActive(true);
-                // _particleSystem?.Play(true);
             }
         }
 
         public void HideTrace()
         {
+            if (!isActiveAndEnabled)
+            {
+                // If this component or its GameObject is inactive, perform immediate hide to avoid StartCoroutine on inactive object.
+                Hide();
+                return;
+            }
+
             StartCoroutine(CoroutineHideTrace());
         }
 
         private IEnumerator CoroutineHideTrace()
         {
-            yield return _coroutineHideTrace;
+            var wait = _coroutineHideTrace ?? new WaitForSeconds(0f);
+            yield return wait;
             Hide();
         }
 
@@ -70,7 +79,6 @@ namespace CodeBase.Projectiles
         {
             if (_trailVfx != null)
                 _trailVfx.SetActive(false);
-            // _particleSystem?.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
     }
 }

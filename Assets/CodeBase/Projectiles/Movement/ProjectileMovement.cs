@@ -19,7 +19,7 @@ namespace CodeBase.Projectiles.Movement
         private const float BaseRatio = 1f;
 
         private IStaticDataService _staticDataService;
-        private float _movementTimeLimit = 3f;
+        private float _movementTimeLimit = 10f;
         private float _launchCounter = 0f;
         private float _baseSpeed;
         private UpgradeItemData _speedItemData;

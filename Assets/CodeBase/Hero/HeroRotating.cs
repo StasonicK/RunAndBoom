@@ -11,8 +11,8 @@ namespace CodeBase.Hero
         [SerializeField] private Camera _camera;
 
         [Header("Sensitivity")]
-        [SerializeField] private float _desktopBaseSensitivity = 5.0f;
-        [SerializeField] private float _mobileBaseSensitivity = 100.0f;
+        [SerializeField] private float _desktopBaseSensitivity = 10.0f;
+        [SerializeField] private float _mobileBaseSensitivity = 200.0f;
 
         [Header("Clamp")]
         [SerializeField] private float _edgeAngle = 85f;

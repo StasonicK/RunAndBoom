@@ -76,3 +76,9 @@ crashlytics-build.properties
 /Builds.meta
 /BuildsOld/*
 /BuildsOld.meta
+
+# Adobe formats
+*.psd
+
+/.idea/*
+/.idea.meta

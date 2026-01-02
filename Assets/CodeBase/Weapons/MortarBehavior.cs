@@ -14,7 +14,7 @@ namespace CodeBase.Weapons
         private void SetTarget(Vector3 targetPosition) =>
             _targetPosition = targetPosition;
 
-        protected override IEnumerator CoroutineShootTo()
+        protected IEnumerator CoroutineShootTo()
         {
             Launch(_targetPosition);
             yield return _launchProjectileCooldown;

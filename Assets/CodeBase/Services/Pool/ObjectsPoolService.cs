@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using CodeBase.Infrastructure.AssetManagement;
 using CodeBase.StaticData.Projectiles;
 using CodeBase.StaticData.ShotVfxs;
 using Cysharp.Threading.Tasks;
-using JetBrains.Annotations;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -17,9 +15,9 @@ namespace CodeBase.Services.Pool
         private const int InitialEnemyProjectilesCapacity = 1;
         private const int InitialHeroProjectilesCapacity = 1;
         private const int AdditionalCount = 5;
+        private const bool EnableDebugLog = false;
 
         private readonly IAssets _assets;
-
         private Dictionary<string, List<GameObject>> _activeHeroProjectiles;
         private Dictionary<string, List<GameObject>> _passiveHeroProjectiles;
         private Dictionary<string, List<GameObject>> _activeEnemyProjectiles;
@@ -31,29 +29,30 @@ namespace CodeBase.Services.Pool
         private Transform _heroProjectilesRoot;
         private Transform _shotVfxsRoot;
 
-        // Per-pool-key async locks to avoid concurrent extension races
-        private readonly Dictionary<string, SemaphoreSlim> _poolLocks = new();
-
-        private const bool EnableDebugLog = false;
-
         public ObjectsPoolService(IAssets assets) => _assets = assets;
 
         public void GenerateObjects() => CreateRoots().Forget();
 
         private async UniTask CreateRoots()
         {
-            GameObject root = await _assets.Load<GameObject>(AssetAddresses.HeroProjectilesRoot);
-            _heroProjectilesRoot = Object.Instantiate(root).transform;
-
-            root = await _assets.Load<GameObject>(AssetAddresses.EnemyProjectilesRoot);
-            _enemyProjectilesRoot = Object.Instantiate(root).transform;
-
-            root = await _assets.Load<GameObject>(AssetAddresses.ShotVfxsRoot);
-            _shotVfxsRoot = Object.Instantiate(root).transform;
+            _heroProjectilesRoot = await InstantiateRoot(AssetAddresses.HeroProjectilesRoot);
+            _enemyProjectilesRoot = await InstantiateRoot(AssetAddresses.EnemyProjectilesRoot);
+            _shotVfxsRoot = await InstantiateRoot(AssetAddresses.ShotVfxsRoot);
 
             await GenerateHeroProjectiles();
             await GenerateEnemyProjectiles();
             await GenerateShotVfxs();
+        }
+
+        private async UniTask<Transform> InstantiateRoot(string address)
+        {
+            var rootPrefab = await _assets.Load<GameObject>(address);
+            if (rootPrefab == null)
+            {
+                Debug.LogError($"[Pool Error] Could not load root prefab at {address}");
+                return null;
+            }
+            return Object.Instantiate(rootPrefab).transform;
         }
 
         private async UniTask GenerateEnemyProjectiles()
@@ -96,16 +95,15 @@ namespace CodeBase.Services.Pool
                 AssetAddresses.RpgMuzzleFire, _shotVfxsRoot, InitialVfxCapacity);
             await AddProjectileType(_passiveShotVfxs, _activeShotVfxs, ShotVfxTypeId.RocketLauncherRocket,
                 AssetAddresses.RocketLauncherMuzzleBlue, _shotVfxsRoot, InitialVfxCapacity);
-            await AddProjectileType(_passiveShotVfxs, _activeShotVfxs, ShotVfxTypeId.Bomb,
-                AssetAddresses.BombMuzzle, _shotVfxsRoot, InitialVfxCapacity);
+            await AddProjectileType(_passiveShotVfxs, _activeShotVfxs, ShotVfxTypeId.Bomb, AssetAddresses.BombMuzzle,
+                _shotVfxsRoot, InitialVfxCapacity);
             await AddProjectileType(_passiveShotVfxs, _activeShotVfxs, ShotVfxTypeId.Bullet,
                 AssetAddresses.BulletMuzzleFire, _shotVfxsRoot, InitialVfxCapacity);
             await AddProjectileType(_passiveShotVfxs, _activeShotVfxs, ShotVfxTypeId.Shot,
                 AssetAddresses.ShotMuzzleFire, _shotVfxsRoot, InitialVfxCapacity);
         }
 
-        private async UniTask AddProjectileType(
-            Dictionary<string, List<GameObject>> passive,
+        private async UniTask AddProjectileType(Dictionary<string, List<GameObject>> passive,
             Dictionary<string, List<GameObject>> active,
             Enum typeId, string assetAddress, Transform parent, int count)
         {
@@ -114,14 +112,16 @@ namespace CodeBase.Services.Pool
             for (int i = 0; i < count; i++)
             {
                 GameObject go = await _assets.Instantiate(assetAddress, parent);
+                if (go == null)
+                {
+                    Debug.LogError($"[Pool Error] Could not instantiate {assetAddress}");
+                    continue;
+                }
                 go.SetActive(false);
                 passiveList.Add(go);
             }
             passive[key] = passiveList;
             active[key] = new List<GameObject>(count);
-
-            // init lock for this key
-            GetOrCreateLock(key);
         }
 
         public async UniTask<GameObject> GetEnemyProjectile(string name) =>
@@ -142,29 +142,17 @@ namespace CodeBase.Services.Pool
         public void ReturnShotVfx(string name, GameObject go) =>
             Return(go, name, _shotVfxsRoot, _activeShotVfxs, _passiveShotVfxs);
 
-        private void Return(
-            GameObject go, string name, Transform root,
-            Dictionary<string, List<GameObject>> active,
+        private void Return(GameObject go, string name, Transform root, Dictionary<string, List<GameObject>> active,
             Dictionary<string, List<GameObject>> passive)
         {
-            if (!passive.TryGetValue(name, out var passiveList))
-            {
-                passiveList = new List<GameObject>();
-                passive[name] = passiveList;
-            }
-            if (!active.TryGetValue(name, out var activeList))
-            {
-                activeList = new List<GameObject>();
-                active[name] = activeList;
-            }
+            var passiveList = GetOrCreateList(passive, name);
+            var activeList = GetOrCreateList(active, name);
 
-            // Avoid duplicates
-            if (!passiveList.Contains(go))
-                passiveList.Add(go);
-            // Remove if present in active
-            int idx = activeList.IndexOf(go);
-            if (idx >= 0)
-                activeList.RemoveAt(idx);
+            if (!activeList.Remove(go))
+            {
+                Debug.LogWarning($"[Pool Return] Tried to return object not in active list: {name}");
+            }
+            passiveList.Add(go);
 
             go.SetActive(false);
             go.transform.SetParent(root);
@@ -173,144 +161,100 @@ namespace CodeBase.Services.Pool
                 Debug.Log($"[Pool Return] {name} → Active: {activeList.Count}, Passive: {passiveList.Count}");
         }
 
-        private async UniTask<GameObject> GetGameObject(
-            Pools pool, string name,
+        private async UniTask<GameObject> GetGameObject(Pools pool, string name,
             Dictionary<string, List<GameObject>> activeDict,
             Dictionary<string, List<GameObject>> passiveDict)
         {
-            if (!activeDict.TryGetValue(name, out var activeList))
-                activeDict[name] = activeList = new();
-            if (!passiveDict.TryGetValue(name, out var passiveList))
-                passiveDict[name] = passiveList = new();
+            var activeList = GetOrCreateList(activeDict, name);
+            var passiveList = GetOrCreateList(passiveDict, name);
 
-            // Fast path: take from passive (pop-back = O(1))
-            int last = passiveList.Count - 1;
-            if (last >= 0)
+            if (passiveList.Count > 0)
             {
-                var obj = passiveList[last];
-                passiveList.RemoveAt(last);
+                var obj = passiveList[0];
+                passiveList.RemoveAt(0);
                 activeList.Add(obj);
                 return obj;
             }
 
-            // Slow path: extend pool (serialized per key)
-            var sem = GetOrCreateLock(name);
-            await sem.WaitAsync();
-            try
-            {
-                // Another waiter may have already extended / returned items
-                last = passiveList.Count - 1;
-                if (last >= 0)
-                {
-                    var obj = passiveList[last];
-                    passiveList.RemoveAt(last);
-                    activeList.Add(obj);
-                    return obj;
-                }
+            // Pool exhausted — create more
+            var newObjects = await ExtendList(pool, name, activeList.Count, AdditionalCount);
+            passiveList.AddRange(newObjects);
+            var objToActivate = passiveList[0];
+            passiveList.RemoveAt(0);
+            activeList.Add(objToActivate);
 
-                // Actually create more
-                await ExtendList(pool, name, passiveList, AdditionalCount);
-                if (passiveList.Count == 0)
-                {
-                    Debug.LogError($"[Pool Error] Extension produced no items for {pool}/{name}");
-                    return null;
-                }
+            if (EnableDebugLog)
+                Debug.LogWarning(
+                    $"[Pool Extend] {name} extended. Total Active: {activeList.Count}, Passive: {passiveList.Count}");
 
-                var newObj = passiveList[^1];
-                passiveList.RemoveAt(passiveList.Count - 1);
-                activeList.Add(newObj);
-
-                if (EnableDebugLog)
-                    Debug.LogWarning($"[Pool Extend] {name} extended. Active: {activeList.Count}, Passive: {passiveList.Count}");
-
-                return newObj;
-            }
-            finally
-            {
-                sem.Release();
-            }
+            return objToActivate;
         }
 
-        private async UniTask ExtendList(Pools pool, string name, List<GameObject> passiveList, int countToCreate)
+        private async UniTask<List<GameObject>> ExtendList(Pools pool, string name, int currentCount, int additionalCount)
         {
-            for (int i = 0; i < countToCreate; i++)
+            var newObjects = new List<GameObject>(additionalCount);
+            for (int i = 0; i < additionalCount; i++)
             {
-                GameObject obj = await CreateObject(pool, name);
+                var obj = await CreateObject(pool, name);
                 if (obj != null)
-                {
-                    obj.SetActive(false);
-                    passiveList.Add(obj);
-                }
+                    newObjects.Add(obj);
             }
+            return newObjects;
         }
 
         private async UniTask<GameObject> CreateObject(Pools pool, string name)
         {
-            GameObject obj = pool switch
+            string assetAddress = pool switch
             {
-                Pools.HeroProjectiles when name == ProjectileTypeId.Grenade.ToString()
-                    => await _assets.Instantiate(AssetAddresses.Grenade, _heroProjectilesRoot),
-
-                Pools.HeroProjectiles when name == ProjectileTypeId.RpgRocket.ToString()
-                    => await _assets.Instantiate(AssetAddresses.RpgRocket, _heroProjectilesRoot),
-
-                Pools.HeroProjectiles when name == ProjectileTypeId.RocketLauncherRocket.ToString()
-                    => await _assets.Instantiate(AssetAddresses.RocketLauncherRocket, _heroProjectilesRoot),
-
-                Pools.HeroProjectiles when name == ProjectileTypeId.Bomb.ToString()
-                    => await _assets.Instantiate(AssetAddresses.Bomb, _heroProjectilesRoot),
-
-                Pools.EnemyProjectiles when name == ProjectileTypeId.PistolBullet.ToString()
-                    => await _assets.Instantiate(AssetAddresses.PistolBullet, _enemyProjectilesRoot),
-
-                Pools.EnemyProjectiles when name == ProjectileTypeId.RifleBullet.ToString()
-                    => await _assets.Instantiate(AssetAddresses.PistolBullet, _enemyProjectilesRoot),
-
-                Pools.EnemyProjectiles when name == ProjectileTypeId.Shot.ToString()
-                    => await _assets.Instantiate(AssetAddresses.Shot, _enemyProjectilesRoot),
-
-                Pools.ShotVfxs when name == ShotVfxTypeId.Bullet.ToString()
-                    => await _assets.Instantiate(AssetAddresses.BulletMuzzleFire, _shotVfxsRoot),
-
-                Pools.ShotVfxs when name == ShotVfxTypeId.Shot.ToString()
-                    => await _assets.Instantiate(AssetAddresses.ShotMuzzleFire, _shotVfxsRoot),
-
-                Pools.ShotVfxs when name == ShotVfxTypeId.Grenade.ToString()
-                    => await _assets.Instantiate(AssetAddresses.GrenadeMuzzleFire, _shotVfxsRoot),
-
-                Pools.ShotVfxs when name == ShotVfxTypeId.RpgRocket.ToString()
-                    => await _assets.Instantiate(AssetAddresses.RpgMuzzleFire, _shotVfxsRoot),
-
-                Pools.ShotVfxs when name == ShotVfxTypeId.RocketLauncherRocket.ToString()
-                    => await _assets.Instantiate(AssetAddresses.RocketLauncherMuzzleBlue, _shotVfxsRoot),
-
-                Pools.ShotVfxs when name == ShotVfxTypeId.Bomb.ToString()
-                    => await _assets.Instantiate(AssetAddresses.BombMuzzle, _shotVfxsRoot),
-
+                Pools.HeroProjectiles when name == ProjectileTypeId.Grenade.ToString() => AssetAddresses.Grenade,
+                Pools.HeroProjectiles when name == ProjectileTypeId.RpgRocket.ToString() => AssetAddresses.RpgRocket,
+                Pools.HeroProjectiles when name == ProjectileTypeId.RocketLauncherRocket.ToString() => AssetAddresses.RocketLauncherRocket,
+                Pools.HeroProjectiles when name == ProjectileTypeId.Bomb.ToString() => AssetAddresses.Bomb,
+                Pools.EnemyProjectiles when name == ProjectileTypeId.PistolBullet.ToString() => AssetAddresses.PistolBullet,
+                Pools.EnemyProjectiles when name == ProjectileTypeId.RifleBullet.ToString() => AssetAddresses.PistolBullet,
+                Pools.EnemyProjectiles when name == ProjectileTypeId.Shot.ToString() => AssetAddresses.Shot,
+                Pools.ShotVfxs when name == ShotVfxTypeId.Bullet.ToString() => AssetAddresses.BulletMuzzleFire,
+                Pools.ShotVfxs when name == ShotVfxTypeId.Shot.ToString() => AssetAddresses.ShotMuzzleFire,
+                Pools.ShotVfxs when name == ShotVfxTypeId.Grenade.ToString() => AssetAddresses.GrenadeMuzzleFire,
+                Pools.ShotVfxs when name == ShotVfxTypeId.RpgRocket.ToString() => AssetAddresses.RpgMuzzleFire,
+                Pools.ShotVfxs when name == ShotVfxTypeId.RocketLauncherRocket.ToString() => AssetAddresses.RocketLauncherMuzzleBlue,
+                Pools.ShotVfxs when name == ShotVfxTypeId.Bomb.ToString() => AssetAddresses.BombMuzzle,
                 _ => null
             };
 
-            if (obj == null)
-                Debug.LogError($"[Pool Error] Could not create object for {pool}/{name}");
+            Transform parent = pool switch
+            {
+                Pools.HeroProjectiles => _heroProjectilesRoot,
+                Pools.EnemyProjectiles => _enemyProjectilesRoot,
+                Pools.ShotVfxs => _shotVfxsRoot,
+                _ => null
+            };
 
+            if (assetAddress == null || parent == null)
+            {
+                Debug.LogError($"[Pool Error] Invalid asset or parent for {pool}/{name}");
+                return null;
+            }
+
+            var obj = await _assets.Instantiate(assetAddress, parent);
+            if (obj == null)
+            {
+                Debug.LogError($"[Pool Error] Could not create object for {pool}/{name}");
+                return null;
+            }
+
+            obj.SetActive(false);
             return obj;
         }
 
-        private SemaphoreSlim GetOrCreateLock(string key)
+        private List<GameObject> GetOrCreateList(Dictionary<string, List<GameObject>> dict, string key)
         {
-            if (!_poolLocks.TryGetValue(key, out var sem))
+            if (!dict.TryGetValue(key, out var list))
             {
-                sem = new SemaphoreSlim(1, 1);
-                _poolLocks[key] = sem;
+                list = new List<GameObject>();
+                dict[key] = list;
             }
-            return sem;
+            return list;
         }
-    }
-
-    public enum Pools
-    {
-        EnemyProjectiles,
-        HeroProjectiles,
-        ShotVfxs,
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using CodeBase.Hero;
 using CodeBase.Projectiles.Hit;
 using CodeBase.Projectiles.Movement;
@@ -21,9 +20,8 @@ namespace CodeBase.Weapons
         private HeroWeaponSelection _heroWeaponSelection;
         private HeroWeaponTypeId _heroWeaponTypeId;
         private HeroDeath _death;
-        private GameObject _firstProjectile;
-        private bool _filled;
         private HeroWeaponStaticData _heroWeaponStaticData;
+        private bool _filled;
 
         public void Construct(HeroDeath death, HeroReloading heroReloading, HeroWeaponSelection heroWeaponSelection)
         {
@@ -50,8 +48,9 @@ namespace CodeBase.Weapons
 
         private async void ReadyToShoot()
         {
-            if (gameObject.activeInHierarchy && (_filled == false || _projectiles.Count == 0) && _enabled)
+            if (gameObject.activeInHierarchy && (!_filled || _projectiles.Count == 0) && _enabled)
             {
+                _projectiles.Clear();
                 foreach (Transform respawn in _projectilesRespawns)
                 {
                     var projectile = await SetNewProjectile(respawn);
@@ -67,10 +66,12 @@ namespace CodeBase.Weapons
 
         public void ShootTo()
         {
-            for (int i = 0; i < _projectilesRespawns.Length; i++)
+            int count = _projectiles.Count;
+            for (int i = 0; i < count; i++)
             {
-                StartCoroutine(CoroutineShootTo());
-                Release();
+                if (_projectiles.Count == 0) break;
+                StartCoroutine(CoroutineShootTo(_projectiles[0]));
+                Release(_projectiles[0]);
             }
 
             _shotVfxsContainer.ShowShotVfx(_shotVfxsRespawns[0]);
@@ -80,9 +81,9 @@ namespace CodeBase.Weapons
         public void ReturnShotsVfx() =>
             _shotVfxsContainer.ReturnShotVfx();
 
-        protected virtual IEnumerator CoroutineShootTo()
+        protected virtual IEnumerator CoroutineShootTo(GameObject projectile)
         {
-            Launch();
+            Launch(projectile);
             yield return _launchProjectileCooldown;
         }
 
@@ -107,39 +108,37 @@ namespace CodeBase.Weapons
 
         protected override async UniTask<GameObject> GetProjectile()
         {
-            _projectile = await _poolService.GetHeroProjectile(_projectileTypeId.ToString());
+            var projectile = await _poolService.GetHeroProjectile(_projectileTypeId.ToString());
             _heroWeaponStaticData = _staticDataService.ForHeroWeapon(_heroWeaponTypeId);
-            _constructorService.ConstructHeroProjectile(_projectile, _heroWeaponStaticData.ProjectileTypeId,
+            _constructorService.ConstructHeroProjectile(projectile, _heroWeaponStaticData.ProjectileTypeId,
                 _heroWeaponStaticData.BlastTypeId, _heroWeaponTypeId);
-            return _projectile;
+            return projectile;
         }
 
         protected override void Launch()
         {
-            GameObject projectile = GetFirstProjectile();
+            if (_projectiles.Count == 0) return;
+            Launch(_projectiles[0]);
+        }
+
+        protected void Launch(GameObject projectile)
+        {
             ProjectileMovement projectileMovement = projectile.GetComponent<ProjectileMovement>();
             TuneProjectileBeforeLaunch(projectile, projectileMovement);
         }
 
         protected override void Launch(Vector3 targetPosition)
         {
-            GameObject projectile = GetFirstProjectile();
+            if (_projectiles.Count == 0) return;
+            var projectile = _projectiles[0];
             ProjectileMovement projectileMovement = projectile.GetComponent<ProjectileMovement>();
             (projectileMovement as BombMovement)?.SetTargetPosition(targetPosition);
             TuneProjectileBeforeLaunch(projectile, projectileMovement);
         }
 
-        private GameObject GetFirstProjectile()
+        private void Release(GameObject projectile)
         {
-            _firstProjectile = _projectiles.First();
-            return _firstProjectile;
-        }
-
-        private void Release()
-        {
-            _projectiles.Remove(_firstProjectile);
-            _firstProjectile = null;
-
+            _projectiles.Remove(projectile);
             if (_projectiles.Count == 0)
                 _filled = false;
         }
